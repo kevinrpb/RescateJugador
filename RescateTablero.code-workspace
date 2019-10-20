@@ -1,0 +1,35 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.classpath": true,
+			"**/.project": true,
+			"**/.settings": true,
+			"**/.factorypath": true,
+			"bin/": true,
+			"lib/": true,
+			"RescateTablero*": true,
+			"*.bat": true,
+			"*.sh": true,
+			"*.txt": true,
+			".git*": true
+		},
+		"cSpell.enabled": false
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"type": "java",
+				"name": "Launch Platform <RescateTablero>",
+				"request": "launch",
+				"mainClass": "jadex.adapter.standalone.Platform",
+				"projectName": "RescateTablero"
+			},
+		]
+	}
+}

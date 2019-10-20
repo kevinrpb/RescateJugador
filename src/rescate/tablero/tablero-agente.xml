@@ -1,0 +1,62 @@
+<agent xmlns="http://jadex.sourceforge.net/jadex"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://jadex.sourceforge.net/jadexhttp://jadex.sourceforge.net/jadex-0.96.xsd"
+	name="tablero" package="src.tablero">
+	<imports>
+		<import>jadex.runtime.*</import>
+		<import>jadex.planlib.*</import>
+		<import>jadex.adapter.fipa.*</import>
+		<import>java.util.logging.*</import>
+		<import>java.util.*</import>
+		<import>jadex.util.*</import>
+
+		<import>ontologia.acciones.*</import>
+		<import>ontologia.conceptos.*</import>
+		<import>ontologia.predicados.*</import>
+		<import>tablero.planes.*</import>
+	</imports>
+
+	<capabilities>
+		<capability name="dfcap" file="jadex.planlib.DF" />
+	</capabilities>
+
+	<!-- Creencias -->
+	<beliefs>
+
+	</beliefs>
+
+	<!-- Metas -->
+	<goals>
+
+	</goals>
+
+	<!-- Planes -->
+	<plans>
+
+	</plans>
+
+	<!-- Eventos -->
+	<events>
+
+	</events>
+
+	<!-- Propiedades -->
+	<properties>
+
+	</properties>
+
+	<!-- Configuracion -->
+	<configurations>
+		<configuration name="default">
+			<goals>
+				<initialgoal ref="df_register">
+					<parameter ref="description">
+						<value>
+							SFipa.createAgentDescription(null, SFipa.createServiceDescription("tablero", "agente", "Rescate"))
+						</value>
+					</parameter>
+				</initialgoal>
+			</goals>
+		</configuration>
+	</configurations>
+</agent>
