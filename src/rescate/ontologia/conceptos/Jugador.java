@@ -4,6 +4,11 @@ import jadex.adapter.fipa.AgentIdentifier;
 
 public class Jugador extends Concepto {
 
+    /*** Enums ***/
+    public enum Rol {
+        SANITARIO, JEFE, EXPERTO_EN_IMAGENES, ESPUMA_IGNIFUGA, MATERIAS_PELIGROSAS, GENERALISTA, RESCATES, CONDUCTOR
+    }
+
     /*** Constructor ***/
     public Jugador() {
     }
@@ -11,9 +16,7 @@ public class Jugador extends Concepto {
     /*** Atributos ***/
     private AgentIdentifier idAgente;
 
-    private int rol;
-    // 0: sanitario, 1: jefe, 2: experto en imgs, 3: espuma ignífuga,
-    // 4: materias peligrosas, 5: generalista, 6: rescates, 7: conductor
+    private Rol rol;
 
     private int[] posicion;
 
@@ -25,7 +28,6 @@ public class Jugador extends Concepto {
     private boolean subidoCamion;
 
     private boolean llevandoVictima;
-
     private boolean llevandoMateriaPeligrosa;
 
     /*** Getters & Setters ***/
@@ -37,11 +39,11 @@ public class Jugador extends Concepto {
         this.idAgente = idAgente;
     }
 
-    public int getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(int rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 

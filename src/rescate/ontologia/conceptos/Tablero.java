@@ -10,8 +10,7 @@ public class Tablero extends Concepto {
 
     /*** Atributos ***/
     private Casilla[][] habitaciones;
-    // Cada habitación, array de casillas
-    // En total, N habitaciones
+    private Casilla[][] mapa;
 
     private int salvados;
     private int victimas;
@@ -86,6 +85,14 @@ public class Tablero extends Concepto {
 
     public void setJugadores(ArrayList<Jugador> jugadores) {
         this.jugadores = jugadores;
+    }
+
+    public Casilla[][] getMapa() {
+        return mapa;
+    }
+
+    public void setMapa(Casilla[][] mapa) {
+        this.mapa = mapa;
     }
 
 }

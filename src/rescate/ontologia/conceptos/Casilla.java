@@ -2,39 +2,33 @@ package rescate.ontologia.conceptos;
 
 public class Casilla extends Concepto {
 
+    /*** Enums ***/
+    public enum Conexion {
+        NADA, PUERTA_ABIERTA, PUERTA_CERRADA, PARED, PARED_SEMIRROTA, PARED_ROTA
+    }
+
+    public enum PuntoInteres {
+        OCULTO, FALSA_ALARMA, VICTIMA
+    }
+
     /*** Constructor ***/
     public Casilla() {
     }
 
     /*** Atributos ***/
-    private int[] posicion;
-    // [x, y]
+    private int[] posicion; // [x, y]
+    private Conexion[] conexiones;
 
-    private int[][] conexiones;
-    // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
-    // 0: nada, 1: puerta, 2: pared
-    // 0: cerrada/sin romper, 1: abierta/semirrota, 2: -/rota
-
-    private int tieneFuego;
-    // 0: nada, 1: humo, 2: fuego
-
+    private int tieneFuego; // 0: nada, 1: humo, 2: fuego
     private boolean tieneMateriaPeligrosa;
-
     private boolean tieneFocoCalor;
+    private PuntoInteres puntoInteres;
 
-    private int[] puntoInteres;
-    // 0: sin descubrir, 1: descubierto
-    // 0: falsa alarma, 1: víctima
-
-    private boolean[] flecha;
-    // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
+    private boolean[] flecha; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
 
     private boolean camionBomberos;
-
     private boolean ambulancia;
-
     private boolean esAparcamientoCamion;
-
     private boolean esAparcamientoAmbulancia;
 
     /*** Getters & Setters ***/
@@ -46,11 +40,11 @@ public class Casilla extends Concepto {
         this.posicion = posicion;
     }
 
-    public int[][] getConexiones() {
+    public Conexion[] getConexiones() {
         return conexiones;
     }
 
-    public void setConexiones(int[][] conexiones) {
+    public void setConexiones(Conexion[] conexiones) {
         this.conexiones = conexiones;
     }
 
@@ -78,11 +72,11 @@ public class Casilla extends Concepto {
         this.tieneFocoCalor = tieneFocoCalor;
     }
 
-    public int[] getPuntoInteres() {
+    public PuntoInteres getPuntoInteres() {
         return puntoInteres;
     }
 
-    public void setPuntoInteres(int[] puntoInteres) {
+    public void setPuntoInteres(PuntoInteres puntoInteres) {
         this.puntoInteres = puntoInteres;
     }
 
