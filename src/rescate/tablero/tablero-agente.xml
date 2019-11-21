@@ -22,6 +22,81 @@
 
 	<!-- Creencias -->
 	<beliefs>
+		<!-- Los jugadores -->
+		<belief name="jugadores" class="Lista_Jugadores">
+			<fact>new Lista_Jugadores()</fact>
+		</belief>
+
+		<!-- A quien le toca actuar -->
+		<belief name="turno" class="int">
+			<fact>0</fact>
+		</belief>
+
+		<!-- Mapa de juego -->
+		<belief name="mapa" class="Tablero">
+			<fact>new Tablero()</fact>
+		</belief>
+
+		<!-- Fichas de dano disponibles -->
+		<belief name="fichasDano" class="int">
+			<fact>24</fact>
+		</belief>
+
+		<!-- Puntos de interes disponibles -->
+		<belief name="pdi" class="int">
+			<fact>18</fact>
+		</belief>
+
+		<!-- PDI personas disponibles -->
+		<belief name="fichasPersona" class="int">
+			<fact>12</fact>
+		</belief>
+
+		<!-- FPDI falsas alarmas disponibles -->
+		<belief name="fichasFalsaAlarma" class="int">
+			<fact>6</fact>
+		</belief>
+
+		<!-- Puntos de accion disponibles -->
+		<belief name="fichasDano" class="int">
+			<fact>21</fact>
+		</belief>
+
+		<!-- Primeros auxilios disponibles -->
+
+		<!-- Materias peligrosas disponibles -->
+		<belief name="fichasFuegoHumo" class="int">
+			<fact>35</fact>
+		</belief>
+
+		<!-- Materias peligrosas disponibles -->
+		<belief name="fichas_dano" class="int">
+			<fact>6</fact>
+		</belief>
+
+		<!-- Focos de calor disponibles -->
+		<belief name="fichasFoco" class="int">
+			<fact>24</fact>
+		</belief>
+
+		<!-- Personas salvadas -->
+		<belief name="salvados" class="int">
+			<fact>0</fact>
+		</belief>
+
+		<!-- Personas no salvadas -->
+		<belief name="victimas" class="int">
+			<fact>0</fact>
+		</belief>
+
+		<!-- Materias peligrosas disponibles -->
+		<belief name="FinPartida" class="boolean">
+			<fact>false</fact>
+		</belief>
+
+		<!-- Camion de bomberos? -->
+
+		<!-- Ambulancia? -->
 
 	</beliefs>
 
@@ -32,6 +107,182 @@
 
 	<!-- Planes -->
 	<plans>
+
+		<!-- Registrar a un jugador -->
+		<plan name="unirJugador_plan">
+			<body class="TableroUnirJugadorPlan"/>
+			<trigger>
+				<messageevent ref="Request_Unirse_a_la_partida"/>
+			</trigger>
+		</plan>
+
+		<!-- Empieza la partida creando el tablero -->
+		<plan name="empezar_plan">
+			<body class="EmpezarPlan"/>
+			<trigger>
+				<!--condicion de inicio -->
+			</trigger>
+		</plan>
+
+		<!-- Asigna un rol a un jugador -->
+		<plan name="asignarRol_plan">
+			<body class="AsignarRolPlan"/>
+			<trigger>
+				<messageevent ref="Request_Elegir_rol"/>
+			</trigger>
+		</plan>
+
+		<!-- Mueve un jugador a otra casilla (esto junta el protocolo desplazar y desplazar_llamas) -->
+		<plan name="moverJugador_plan">
+			<body class="MoverJugadorPlan"/>
+			<trigger>
+				<messageevent ref="Request_Desplazar"/>
+			</trigger>
+		</plan>
+
+		<!-- Cambia una ficha de fuego por humo -->
+		<plan name="apagarFuego_plan">
+			<body class="ApagarFuegoPlan"/>
+			<trigger>
+				<messageevent ref="Request_Apagar_fuego"/>
+			</trigger>
+		</plan>
+
+		<!-- Retira una ficha de fuego -->
+		<plan name="extinguirFuego_plan">
+			<body class="ExtinguirFuegoPlan"/>
+			<trigger>
+				<messageevent ref="Request_Extinguir_fuego"/>
+			</trigger>
+		</plan>
+
+		<!-- Retira una ficha de humo -->
+		<plan name="extinguirHumo_plan">
+			<body class="ExtinguirHumoPlan"/>
+			<trigger>
+				<messageevent ref="Request_Extinguir_humo"/>
+			</trigger>
+		</plan>
+
+		<!-- Comunica la informacion de la habitación en la que ha entrado el bombero -->
+		<plan name="informarHabitacion_plan">
+			<body class="InformarHabitacionPlan"/>
+			<trigger>
+				<!-- Cuando informa -->>
+			</trigger>
+		</plan>
+
+		<!-- Cambia una puerta de cerrada a abierta -->
+		<plan name="abrirPuerta_plan">
+			<body class="AbrirPuertaPlan"/>
+			<trigger>
+				<messageevent ref="Request_Abrir_puerta"/>
+			</trigger>
+		</plan>
+
+		<!-- Cambia una puerta de abierta a cerrada -->
+		<plan name="cerrarPuerta_plan">
+			<body class="CerrarPuertaPlan"/>
+			<trigger>
+				<messageevent ref="Request_Cerrar_puerta"/>
+			</trigger>
+		</plan>
+
+		<!-- Suma un punto de dano a una pared -->
+		<plan name="derribarPared_plan">
+			<body class="DerribarParedPlan"/>
+			<trigger>
+				<messageevent ref="Request_Derribar_pared"/>
+			</trigger>
+		</plan>
+
+		<!-- Mueve un jugador y una victima -->
+		<plan name="trasladarVictima_plan">
+			<body class="TrasladarVictimaPlan"/>
+			<trigger>
+				<messageevent ref="Request_Trasladar_victima"/>
+			</trigger>
+		</plan>
+
+		<!-- Mueve un jugador con una materia peligrosa -->
+		<plan name="trasladarMateriaPeligrosa_plan">
+			<body class="TrasladarMateriaPeligrosaPlan"/>
+			<trigger>
+				<messageevent ref="Request_Trasladar_materia_peligrosa"/>
+			</trigger>
+		</plan>
+
+		<!-- Atiende a un jugador herido -->
+		<plan name="atender_plan">
+			<body class="AtenderPlan"/>
+			<trigger>
+				<messageevent ref="Request_Atender"/>
+			</trigger>
+		</plan>
+
+		<!-- Identifica un punto de interés -->
+		<plan name="identificarPuntoDeInteres_plan">
+			<body class="IdentificarPuntoDeInteresPlan"/>
+			<trigger>
+				<messageevent ref="Request_Identificar_materia_peligrosa"/>
+			</trigger>
+		</plan>
+
+		<!-- El jugador se monta en un vehiculo -->
+		<plan name="montarEnVehiculo_plan">
+			<body class="MontarEnVehiculoPlan"/>
+			<trigger>
+				<messageevent ref="Request_Montar_en_vehiculo"/>
+			</trigger>
+		</plan>
+
+		<!-- Conduce un vehiculo en el que este montado el jugador -->
+		<plan name="conducirVehiculo_plan">
+			<body class="ConducirVehiculoPlan"/>
+			<trigger>
+				<messageevent ref="Request_Conducir_vehiculo"/>
+			</trigger>
+		</plan>
+
+		<!-- Llama a la ambulancia para que se desplace a la casilla designada -->
+		<plan name="desplazarAmbulancia_plan">
+			<body class="DesplazarAmbulanciaPlan"/>
+			<trigger>
+				<messageevent ref="Request_Desplazar_ambulancia"/>
+			</trigger>
+		</plan>
+
+		<!-- Cambia el rol del jugador -->
+		<plan name="cambiarRol_plan">
+			<body class="CambiarRolPlan"/>
+			<trigger>
+				<messageevent ref="Request_Cambiar_rol"/>
+			</trigger>
+		</plan>
+
+		<!-- Usa el canon de agua de la ambulancia -->
+		<plan name="usarCanonDeAgua_plan">
+			<body class="UsarCanonDeAguaPlan"/>
+			<trigger>
+				<messageevent ref="Request_Usar_canon_de_agua"/>
+			</trigger>
+		</plan>
+
+		<!-- El jefe de bomberos manda a un jugador realizar una accion  -->
+		<plan name="mando_plan">
+			<body class="MandoPlan"/>
+			<trigger>
+				<messageevent ref="Request_Mando"/>
+			</trigger>
+		</plan>
+
+		<!--  -->
+		<plan name="eliminarMateriaPeligrosa_plan">
+			<body class="EliminarMateriaPeligrosaPlan"/>
+			<trigger>
+				<messageevent ref="Request_Eliminar_materia_peligrosa"/>
+			</trigger>
+		</plan>
 
 	</plans>
 
