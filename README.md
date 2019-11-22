@@ -60,15 +60,15 @@ Una vez VSC sepa dónde encontrar Java, pulsa F5 (ejecutar el modo Debug) y el e
 
 > NOTA: Antes de nada, para poder contribuir, deberás ser parte de la organización.
 
-1. Aignate a una de las tareas pendientes en el [documento correspondiente](https://docs.google.com/spreadsheets/d/1UepllTSWQi2oH7iajYn6p4yURnyUvm-_o1md8dRoFBc)
+1. ~Aignate a una de las tareas pendientes en el [documento correspondiente](https://docs.google.com/spreadsheets/d/1UepllTSWQi2oH7iajYn6p4yURnyUvm-_o1md8dRoFBc)~
 2. Clona el repositorio en local
 3. Crea una nueva rama para tus cambios y apunta el nombre de dicha rama en el doc de tareas
 4. En la rama, haz los cambios y _commits_ necesarios para completar la tarea
 5. Sube (haz _push_) la rama al repositorio
-6. Crea una _Pull Request_ sobre la rama `master`
+6. Crea una _Pull Request_ sobre la rama `develop`
 7. Espera hasta que alguien más revise tus cambios
    - Mientras esperas, puedes volver al paso 1 y hacer otra tarea
    - Si los cambios no son aceptados, vuelve al paso 4
 8. Espera a que se haga _merge_ de la rama
    - Mientras esperas, puedes volver al paso 1 y hacer otra tarea
-9. Apunta la tarea como completada en el doc señalando "Merge" como "sí"
+9. ~Apunta la tarea como completada en el doc señalando "Merge" como "sí"~
