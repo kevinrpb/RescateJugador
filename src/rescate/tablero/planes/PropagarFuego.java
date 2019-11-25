@@ -6,7 +6,7 @@ import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
-public class PropagarFuego {
+public class PropagarFuego extends Plan{
 
 	
 	@Override
