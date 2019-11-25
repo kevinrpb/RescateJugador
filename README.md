@@ -13,7 +13,6 @@ A continuación se incluyen las instrucciones necesarias para ejecutar dicho có
     - [Compilando e iniciando JADEX](#compilando-e-iniciando-jadex)
       - [Desde la consola de comandos](#desde-la-consola-de-comandos)
       - [Usando Visual Studio Code (Recomendado)](#usando-visual-studio-code-recomendado)
-      - [Usando Eclipse IDE](#usando-eclipse-ide)
     - [Lanzando el agente](#lanzando-el-agente)
   - [Contribuyendo al código](#contribuyendo-al-c%c3%b3digo)
 
@@ -48,11 +47,9 @@ Una vez VSC sepa dónde encontrar Java, pulsa F5 (ejecutar el modo Debug) y el e
 
 > NOTA: En Windows, asegurate de que la configuración que se está lanzando es la indicada como "Externa". Esto previene problemas causados cuando la terminal integrada de VSC no se corresponde con CMD.
 
-#### Usando Eclipse IDE
-
-> TODO: configurar el proyecto para hacerlo fácilmente ejecutable desde Eclipse
-
 ### Lanzando el agente
+
+El primer paso es lanzar la plataforma jadex. Una vez se haya hecho esto, habrá que añadir los directorios `lib/` y `bin` al explorador de jadex para que cargue nuestros archivos. Esto solo es necesario hacerlo la primera vez que se descarga el código.
 
 > TODO: describir los pasos para ejecutar los agentes
 
