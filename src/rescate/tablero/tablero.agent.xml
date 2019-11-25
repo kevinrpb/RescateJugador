@@ -1,16 +1,18 @@
-<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jadex.sourceforge.net/jadexhttp://jadex.sourceforge.net/jadex-0.96.xsd" name="tablero" package="src.tablero">
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-0.96.xsd" name="tablero" package="rescate.tablero">
+
   <imports>
     <import>jadex.runtime.*</import>
     <import>jadex.planlib.*</import>
     <import>jadex.adapter.fipa.*</import>
-    <import>java.util.logging.*</import>
-    <import>java.util.*</import>
     <import>jadex.util.*</import>
 
-    <import>ontologia.acciones.*</import>
-    <import>ontologia.conceptos.*</import>
-    <import>ontologia.predicados.*</import>
-    <import>tablero.planes.*</import>
+    <import>java.util.logging.*</import>
+    <import>java.util.*</import>
+
+    <import>rescate.ontologia.acciones.*</import>
+    <import>rescate.ontologia.conceptos.*</import>
+    <import>rescate.ontologia.predicados.*</import>
+    <import>rescate.tablero.planes.*</import>
   </imports>
 
   <capabilities>
@@ -35,7 +37,7 @@
     </belief>
 
     <!-- Fichas de dano disponibles -->
-    <belief name="fichasDano" class="int">
+    <belief name="fichasDanyo" class="int">
       <fact>24</fact>
     </belief>
 
@@ -55,7 +57,7 @@
     </belief>
 
     <!-- Puntos de accion disponibles -->
-    <belief name="fichasDano" class="int">
+    <belief name="fichasAccion" class="int">
       <fact>21</fact>
     </belief>
 
@@ -67,7 +69,7 @@
     </belief>
 
     <!-- Materias peligrosas disponibles -->
-    <belief name="fichas_dano" class="int">
+    <belief name="fichasMateriaPeligrosa" class="int">
       <fact>6</fact>
     </belief>
 
@@ -98,7 +100,13 @@
   </beliefs>
 
   <!-- Metas -->
-  <goals></goals>
+  <goals>
+
+    <achievegoalref name="df_register">
+      <concrete ref="dfcap.df_register" />
+    </achievegoalref>
+
+  </goals>
 
   <!-- Planes -->
   <plans>
@@ -291,6 +299,7 @@
   <!-- Configuracion -->
   <configurations>
     <configuration name="default">
+
       <goals>
         <initialgoal ref="df_register">
           <parameter ref="description">
@@ -300,6 +309,7 @@
           </parameter>
         </initialgoal>
       </goals>
+
     </configuration>
   </configurations>
 </agent>

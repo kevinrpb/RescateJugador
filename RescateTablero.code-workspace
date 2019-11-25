@@ -29,14 +29,6 @@
     "configurations": [
       {
         "type": "java",
-        "name": "Launch Platform External <RescateTablero>",
-        "request": "launch",
-        "console": "externalTerminal",
-        "mainClass": "jadex.adapter.standalone.Platform",
-        "projectName": "RescateTablero"
-      },
-      {
-        "type": "java",
         "name": "Launch Platform <RescateTablero>",
         "request": "launch",
         "mainClass": "jadex.adapter.standalone.Platform",

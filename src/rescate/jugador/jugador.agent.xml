@@ -1,0 +1,114 @@
+<agent xmlns="http://jadex.sourceforge.net/jadex" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jadex.sourceforge.net/jadex http://jadex.sourceforge.net/jadex-0.96.xsd" name="jugador" package="rescate.jugador">
+
+  <imports>
+    <import>jadex.runtime.*</import>
+    <import>jadex.planlib.*</import>
+    <import>jadex.adapter.fipa.*</import>
+    <import>jadex.util.*</import>
+
+    <import>java.util.logging.*</import>
+    <import>java.util.*</import>
+
+    <import>rescate.jugador.planes.*</import>
+    <import>rescate.ontologia.acciones.*</import>
+    <import>rescate.ontologia.conceptos.*</import>
+    <import>rescate.ontologia.predicados.*</import>
+  </imports>
+
+  <capabilities>
+    <capability name="dfcap" file="jadex.planlib.DF" />
+  </capabilities>
+
+  <beliefs>
+
+    <belief name="tablero" class="AgentIdentifier">
+      <fact>new AgentIdentifier()</fact>
+    </belief>
+
+    <belief name="jugador" class="Jugador">
+      <fact>new Jugador()</fact>
+    </belief>
+
+  </beliefs>
+
+  <goals>
+    <achievegoalref name="df_register">
+      <concrete ref="dfcap.df_register" />
+    </achievegoalref>
+
+    <achievegoal name="unirsePartida"></achievegoal>
+
+    <achievegoalref name="df_search">
+      <concrete ref="dfcap.df_search" />
+    </achievegoalref>
+
+  </goals>
+
+  <plans>
+    <plan name="UnirsePartida">
+      <body class="UnirsePartidaPlan" />
+      <trigger>
+        <goal ref="unirsePartida" />
+      </trigger>
+    </plan>
+
+  </plans>
+
+  <events>
+
+    <messageevent name="RequestUnirsePartidaMsg" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Unirse_Partida.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="inform_unido" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="failure_unido" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="refuse_unido" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="agree_unido" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.AGREE</value>
+      </parameter>
+    </messageevent>
+
+  </events>
+
+  <configurations>
+    <configuration name="default">
+
+      <goals>
+        <initialgoal ref="df_register">
+          <parameter ref="description">
+            <value>
+              SFipa.createAgentDescription(null,SFipa.createServiceDescription("jugador", "agente", "Rescate"))
+                        </value>
+          </parameter>
+        </initialgoal>
+        <initialgoal ref="unirsePartida"></initialgoal>
+      </goals>
+
+    </configuration>
+  </configurations>
+
+</agent>
