@@ -349,11 +349,114 @@
       </messageevent>
       <messageevent name="Request_Desplazar" direction="send" type="fipa">
       </messageevent>
-      <messageevent name="Request_Apagar_fuego" direction="send" type="fipa">
+
+
+      <messageevent name="Request_Apagar_fuego" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.REQUEST</value>
+          </parameter>
+          <parameter name="language" class="String" direction="fixed">
+            <value>SFipa.NUGGETS_XML</value> 
+          </parameter>
+          <parameter name="content-class" class="Class" direction="fixed">
+            <value>ApagarFuegoAccion.class</value>
+          </parameter>
       </messageevent>
-      <messageevent name="Request_Extinguir_fuego" direction="send" type="fipa">
+
+      <messageevent name="Agree_Apagar_Fuego" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.INFORM</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value> 
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>FuegoApagadoPredicado.class</value>
+        </parameter>
       </messageevent>
-      <messageevent name="Request_Extinguir_humo" direction="send" type="fipa">
+
+      <messageevent name="Refuse_Apagar_Fuego" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.FAILURE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value> 
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>FuegoApagadoPredicado.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Request_Extinguir_fuego" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.REQUEST</value>
+          </parameter>
+          <parameter name="language" class="String" direction="fixed">
+            <value>SFipa.NUGGETS_XML</value> 
+          </parameter>
+          <parameter name="content-class" class="Class" direction="fixed">
+            <value>ExtinguirFuegoAccion.class</value>
+          </parameter>
+      </messageevent>
+
+      <messageevent name="Agree_Extinguir_Fuego" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.INFORM</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value> 
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>FuegoExtinguidoPredicado.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Refuse_Extinguir_Fuego" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.FAILURE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value> 
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>FuegoExtinguidoPredicado.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Request_Extinguir_humo" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+            <value>SFipa.REQUEST</value>
+          </parameter>
+          <parameter name="language" class="String" direction="fixed">
+            <value>SFipa.NUGGETS_XML</value> 
+          </parameter>
+          <parameter name="content-class" class="Class" direction="fixed">
+            <value>ExtinguirHumoAccion.class</value>
+          </parameter>
+      </messageevent>
+
+      <messageevent name="Agree_Extinguir_Humo" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.INFORM</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value> 
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>HumoExtinguidoPredicado.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Refuse_Extinguir_Humo" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.FAILURE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value> 
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>HumoExtinguidoPredicado.class</value>
+        </parameter>
       </messageevent>
       <messageevent name="Request_Abrir_puerta" direction="send" type="fipa">
       </messageevent>

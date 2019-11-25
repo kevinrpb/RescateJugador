@@ -8,6 +8,7 @@ import jadex.runtime.Plan;
 
 import rescate.ontologia.*;
 import rescate.ontologia.conceptos.Casilla;
+
 import rescate.ontologia.conceptos.Casilla.Conexion;
 
 class AbrirPuertaPlan extends Plan {
