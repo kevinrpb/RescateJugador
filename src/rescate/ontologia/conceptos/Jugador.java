@@ -9,6 +9,10 @@ public class Jugador extends Concepto {
     SANITARIO, JEFE, EXPERTO_EN_IMAGENES, ESPUMA_IGNIFUGA, MATERIAS_PELIGROSAS, GENERALISTA, RESCATES, CONDUCTOR
   }
 
+  public enum LlevandoVictima {
+    NO, SI, CURADA
+  }
+
   /*** Constructor ***/
   public Jugador() {
   }
@@ -27,7 +31,7 @@ public class Jugador extends Concepto {
 
   private boolean subidoCamion;
 
-  private boolean llevandoVictima;
+  private LlevandoVictima llevandoVictima;
   private boolean llevandoMateriaPeligrosa;
 
   /*** Getters & Setters ***/
@@ -95,11 +99,11 @@ public class Jugador extends Concepto {
     this.subidoCamion = subidoCamion;
   }
 
-  public boolean llevandoVictima() {
+  public LlevandoVictima LlevandoVictima() {
     return llevandoVictima;
   }
 
-  public void setLlevandoVictima(boolean llevandoVictima) {
+  public void setLlevandoVictima(LlevandoVictima llevandoVictima) {
     this.llevandoVictima = llevandoVictima;
   }
 

@@ -21,33 +21,33 @@
 
   <!-- Creencias -->
   <beliefs>
-    <!-- Los jugadores -->
-    <belief name="jugadores" class="Lista_Jugadores">
-      <fact>new Lista_Jugadores()</fact>
-    </belief>
-
     <!-- A quien le toca actuar -->
     <belief name="turno" class="int">
       <fact>0</fact>
     </belief>
 
     <!-- Mapa de juego -->
-    <belief name="mapa" class="Tablero">
+    <belief name="tablero" class="Tablero">
       <fact>new Tablero()</fact>
     </belief>
 
-    <!-- Fichas de dano disponibles -->
-    <belief name="fichasDanyo" class="int">
+    <!-- Fichas de danno disponibles -->
+    <belief name="fichasDanno" class="int">
       <fact>24</fact>
     </belief>
 
     <!-- Puntos de interes disponibles -->
-    <belief name="pdi" class="int">
+    <belief name="PDI" class="int">
       <fact>18</fact>
+    </belief>
+	
+	<!-- Puntos de interes en el tablero -->
+    <belief name="PDITablero" class="int">
+      <fact>0</fact>
     </belief>
 
     <!-- PDI personas disponibles -->
-    <belief name="fichasPersona" class="int">
+    <belief name="fichasVictima" class="int">
       <fact>12</fact>
     </belief>
 
@@ -56,12 +56,10 @@
       <fact>6</fact>
     </belief>
 
-    <!-- Puntos de accion disponibles -->
-    <belief name="fichasAccion" class="int">
-      <fact>21</fact>
-    </belief>
-
     <!-- Primeros auxilios disponibles -->
+    <belief name="primerosAuxilios" class="int">
+      <fact>3</fact>
+    </belief>
 
     <!-- Materias peligrosas disponibles -->
     <belief name="fichasFuegoHumo" class="int">
@@ -89,14 +87,34 @@
     </belief>
 
     <!-- Materias peligrosas disponibles -->
-    <belief name="FinPartida" class="boolean">
+    <belief name="finPartida" class="boolean">
       <fact>false</fact>
     </belief>
+	
+	   <!-- Materias peligrosas disponibles -->
+    <beliefset name="casillas" class="Casilla">
+      <fact>null</fact>
+    </beliefset>
 
-    <!-- Camion de bomberos? -->
+    <!-- Camion de bomberos -->
 
-    <!-- Ambulancia? -->
+    <!-- Ambulancia -->
 
+	<!-- Los jugadores han terminado -->
+    <belief name="finTurno" class="boolean">
+      <fact>false</fact>
+    </belief>
+	
+	<!-- Victimas Salvadas -->
+    <belief name="victimaSalvadas" class="int">
+      <fact>0</fact>
+    </belief>
+	
+	<!-- Victimas Muertas -->
+    <belief name="victimaMuertas" class="int">
+      <fact>0</fact>
+    </belief>
+	
   </beliefs>
 
   <!-- Metas -->
@@ -105,11 +123,26 @@
     <achievegoalref name="df_register">
       <concrete ref="dfcap.df_register" />
     </achievegoalref>
-
+	
+	<performgoal name="quieroColocarPuntos"  retry="true" retrydelay="3000" exclude="never" >
+			<contextcondition>
+				(($beliefbase.finTurno) &amp;&amp; ($beliefbase.PDITablero<3)) 
+			</contextcondition>
+	</performgoal>
+	
+	
   </goals>
 
   <!-- Planes -->
   <plans>
+  
+    <!-- Cambia una puerta de cerrada a abierta -->
+    <plan name="TableroInicial">
+      <body class="TableroInicial" />
+      <trigger>
+        <messageevent ref="msg_TableroInicial" />
+      </trigger>
+    </plan>
 
     <!-- Registrar a un jugador -->
     <plan name="unirJugador_plan">
@@ -287,11 +320,71 @@
         <messageevent ref="Request_Eliminar_materia_peligrosa" />
       </trigger>
     </plan>
+	
+	<!--  -->
+	<plan name="ColocarPuntosInteres">
+      <body class="ColocarPuntosInteres" />
+	  <trigger>	<goal ref="quieroColocarPuntos"/> </trigger>
+	  
+    </plan>
 
   </plans>
 
   <!-- Eventos -->
-  <events></events>
+  <events>
+      <messageevent name="Request_Unirse_a_la_partida" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REQUEST</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value> 
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>UnirsePartidaAccion.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Request_Elegir_rol" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Desplazar" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Apagar_fuego" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Extinguir_fuego" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Extinguir_humo" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Abrir_puerta" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Cerrar_puerta" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Derribar_pared" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Trasladar_victima" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Trasladar_materia_peligrosa" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Atender" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Identificar_materia_peligrosa" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Montar_en_vehiculo" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Conducir_vehiculo" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Desplazar_ambulancia" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Cambiar_rol" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Usar_canon_de_agua" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Mando" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="Request_Eliminar_materia_peligrosa" direction="send" type="fipa">
+      </messageevent>
+      <messageevent name="msg_TableroInicial" direction="send" type="fipa">
+      </messageevent>
+  </events>
 
   <!-- Propiedades -->
   <properties></properties>

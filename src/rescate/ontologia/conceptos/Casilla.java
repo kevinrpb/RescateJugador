@@ -1,123 +1,130 @@
+
 package rescate.ontologia.conceptos;
+
+
 
 public class Casilla extends Concepto {
 
-  /*** Enums ***/
-  public enum Conexion {
-    NADA, PUERTA_ABIERTA, PUERTA_CERRADA, PARED, PARED_SEMIRROTA, PARED_ROTA
-  }
+    /*** Enums ***/
+    public enum Conexion {
+        NADA, PUERTA_ABIERTA, PUERTA_CERRADA, PARED, PARED_SEMIRROTA, PARED_ROTA
+    }
 
-  public enum PuntoInteres {
-    OCULTO, FALSA_ALARMA, VICTIMA
-  }
+    public enum PuntoInteres {
+        OCULTO, FALSA_ALARMA, VICTIMA
+    }
 
-  /*** Constructor ***/
-  public Casilla() {
-  }
+    public enum Flecha {
+        ARRIBA, ARRIBADERECHA, DERECHA, DERECHAABAJO, ABAJO, ABAJOIZQUIERDA, IZQUIERDA, IZQUIERDAARRIBA, NADA
+    }
 
-  /*** Atributos ***/
-  private int[] posicion; // [x, y]
-  private Conexion[] conexiones;
+    /*** Constructor ***/
+    public Casilla() {
+    }
 
-  private int tieneFuego; // 0: nada, 1: humo, 2: fuego
-  private boolean tieneMateriaPeligrosa;
-  private boolean tieneFocoCalor;
-  private PuntoInteres puntoInteres;
+    /*** Atributos ***/
+    private int[] posicion; // [x, y]
+    private Conexion[] conexiones;
 
-  private boolean[] flecha; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
+    private int tieneFuego; // 0: nada, 1: humo, 2: fuego
+    private boolean tieneMateriaPeligrosa;
+    private boolean tieneFocoCalor;
+    private PuntoInteres puntoInteres;
 
-  private boolean camionBomberos;
-  private boolean ambulancia;
-  private boolean esAparcamientoCamion;
-  private boolean esAparcamientoAmbulancia;
+    private Flecha flecha; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
 
-  /*** Getters & Setters ***/
-  public int[] getPosicion() {
-    return posicion;
-  }
+    private boolean camionBomberos;
+    private boolean ambulancia;
+    private boolean esAparcamientoCamion;
+    private boolean esAparcamientoAmbulancia;
 
-  public void setPosicion(int[] posicion) {
-    this.posicion = posicion;
-  }
+    /*** Getters & Setters ***/
+    public int[] getPosicion() {
+        return posicion;
+    }
 
-  public Conexion[] getConexiones() {
-    return conexiones;
-  }
+    public void setPosicion(int[] posicion) {
+        this.posicion = posicion;
+    }
 
-  public void setConexiones(Conexion[] conexiones) {
-    this.conexiones = conexiones;
-  }
+    public Conexion[] getConexiones() {
+        return conexiones;
+    }
 
-  public int tieneFuego() {
-    return tieneFuego;
-  }
+    public void setConexiones(Conexion[] conexiones) {
+        this.conexiones = conexiones;
+    }
 
-  public void setTieneFuego(int tieneFuego) {
-    this.tieneFuego = tieneFuego;
-  }
+    public int tieneFuego() {
+        return tieneFuego;
+    }
 
-  public boolean tieneMateriaPeligrosa() {
-    return tieneMateriaPeligrosa;
-  }
+    public void setTieneFuego(int tieneFuego) {
+        this.tieneFuego = tieneFuego;
+    }
 
-  public void setTieneMateriaPeligrosa(boolean tieneMateriaPeligrosa) {
-    this.tieneMateriaPeligrosa = tieneMateriaPeligrosa;
-  }
+    public boolean tieneMateriaPeligrosa() {
+        return tieneMateriaPeligrosa;
+    }
 
-  public boolean tieneFocoCalor() {
-    return tieneFocoCalor;
-  }
+    public void setTieneMateriaPeligrosa(boolean tieneMateriaPeligrosa) {
+        this.tieneMateriaPeligrosa = tieneMateriaPeligrosa;
+    }
 
-  public void setTieneFocoCalor(boolean tieneFocoCalor) {
-    this.tieneFocoCalor = tieneFocoCalor;
-  }
+    public boolean tieneFocoCalor() {
+        return tieneFocoCalor;
+    }
 
-  public PuntoInteres getPuntoInteres() {
-    return puntoInteres;
-  }
+    public void setTieneFocoCalor(boolean tieneFocoCalor) {
+        this.tieneFocoCalor = tieneFocoCalor;
+    }
 
-  public void setPuntoInteres(PuntoInteres puntoInteres) {
-    this.puntoInteres = puntoInteres;
-  }
+    public PuntoInteres getPuntoInteres() {
+        return puntoInteres;
+    }
 
-  public boolean[] getFlecha() {
-    return flecha;
-  }
+    public void setPuntoInteres(PuntoInteres puntoInteres) {
+        this.puntoInteres = puntoInteres;
+    }
 
-  public void setFlecha(boolean[] flecha) {
-    this.flecha = flecha;
-  }
+    public Flecha getFlecha() {
+        return flecha;
+    }
 
-  public boolean isCamionBomberos() {
-    return camionBomberos;
-  }
+    public void setFlecha(Flecha flecha) {
+        this.flecha = flecha;
+    }
 
-  public void setCamionBomberos(boolean camionBomberos) {
-    this.camionBomberos = camionBomberos;
-  }
+    public boolean isCamionBomberos() {
+        return camionBomberos;
+    }
 
-  public boolean isAmbulancia() {
-    return ambulancia;
-  }
+    public void setCamionBomberos(boolean camionBomberos) {
+        this.camionBomberos = camionBomberos;
+    }
 
-  public void setAmbulancia(boolean ambulancia) {
-    this.ambulancia = ambulancia;
-  }
+    public boolean isAmbulancia() {
+        return ambulancia;
+    }
 
-  public boolean esAparcamientoCamion() {
-    return esAparcamientoCamion;
-  }
+    public void setAmbulancia(boolean ambulancia) {
+        this.ambulancia = ambulancia;
+    }
 
-  public void setEsAparcamientoCamion(boolean esAparcamientoCamion) {
-    this.esAparcamientoCamion = esAparcamientoCamion;
-  }
+    public boolean esAparcamientoCamion() {
+        return esAparcamientoCamion;
+    }
 
-  public boolean esAparcamientoAmbulancia() {
-    return esAparcamientoAmbulancia;
-  }
+    public void setEsAparcamientoCamion(boolean esAparcamientoCamion) {
+        this.esAparcamientoCamion = esAparcamientoCamion;
+    }
 
-  public void setEsAparcamientoAmbulancia(boolean esAparcamientoAmbulancia) {
-    this.esAparcamientoAmbulancia = esAparcamientoAmbulancia;
-  }
+    public boolean esAparcamientoAmbulancia() {
+        return esAparcamientoAmbulancia;
+    }
+
+    public void setEsAparcamientoAmbulancia(boolean esAparcamientoAmbulancia) {
+        this.esAparcamientoAmbulancia = esAparcamientoAmbulancia;
+    }
 
 }
