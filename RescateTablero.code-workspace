@@ -12,11 +12,12 @@
 			"**/.factorypath": true,
 			"bin/": true,
 			"lib/": true,
-			"RescateTablero*": true,
 			"*.bat": true,
 			"*.sh": true,
 			"*.txt": true,
-			".git*": true
+			".git*": true,
+			"jadex.pr*": true,
+			"RescateTablero*": true,
 		},
 		"cSpell.enabled": false
 	},
