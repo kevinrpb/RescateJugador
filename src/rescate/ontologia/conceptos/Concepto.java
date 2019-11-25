@@ -1,3 +1,4 @@
 package rescate.ontologia.conceptos;
 
-public abstract class Concepto { }
+public abstract class Concepto {
+}

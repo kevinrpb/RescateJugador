@@ -1,44 +1,47 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"files.exclude": {
-			"**/.classpath": true,
-			"**/.project": true,
-			"**/.settings": true,
-			"**/.factorypath": true,
-			"bin/": true,
-			"lib/": true,
-			"*.bat": true,
-			"*.sh": true,
-			"*.txt": true,
-			".git*": true,
-			"jadex.pr*": true,
-			"RescateTablero*": true,
-		},
-		"cSpell.enabled": false
-	},
-	"launch": {
-		"version": "0.2.0",
-		"configurations": [
-			{
-				"type": "java",
-				"name": "Launch Platform External <RescateTablero>",
-				"request": "launch",
-				"console": "externalTerminal",
-				"mainClass": "jadex.adapter.standalone.Platform",
-				"projectName": "RescateTablero"
-			},
-			{
-				"type": "java",
-				"name": "Launch Platform <RescateTablero>",
-				"request": "launch",
-				"mainClass": "jadex.adapter.standalone.Platform",
-				"projectName": "RescateTablero"
-			}
-		]
-	}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "**/.classpath": true,
+      "**/.project": true,
+      "**/.settings": true,
+      "**/.factorypath": true,
+      "bin/": true,
+      "lib/": true,
+      "*.bat": true,
+      "*.sh": true,
+      "*.txt": true,
+      ".git*": true,
+      "jadex.pr*": true,
+      "RescateTablero*": true
+    },
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "cSpell.enabled": false
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "name": "Launch Platform External <RescateTablero>",
+        "request": "launch",
+        "console": "externalTerminal",
+        "mainClass": "jadex.adapter.standalone.Platform",
+        "projectName": "RescateTablero"
+      },
+      {
+        "type": "java",
+        "name": "Launch Platform <RescateTablero>",
+        "request": "launch",
+        "mainClass": "jadex.adapter.standalone.Platform",
+        "projectName": "RescateTablero"
+      }
+    ]
+  }
 }

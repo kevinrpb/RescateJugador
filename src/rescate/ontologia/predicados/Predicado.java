@@ -1,3 +1,4 @@
 package rescate.ontologia.predicados;
 
-public abstract class Predicado { }
+public abstract class Predicado {
+}

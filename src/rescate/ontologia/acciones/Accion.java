@@ -1,3 +1,4 @@
 package rescate.ontologia.acciones;
 
-public abstract class Accion { }
+public abstract class Accion {
+}

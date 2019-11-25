@@ -1,3 +1,4 @@
 package rescate.ontologia.acciones;
 
-class AccionVacia extends Accion { }
+class AccionVacia extends Accion {
+}

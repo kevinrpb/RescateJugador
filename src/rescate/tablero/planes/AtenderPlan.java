@@ -10,9 +10,9 @@ import rescate.ontologia.*;
 
 class AtenderPlan extends Plan {
 
-	@Override
-	public void body() {
+  @Override
+  public void body() {
 
-	}
+  }
 
 }

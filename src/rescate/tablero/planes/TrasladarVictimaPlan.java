@@ -10,9 +10,9 @@ import rescate.ontologia.*;
 
 class TrasladarVictimaPlan extends Plan {
 
-	@Override
-	public void body() {
+  @Override
+  public void body() {
 
-	}
+  }
 
 }

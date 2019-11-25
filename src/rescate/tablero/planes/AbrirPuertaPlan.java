@@ -10,9 +10,9 @@ import rescate.ontologia.*;
 
 class AbrirPuertaPlan extends Plan {
 
-	@Override
-	public void body() {
+  @Override
+  public void body() {
 
-	}
+  }
 
 }
