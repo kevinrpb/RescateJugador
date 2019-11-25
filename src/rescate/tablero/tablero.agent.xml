@@ -126,7 +126,8 @@
 	
 	<performgoal name="quieroColocarPuntos"  retry="true" retrydelay="3000" exclude="never" >
 			<contextcondition>
-				(($beliefbase.finTurno) &amp;&amp; ($beliefbase.PDITablero<3)) 
+				(($beliefbase.finTurno) &amp;&amp; 
+        (($beliefbase.PDITablero) &lt; 3))
 			</contextcondition>
 	</performgoal>
 	
