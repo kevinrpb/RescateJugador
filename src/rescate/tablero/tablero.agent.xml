@@ -100,6 +100,10 @@
 
     <!-- Ambulancia -->
 
+    <belief name="ambulancia" class="Ambulancia">
+      <fact>null</fact>
+    </belief>
+
 	<!-- Los jugadores han terminado -->
     <belief name="finTurno" class="boolean">
       <fact>false</fact>
@@ -114,6 +118,10 @@
     <belief name="victimaMuertas" class="int">
       <fact>0</fact>
     </belief>
+
+    <beliefset name="jugadores" class="Jugador">
+      <fact>null</fact>
+    </beliefset>
 	
   </beliefs>
 
@@ -206,7 +214,6 @@
       <body class="InformarHabitacionPlan" />
       <trigger>
         <!-- Cuando informa -->
-        >
       </trigger>
     </plan>
 
@@ -324,7 +331,7 @@
 	
 	<!--  -->
 	<plan name="ColocarPuntosInteres">
-      <body class="ColocarPuntosInteres" />
+      <body class="ColocarPuntosInteresPlan" />
 	  <trigger>	<goal ref="quieroColocarPuntos"/> </trigger>
 	  
     </plan>

@@ -5,126 +5,145 @@ package rescate.ontologia.conceptos;
 
 public class Casilla extends Concepto {
 
-    /*** Enums ***/
-    public enum Conexion {
-        NADA, PUERTA_ABIERTA, PUERTA_CERRADA, PARED, PARED_SEMIRROTA, PARED_ROTA
-    }
+    	/*** Enums ***/
+	public enum Conexion {
+		NADA, PUERTA_ABIERTA, PUERTA_CERRADA, PARED, PARED_SEMIRROTA, PARED_ROTA
+	}
 
-    public enum PuntoInteres {
-        OCULTO, FALSA_ALARMA, VICTIMA
-    }
+	public enum PuntoInteres {
+		NADA, OCULTO, FALSA_ALARMA, VICTIMA
+	}
 
-    public enum Flecha {
-        ARRIBA, ARRIBADERECHA, DERECHA, DERECHAABAJO, ABAJO, ABAJOIZQUIERDA, IZQUIERDA, IZQUIERDAARRIBA, NADA
-    }
+	public enum PuntoInteresReal {
+		NADA, FALSA_ALARMA, VICTIMA
+	}
 
-    /*** Constructor ***/
-    public Casilla() {
-    }
+	public enum Flecha {
+		ARRIBA, ARRIBADERECHA, DERECHA, DERECHAABAJO, ABAJO, ABAJOIZQUIERDA, IZQUIERDA, IZQUIERDAARRIBA, NADA
+	}
 
-    /*** Atributos ***/
-    private int[] posicion; // [x, y]
-    private Conexion[] conexiones;
+	/*** Constructor ***/
+	public Casilla() {
+	}
 
-    private int tieneFuego; // 0: nada, 1: humo, 2: fuego
-    private boolean tieneMateriaPeligrosa;
-    private boolean tieneFocoCalor;
-    private PuntoInteres puntoInteres;
+	/*** Atributos ***/
+	private int[] posicion; // [x, y]
+	private Conexion[] conexiones; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
 
-    private Flecha flecha; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
+	private int tieneFuego; // 0: nada, 1: humo, 2: fuego
+	private boolean tieneMateriaPeligrosa;
+	private boolean tieneFocoCalor;
+	private PuntoInteres puntoInteres;
+	private PuntoInteresReal puntoInteresReal;
+	private Flecha flecha;
 
-    private boolean camionBomberos;
-    private boolean ambulancia;
-    private boolean esAparcamientoCamion;
-    private boolean esAparcamientoAmbulancia;
+	private boolean camionBomberos;
+	private boolean ambulancia;
+	private boolean esAparcamientoCamion;
+	private boolean esAparcamientoAmbulancia;
 
-    /*** Getters & Setters ***/
-    public int[] getPosicion() {
-        return posicion;
-    }
+	/*** Getters & Setters ***/
+	public int[] getPosicion() {
+		return posicion;
+	}
 
-    public void setPosicion(int[] posicion) {
-        this.posicion = posicion;
-    }
+	public void setPosicion(int[] posicion) {
+		this.posicion = posicion;
+	}
 
-    public Conexion[] getConexiones() {
-        return conexiones;
-    }
+	public Conexion[] getConexiones() {
+		return conexiones;
+	}
 
-    public void setConexiones(Conexion[] conexiones) {
-        this.conexiones = conexiones;
-    }
+	public void setConexiones(Conexion[] conexiones) {
+		this.conexiones = conexiones;
+	}
 
-    public int tieneFuego() {
-        return tieneFuego;
-    }
+	public int tieneFuego() {
+		return tieneFuego;
+	}
 
-    public void setTieneFuego(int tieneFuego) {
-        this.tieneFuego = tieneFuego;
-    }
+	public void setTieneFuego(int tieneFuego) {
+		this.tieneFuego = tieneFuego;
+	}
 
-    public boolean tieneMateriaPeligrosa() {
-        return tieneMateriaPeligrosa;
-    }
+	public boolean tieneMateriaPeligrosa() {
+		return tieneMateriaPeligrosa;
+	}
 
-    public void setTieneMateriaPeligrosa(boolean tieneMateriaPeligrosa) {
-        this.tieneMateriaPeligrosa = tieneMateriaPeligrosa;
-    }
+	public void setTieneMateriaPeligrosa(boolean tieneMateriaPeligrosa) {
+		this.tieneMateriaPeligrosa = tieneMateriaPeligrosa;
+	}
 
-    public boolean tieneFocoCalor() {
-        return tieneFocoCalor;
-    }
+	public boolean tieneFocoCalor() {
+		return tieneFocoCalor;
+	}
 
-    public void setTieneFocoCalor(boolean tieneFocoCalor) {
-        this.tieneFocoCalor = tieneFocoCalor;
-    }
+	public void setTieneFocoCalor(boolean tieneFocoCalor) {
+		this.tieneFocoCalor = tieneFocoCalor;
+	}
 
-    public PuntoInteres getPuntoInteres() {
-        return puntoInteres;
-    }
+	public PuntoInteres getPuntoInteres() {
+		return puntoInteres;
+	}
 
-    public void setPuntoInteres(PuntoInteres puntoInteres) {
-        this.puntoInteres = puntoInteres;
-    }
+	public void setPuntoInteresReal(PuntoInteresReal puntoInteresReal) {
+		this.puntoInteresReal = puntoInteresReal;
+	}
 
-    public Flecha getFlecha() {
-        return flecha;
-    }
+	public PuntoInteresReal getPuntoInteresReal() {
+		return puntoInteresReal;
+	}
 
-    public void setFlecha(Flecha flecha) {
-        this.flecha = flecha;
-    }
+	public void setPuntoInteres(PuntoInteres puntoInteres) {
+		this.puntoInteres = puntoInteres;
+	}
 
-    public boolean isCamionBomberos() {
-        return camionBomberos;
-    }
+	public Flecha getFlecha() {
+		return flecha;
+	}
 
-    public void setCamionBomberos(boolean camionBomberos) {
-        this.camionBomberos = camionBomberos;
-    }
+	public void setFlecha(Flecha flecha) {
+		this.flecha = flecha;
+	}
 
-    public boolean isAmbulancia() {
-        return ambulancia;
-    }
+	public boolean isCamionBomberos() {
+		return camionBomberos;
+	}
 
-    public void setAmbulancia(boolean ambulancia) {
-        this.ambulancia = ambulancia;
-    }
+	public void setCamionBomberos(boolean camionBomberos) {
+		this.camionBomberos = camionBomberos;
+	}
 
-    public boolean esAparcamientoCamion() {
-        return esAparcamientoCamion;
-    }
+	public boolean isAmbulancia() {
+		return ambulancia;
+	}
 
-    public void setEsAparcamientoCamion(boolean esAparcamientoCamion) {
-        this.esAparcamientoCamion = esAparcamientoCamion;
-    }
+	public void setAmbulancia(boolean ambulancia) {
+		this.ambulancia = ambulancia;
+	}
 
-    public boolean esAparcamientoAmbulancia() {
-        return esAparcamientoAmbulancia;
-    }
+	public boolean esAparcamientoCamion() {
+		return esAparcamientoCamion;
+	}
 
-    public void setEsAparcamientoAmbulancia(boolean esAparcamientoAmbulancia) {
-        this.esAparcamientoAmbulancia = esAparcamientoAmbulancia;
-    }
+	public void setEsAparcamientoCamion(boolean esAparcamientoCamion) {
+		this.esAparcamientoCamion = esAparcamientoCamion;
+	}
 
+	public boolean esAparcamientoAmbulancia() {
+		return esAparcamientoAmbulancia;
+	}
+
+	public void setEsAparcamientoAmbulancia(boolean esAparcamientoAmbulancia) {
+		this.esAparcamientoAmbulancia = esAparcamientoAmbulancia;
+	}
+
+	public boolean esUnaCalle() {
+		if (posicion[0] == 0 || posicion[0] == 7 || posicion[1] == 1 || posicion[1] == 9) {
+			return true;
+		}
+
+		return false;
+	}
 }
