@@ -537,10 +537,57 @@
       <!-- HECHO -->
 
 
-
-
-      <messageevent name="Request_Cerrar_puerta" direction="send" type="fipa">
+      <!-- HECHO -->
+      <messageevent name="Request_Cerrar_Puerta" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REQUEST</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>CerrarPuerta.class</value>
+        </parameter>
       </messageevent>
+
+      <messageevent name="Inform_Puerta_Cerrada" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.INFORM</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>PuertaCerrada.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Refuse_Cerrar_Puerta" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REFUSE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>CerrarPuerta.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Failure_Cerrar_Puerta" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.FAILURE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>CerrarPuerta.class</value>
+        </parameter>
+      </messageevent>
+      <!-- HECHO -->
+
+      
       <messageevent name="Request_Derribar_pared" direction="send" type="fipa">
       </messageevent>
       <messageevent name="Request_Trasladar_victima" direction="send" type="fipa">

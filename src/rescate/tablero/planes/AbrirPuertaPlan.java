@@ -47,6 +47,7 @@ class AbrirPuertaPlan extends Plan {
     } 
     // Si la conexión es una puerta cerrada...
     else {
+      // No tiene PA suficientes...
       if (jugador.getPuntosAccion() < 1) {
         System.out.println("[ERROR] El jugador con id " + idJugador + " no tiene suficientes PA para abrir una puerta");
         // Se rechaza la petición de acción del jugador
@@ -55,6 +56,7 @@ class AbrirPuertaPlan extends Plan {
         respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
         sendMessage(respuesta);
       }
+      // PA suficientes...
       else {
         System.out.println("[INFO] Se ha abierto una puerta en la casilla[" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
         // Se modifica la conexion a puerta abierta
