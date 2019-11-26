@@ -47,8 +47,9 @@ class ApagarFuegoPlan extends Plan {
       respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
       sendMessage(respuesta);
     } 
-    // Si la conexión tiene fuego...
+    // Si la casilla tiene fuego...
     else {
+      // No hay PA suficientes para realizar la acción (en función del rol)
       if (jugador.getPuntosAccion() + jugador.getPuntosAccionExtincion() < ((jugador.getRol() == Jugador.Rol.SANITARIO) ? 2 : 1)) {
         System.out.println("[ERROR] El jugador con id " + idJugador + " no tiene suficientes PA para apagar un fuego");
         // Se rechaza la petición de acción del jugador
@@ -57,6 +58,7 @@ class ApagarFuegoPlan extends Plan {
         respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
         sendMessage(respuesta);
       }
+      // PA suficientes
       else {
         System.out.println("[INFO] Se ha apagado un fuego en la casilla[" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
         // Se apaga el fuego (pasa a humo)

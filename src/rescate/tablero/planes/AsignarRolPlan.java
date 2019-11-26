@@ -31,7 +31,7 @@ class AsignarRolPlan extends Plan {
     // Se identifican los roles disponibles y...
     ArrayList<Jugador.Rol> roles = (ArrayList<Jugador.Rol>) Arrays.asList(Jugador.Rol.values());
     roles.remove(Jugador.Rol.NINGUNO);
-    // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
+    // ...se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
     Jugador jugador = null;
     int indice = -1;
     for (int i = 0; i < t.getJugadores().size(); i++) {

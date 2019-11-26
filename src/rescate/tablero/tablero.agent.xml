@@ -547,8 +547,61 @@
       </messageevent>
       <messageevent name="Request_Trasladar_materia_peligrosa" direction="send" type="fipa">
       </messageevent>
-      <messageevent name="Request_Atender" direction="send" type="fipa">
+
+      <!-- HECHO -->
+      <messageevent name="Request_Atender" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REQUEST</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>AtenderHerido.class</value>
+        </parameter>
       </messageevent>
+
+      <messageevent name="Inform_Victima_Atendida" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.INFORM</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>VictimaAtendida.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Refuse_Atender" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REFUSE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>AtenderHerido.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Failure_Atender" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.FAILURE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>AtenderHerido.class</value>
+        </parameter>
+      </messageevent>
+      <!-- HECHO -->
+
+
+
+
+
       <messageevent name="Request_Identificar_materia_peligrosa" direction="send" type="fipa">
       </messageevent>
       <messageevent name="Request_Montar_en_vehiculo" direction="send" type="fipa">

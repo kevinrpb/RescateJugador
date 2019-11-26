@@ -100,7 +100,7 @@ public class Jugador extends Concepto {
     this.subidoCamion = subidoCamion;
   }
 
-  public LlevandoVictima LlevandoVictima() {
+  public LlevandoVictima llevandoVictima() {
     return llevandoVictima;
   }
 
