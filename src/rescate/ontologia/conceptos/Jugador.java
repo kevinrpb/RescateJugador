@@ -23,6 +23,7 @@ public class Jugador extends Concepto {
   private Rol rol;
 
   private int[] posicion;
+  private int habitacion;
 
   private int puntosAccion;
   private int puntosAccionMando;
@@ -113,6 +114,14 @@ public class Jugador extends Concepto {
 
   public void setLlevandoMateriaPeligrosa(boolean llevandoMateriaPeligrosa) {
     this.llevandoMateriaPeligrosa = llevandoMateriaPeligrosa;
+  }
+
+  public int getHabitacion() {
+    return habitacion;
+  }
+
+  public void setHabitacion(int habitacion) {
+    this.habitacion = habitacion;
   }
 
 }

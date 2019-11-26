@@ -9,90 +9,37 @@ public class Tablero extends Concepto {
   }
 
   /*** Atributos ***/
-  private Casilla[][] habitaciones;
   private Casilla[][] mapa;
-
-  private int salvados;
-  private int victimas;
-
-  private int cubosDanno;
-  private int focosCalor;
-  private int puntoInteres;
-  private int primerosAuxilios;
-
   private ArrayList<Jugador> jugadores;
 
+  /*** Funciones auxiliares ***/
+  public ArrayList<Casilla> getHabitacion(int i) {
+    ArrayList<Casilla> habitacion = new ArrayList<>();
+    for (Casilla[] fila: mapa) {
+      for (Casilla c: fila) {
+        if (c.getHabitacion() == i) {
+          habitacion.add(c);
+        }
+      }
+    }
+    return habitacion;
+  }
+
   /*** Getters & Setters ***/
-  public Casilla[][] getHabitaciones() {
-    return habitaciones;
-  }
-
-  public void setHabitaciones(Casilla[][] habitaciones) {
-    this.habitaciones = habitaciones;
-  }
-
-  public int getSalvados() {
-    return salvados;
-  }
-
-  public void setSalvados(int salvados) {
-    this.salvados = salvados;
-  }
-
-  public int getVictimas() {
-    return victimas;
-  }
-
-  public void setVictimas(int victimas) {
-    this.victimas = victimas;
-  }
-
-  public int getCubosDanno() {
-    return cubosDanno;
-  }
-
-  public void setCubosDanno(int cubosDanno) {
-    this.cubosDanno = cubosDanno;
-  }
-
-  public int getFocosCalor() {
-    return focosCalor;
-  }
-
-  public void setFocosCalor(int focosCalor) {
-    this.focosCalor = focosCalor;
-  }
-
-  public int getPuntoInteres() {
-    return puntoInteres;
-  }
-
-  public void setPuntoInteres(int puntoInteres) {
-    this.puntoInteres = puntoInteres;
-  }
-
-  public int getPrimerosAuxilios() {
-    return primerosAuxilios;
-  }
-
-  public void setPrimerosAuxilios(int primerosAuxilios) {
-    this.primerosAuxilios = primerosAuxilios;
-  }
-
   public ArrayList<Jugador> getJugadores() {
     return jugadores;
   }
 
-  public void setJugadores(ArrayList<Jugador> jugadores) {
-    this.jugadores = jugadores;
+  public void setJugadores(int indice, Jugador j) {
+    this.jugadores.set(indice, j);
   }
 
   public Casilla[][] getMapa() {
     return mapa;
   }
 
-  public void setMapa(Casilla[][] mapa) {
-    this.mapa = mapa;
+  public void setCasilla(int X, int Y, Casilla c) {
+    this.mapa[Y][X] = c;
   }
 
 }

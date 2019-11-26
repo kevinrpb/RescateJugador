@@ -31,29 +31,19 @@
       <fact>new Tablero()</fact>
     </belief>
 
-    <!-- Fichas de danno disponibles -->
-    <belief name="fichasDanno" class="int">
-      <fact>24</fact>
-    </belief>
-
-    <!-- Puntos de interes disponibles -->
-    <belief name="PDI" class="int">
-      <fact>18</fact>
-    </belief>
-
-	<!-- Puntos de interes en el tablero -->
-    <belief name="PDITablero" class="int">
-      <fact>0</fact>
-    </belief>
-
     <!-- PDI personas disponibles -->
-    <belief name="fichasVictima" class="int">
-      <fact>12</fact>
+    <belief name="PDIVictima" class="int">
+      <fact>10</fact>
     </belief>
 
-    <!-- FPDI falsas alarmas disponibles -->
-    <belief name="fichasFalsaAlarma" class="int">
-      <fact>6</fact>
+    <!-- PDI falsas alarmas disponibles -->
+    <belief name="PDIFalsaAlarma" class="int">
+      <fact>5</fact>
+    </belief>
+
+    <!-- Fichas de danno disponibles -->
+    <belief name="cubosDanno" class="int">
+      <fact>24</fact>
     </belief>
 
     <!-- Primeros auxilios disponibles -->
@@ -62,17 +52,12 @@
     </belief>
 
     <!-- Materias peligrosas disponibles -->
-    <belief name="fichasFuegoHumo" class="int">
-      <fact>35</fact>
-    </belief>
-
-    <!-- Materias peligrosas disponibles -->
     <belief name="fichasMateriaPeligrosa" class="int">
       <fact>6</fact>
     </belief>
 
     <!-- Focos de calor disponibles -->
-    <belief name="fichasFoco" class="int">
+    <belief name="focosCalor" class="int">
       <fact>24</fact>
     </belief>
 
@@ -91,11 +76,6 @@
       <fact>false</fact>
     </belief>
 
-	   <!-- Materias peligrosas disponibles -->
-    <beliefset name="casillas" class="Casilla">
-      <fact>null</fact>
-    </beliefset>
-
     <!-- Camion de bomberos -->
 
     <!-- Ambulancia -->
@@ -104,7 +84,7 @@
       <fact>null</fact>
     </belief>
 
-	<!-- Los jugadores han terminado -->
+	  <!-- Los jugadores han terminado -->
     <belief name="finTurno" class="boolean">
       <fact>false</fact>
     </belief>

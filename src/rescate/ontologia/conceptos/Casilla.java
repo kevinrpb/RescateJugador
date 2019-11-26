@@ -2,7 +2,7 @@ package rescate.ontologia.conceptos;
 
 public class Casilla extends Concepto {
 
-    	/*** Enums ***/
+  /*** Enums ***/
 	public enum Conexion {
 		NADA, PUERTA_ABIERTA, PUERTA_CERRADA, PARED, PARED_SEMIRROTA, PARED_ROTA
 	}
@@ -11,13 +11,13 @@ public class Casilla extends Concepto {
 		NADA, OCULTO, FALSA_ALARMA, VICTIMA
 	}
 
-	public enum PuntoInteresReal {
-		NADA, FALSA_ALARMA, VICTIMA
-	}
-
-	public enum Flecha {
-		ARRIBA, ARRIBADERECHA, DERECHA, DERECHAABAJO, ABAJO, ABAJOIZQUIERDA, IZQUIERDA, IZQUIERDAARRIBA, NADA
-	}
+	public enum Direccion {
+		ARRIBA, ARRIBA_DERECHA, DERECHA, ABAJO_DERECHA, ABAJO, ABAJO_IZQUIERDA, IZQUIERDA, ARRIBA_IZQUIERDA, NADA
+  }
+  
+  public enum Fuego {
+    NADA, HUMO, FUEGO
+  }
 
 	/*** Constructor ***/
 	public Casilla() {
@@ -27,17 +27,21 @@ public class Casilla extends Concepto {
 	private int[] posicion; // [x, y]
 	private Conexion[] conexiones; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
 
-	private int tieneFuego; // 0: nada, 1: humo, 2: fuego
+	private Fuego tieneFuego;
 	private boolean tieneMateriaPeligrosa;
-	private boolean tieneFocoCalor;
-	private PuntoInteres puntoInteres;
-	private PuntoInteresReal puntoInteresReal;
-	private Flecha flecha;
+  private boolean tieneFocoCalor;
+
+  private boolean puntoInteresOculto;
+  private PuntoInteres puntoInteres;
+  
+	private Direccion flecha;
 
 	private boolean camionBomberos;
 	private boolean ambulancia;
 	private boolean esAparcamientoCamion;
-	private boolean esAparcamientoAmbulancia;
+  private boolean esAparcamientoAmbulancia;
+  
+  private int habitacion;
 
 	/*** Getters & Setters ***/
 	public int[] getPosicion() {
@@ -52,15 +56,15 @@ public class Casilla extends Concepto {
 		return conexiones;
 	}
 
-	public void setConexiones(Conexion[] conexiones) {
-		this.conexiones = conexiones;
+	public void setConexiones(int pos, Conexion con) {
+		this.conexiones[pos] = con;
 	}
 
-	public int tieneFuego() {
+	public Fuego tieneFuego() {
 		return tieneFuego;
 	}
 
-	public void setTieneFuego(int tieneFuego) {
+	public void setTieneFuego(Fuego tieneFuego) {
 		this.tieneFuego = tieneFuego;
 	}
 
@@ -84,23 +88,15 @@ public class Casilla extends Concepto {
 		return puntoInteres;
 	}
 
-	public void setPuntoInteresReal(PuntoInteresReal puntoInteresReal) {
-		this.puntoInteresReal = puntoInteresReal;
-	}
-
-	public PuntoInteresReal getPuntoInteresReal() {
-		return puntoInteresReal;
-	}
-
 	public void setPuntoInteres(PuntoInteres puntoInteres) {
 		this.puntoInteres = puntoInteres;
 	}
 
-	public Flecha getFlecha() {
+	public Direccion getFlecha() {
 		return flecha;
 	}
 
-	public void setFlecha(Flecha flecha) {
+	public void setFlecha(Direccion flecha) {
 		this.flecha = flecha;
 	}
 
@@ -136,11 +132,20 @@ public class Casilla extends Concepto {
 		this.esAparcamientoAmbulancia = esAparcamientoAmbulancia;
 	}
 
-	public boolean esUnaCalle() {
-		if (posicion[0] == 0 || posicion[0] == 7 || posicion[1] == 1 || posicion[1] == 9) {
-			return true;
-		}
+  public boolean puntoInteresOculto() {
+    return puntoInteresOculto;
+  }
 
-		return false;
-	}
+  public void setPuntoInteresOculto(boolean puntoInteresOculto) {
+    this.puntoInteresOculto = puntoInteresOculto;
+  }
+
+  public int getHabitacion() {
+    return habitacion;
+  }
+
+  public void setHabitacion(int habitacion) {
+    this.habitacion = habitacion;
+  }
+
 }
