@@ -2,11 +2,11 @@ package rescate.ontologia.acciones;
 
 import rescate.ontologia.conceptos.Casilla;
 
-public class ApagarFuegoAccion extends Accion {
+public class ApagarFuego extends Accion {
 
   private Casilla casilla;
 
-  public ApagarFuegoAccion() {
+  public ApagarFuego() {
   }
 
   public Casilla getCasilla() {

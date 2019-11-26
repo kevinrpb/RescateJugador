@@ -17,6 +17,8 @@ public class ColocarPuntosInteresPlan extends Plan {
     System.out.println("[PLAN] El tablero trata de colocar un PDI");
 
     // PDI tipo victima sin colocar
+    int PDITablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
+    // PDI tipo victima sin colocar
     int PDIVictima = (int) getBeliefbase().getBelief("PDIVictima").getFact();
     // PDI tipo falsa alarma sin colocar
     int PDIFalsaAlarma = (int) getBeliefbase().getBelief("PDIFalsaAlarma").getFact();
@@ -84,32 +86,32 @@ public class ColocarPuntosInteresPlan extends Plan {
         // La nueva casilla es la indica por la flecha de la casilla actual
         switch (c.getFlecha()) {
           case ARRIBA:
-            Y++;
+            Y--;
             break;
           case ARRIBA_DERECHA:
             X++;
-            Y++;
+            Y--;
             break;
           case DERECHA:
             X++;
             break;
           case ABAJO_DERECHA:
             X++;
-            Y--;
+            Y++;
             break;
           case ABAJO:
-            Y--;
+            Y++;
             break;
           case ABAJO_IZQUIERDA:
             X--;
-            Y--;
+            Y++;
             break;
           case IZQUIERDA:
             X--;
             break;
           case ARRIBA_IZQUIERDA:
             X--;
-            Y++;
+            Y--;
             break;
           case NADA:
             break;
@@ -121,10 +123,12 @@ public class ColocarPuntosInteresPlan extends Plan {
     }
 
     // Una vez colocado el nuevo PDI, se actualizan las creencias
+		getBeliefbase().getBelief("PDITablero").setFact(PDITablero + 1);
 		getBeliefbase().getBelief("PDIVictima").setFact(PDIVictima);
 		getBeliefbase().getBelief("PDIFalsaAlarma").setFact(PDIFalsaAlarma);
     getBeliefbase().getBelief("tablero").setFact(t);
 
+    /*
     // Casillas en la habitación
     ArrayList<Casilla> habitacion = t.getHabitacion(c.getHabitacion());
     // Se oculta el PDI de aquellos PDI sin revelar aun
@@ -147,7 +151,7 @@ public class ColocarPuntosInteresPlan extends Plan {
         sendMessage(mensaje);
       }
     }
-
+    */
   }
 
   public void colocarVictima(Casilla c, Tablero t) {

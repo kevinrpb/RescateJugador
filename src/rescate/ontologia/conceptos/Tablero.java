@@ -30,7 +30,7 @@ public class Tablero extends Concepto {
     return jugadores;
   }
 
-  public void setJugadores(int indice, Jugador j) {
+  public void setJugador(int indice, Jugador j) {
     this.jugadores.set(indice, j);
   }
 
