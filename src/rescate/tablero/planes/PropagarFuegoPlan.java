@@ -7,13 +7,9 @@ import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
-import rescate.ontologia.*;
-import rescate.ontologia.conceptos.Ambulancia;
-import rescate.ontologia.conceptos.Casilla;
-import rescate.ontologia.conceptos.Casilla.Conexion;
-import rescate.ontologia.conceptos.Casilla.PuntoInteres;
-import rescate.ontologia.conceptos.Casilla.PuntoInteresReal;
-import rescate.ontologia.conceptos.Jugador;
+import rescate.ontologia.acciones.*;
+import rescate.ontologia.conceptos.*;
+import rescate.ontologia.predicados.*;
 
 public class PropagarFuegoPlan extends Plan {
 
@@ -24,17 +20,17 @@ public class PropagarFuegoPlan extends Plan {
 		int posicionX = elegida.getPosicion()[0];
 		boolean calle = false;
 
-		while (mapa[posicionY][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[2] != Conexion.PARED)
-				&& (elegida.getConexiones()[2] != Conexion.PARED_SEMIRROTA)
-				&& (elegida.getConexiones()[2] != Conexion.PUERTA_CERRADA)) {
+		while (mapa[posicionY][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[2] != Casilla.Conexion.PARED)
+				&& (elegida.getConexiones()[2] != Casilla.Conexion.PARED_SEMIRROTA)
+				&& (elegida.getConexiones()[2] != Casilla.Conexion.PUERTA_CERRADA)) {
 
-			if (mapa[posicionY][posicionX].getPuntoInteresReal() == PuntoInteresReal.VICTIMA) {
+			if (mapa[posicionY][posicionX].getPuntoInteresReal() == Casilla.PuntoInteresReal.VICTIMA) {
 				int victim = (int) getBeliefbase().getBelief("victimaMuertas").getFact();
 				getBeliefbase().getBeliefSet("victimaMuertas").removeFact(victim);
 				victim += 1;
 				getBeliefbase().getBeliefSet("victimaMuertas").addFact(victim);
-				mapa[posicionY][posicionX].setPuntoInteres(PuntoInteres.NADA);
-				mapa[posicionY][posicionX].setPuntoInteresReal(PuntoInteresReal.NADA);
+				mapa[posicionY][posicionX].setPuntoInteres(Casilla.PuntoInteres.NADA);
+				mapa[posicionY][posicionX].setPuntoInteresReal(Casilla.PuntoInteresReal.NADA);
 
 				// Se decrementa el contador de fichas de interes
 				int PDIEnTablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
@@ -54,15 +50,15 @@ public class PropagarFuegoPlan extends Plan {
 			}
 
 			// Si hay una puerta abierta la rompe
-			if (mapa[posicionY][posicionX].getConexiones()[2] == Conexion.PUERTA_ABIERTA) {
+			if (mapa[posicionY][posicionX].getConexiones()[2] == Casilla.Conexion.PUERTA_ABIERTA) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[2] = Conexion.NADA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[2] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY - 1][posicionX].getConexiones();
-				conexiones[0] = Conexion.NADA;
+				conexiones[0] = Casilla.Conexion.NADA;
 				mapa[posicionY - 1][posicionX].setConexiones(conexiones);
 			}
 
@@ -76,36 +72,36 @@ public class PropagarFuegoPlan extends Plan {
 		}
 
 		if (!calle) {
-			if (mapa[posicionY][posicionX].getConexiones()[2] == Conexion.PARED) {
+			if (mapa[posicionY][posicionX].getConexiones()[2] == Casilla.Conexion.PARED) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[2] = Conexion.PARED_SEMIRROTA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[2] = Casilla.Conexion.PARED_SEMIRROTA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY - 1][posicionX].getConexiones();
-				conexiones[0] = Conexion.PARED_SEMIRROTA;
+				conexiones[0] = Casilla.Conexion.PARED_SEMIRROTA;
 				mapa[posicionY - 1][posicionX].setConexiones(conexiones);
 
-			} else if (mapa[posicionY][posicionX].getConexiones()[2] == Conexion.PARED_SEMIRROTA) {
+			} else if (mapa[posicionY][posicionX].getConexiones()[2] == Casilla.Conexion.PARED_SEMIRROTA) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[2] = Conexion.NADA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[2] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY - 1][posicionX].getConexiones();
-				conexiones[0] = Conexion.NADA;
+				conexiones[0] = Casilla.Conexion.NADA;
 				mapa[posicionY - 1][posicionX].setConexiones(conexiones);
 			} else {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[2] = Conexion.PUERTA_ABIERTA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[2] = Casilla.Conexion.PUERTA_ABIERTA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY - 1][posicionX].getConexiones();
-				conexiones[0] = Conexion.PUERTA_ABIERTA;
+				conexiones[0] = Casilla.Conexion.PUERTA_ABIERTA;
 				mapa[posicionY - 1][posicionX].setConexiones(conexiones);
 
 			}
@@ -116,17 +112,17 @@ public class PropagarFuegoPlan extends Plan {
 		posicionX = elegida.getPosicion()[0];
 		calle = false;
 
-		while (mapa[posicionY][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[0] != Conexion.PARED)
-				&& (elegida.getConexiones()[0] != Conexion.PARED_SEMIRROTA)
-				&& (elegida.getConexiones()[0] != Conexion.PUERTA_CERRADA)) {
+		while (mapa[posicionY][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[0] != Casilla.Conexion.PARED)
+				&& (elegida.getConexiones()[0] != Casilla.Conexion.PARED_SEMIRROTA)
+				&& (elegida.getConexiones()[0] != Casilla.Conexion.PUERTA_CERRADA)) {
 
-			if (mapa[posicionY][posicionX].getPuntoInteresReal() == PuntoInteresReal.VICTIMA) {
+			if (mapa[posicionY][posicionX].getPuntoInteresReal() == Casilla.PuntoInteresReal.VICTIMA) {
 				int victim = (int) getBeliefbase().getBelief("victimaMuertas").getFact();
 				getBeliefbase().getBeliefSet("victimaMuertas").removeFact(victim);
 				victim += 1;
 				getBeliefbase().getBeliefSet("victimaMuertas").addFact(victim);
-				mapa[posicionY][posicionX].setPuntoInteres(PuntoInteres.NADA);
-				mapa[posicionY][posicionX].setPuntoInteresReal(PuntoInteresReal.NADA);
+				mapa[posicionY][posicionX].setPuntoInteres(Casilla.PuntoInteres.NADA);
+				mapa[posicionY][posicionX].setPuntoInteresReal(Casilla.PuntoInteresReal.NADA);
 
 				// Se decrementa el contador de fichas de interes
 				int PDIEnTablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
@@ -145,15 +141,15 @@ public class PropagarFuegoPlan extends Plan {
 			}
 
 			// Si hay una puerta abierta la rompe
-			if (mapa[posicionY][posicionX].getConexiones()[0] == Conexion.PUERTA_ABIERTA) {
+			if (mapa[posicionY][posicionX].getConexiones()[0] == Casilla.Conexion.PUERTA_ABIERTA) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[0] = Conexion.NADA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[0] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY + 1][posicionX].getConexiones();
-				conexiones[2] = Conexion.NADA;
+				conexiones[2] = Casilla.Conexion.NADA;
 				mapa[posicionY + 1][posicionX].setConexiones(conexiones);
 			}
 
@@ -167,36 +163,36 @@ public class PropagarFuegoPlan extends Plan {
 		}
 
 		if (!calle) {
-			if (mapa[posicionY][posicionX].getConexiones()[0] == Conexion.PARED) {
+			if (mapa[posicionY][posicionX].getConexiones()[0] == Casilla.Conexion.PARED) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[0] = Conexion.PARED_SEMIRROTA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[0] = Casilla.Conexion.PARED_SEMIRROTA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY + 1][posicionX].getConexiones();
-				conexiones[2] = Conexion.PARED_SEMIRROTA;
+				conexiones[2] = Casilla.Conexion.PARED_SEMIRROTA;
 				mapa[posicionY + 1][posicionX].setConexiones(conexiones);
 
-			} else if (mapa[posicionY][posicionX].getConexiones()[0] == Conexion.PARED_SEMIRROTA) {
+			} else if (mapa[posicionY][posicionX].getConexiones()[0] == Casilla.Conexion.PARED_SEMIRROTA) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[0] = Conexion.NADA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[0] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY + 1][posicionX].getConexiones();
-				conexiones[2] = Conexion.NADA;
+				conexiones[2] = Casilla.Conexion.NADA;
 				mapa[posicionY + 1][posicionX].setConexiones(conexiones);
 			} else {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[0] = Conexion.PUERTA_ABIERTA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[0] = Casilla.Conexion.PUERTA_ABIERTA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY + 1][posicionX].getConexiones();
-				conexiones[2] = Conexion.PUERTA_ABIERTA;
+				conexiones[2] = Casilla.Conexion.PUERTA_ABIERTA;
 				mapa[posicionY + 1][posicionX].setConexiones(conexiones);
 
 			}
@@ -207,17 +203,17 @@ public class PropagarFuegoPlan extends Plan {
 		posicionX = elegida.getPosicion()[0] - 1;
 		calle = false;
 
-		while (mapa[posicionY][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[3] != Conexion.PARED)
-				&& (elegida.getConexiones()[3] != Conexion.PARED_SEMIRROTA)
-				&& (elegida.getConexiones()[3] != Conexion.PUERTA_CERRADA)) {
+		while (mapa[posicionY][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[3] != Casilla.Conexion.PARED)
+				&& (elegida.getConexiones()[3] != Casilla.Conexion.PARED_SEMIRROTA)
+				&& (elegida.getConexiones()[3] != Casilla.Conexion.PUERTA_CERRADA)) {
 
-			if (mapa[posicionY][posicionX].getPuntoInteresReal() == PuntoInteresReal.VICTIMA) {
+			if (mapa[posicionY][posicionX].getPuntoInteresReal() == Casilla.PuntoInteresReal.VICTIMA) {
 				int victim = (int) getBeliefbase().getBelief("victimaMuertas").getFact();
 				getBeliefbase().getBeliefSet("victimaMuertas").removeFact(victim);
 				victim += 1;
 				getBeliefbase().getBeliefSet("victimaMuertas").addFact(victim);
-				mapa[posicionY][posicionX].setPuntoInteres(PuntoInteres.NADA);
-				mapa[posicionY][posicionX].setPuntoInteresReal(PuntoInteresReal.NADA);
+				mapa[posicionY][posicionX].setPuntoInteres(Casilla.PuntoInteres.NADA);
+				mapa[posicionY][posicionX].setPuntoInteresReal(Casilla.PuntoInteresReal.NADA);
 
 				// Se decrementa el contador de fichas de interes
 				int PDIEnTablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
@@ -236,15 +232,15 @@ public class PropagarFuegoPlan extends Plan {
 			}
 
 			// Si hay una puerta abierta la rompe
-			if (mapa[posicionY][posicionX].getConexiones()[3] == Conexion.PUERTA_ABIERTA) {
+			if (mapa[posicionY][posicionX].getConexiones()[3] == Casilla.Conexion.PUERTA_ABIERTA) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[3] = Conexion.NADA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[3] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY][posicionX - 1].getConexiones();
-				conexiones[1] = Conexion.NADA;
+				conexiones[1] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX - 1].setConexiones(conexiones);
 			}
 
@@ -258,36 +254,36 @@ public class PropagarFuegoPlan extends Plan {
 		}
 
 		if (!calle) {
-			if (mapa[posicionY][posicionX].getConexiones()[3] == Conexion.PARED) {
+			if (mapa[posicionY][posicionX].getConexiones()[3] == Casilla.Conexion.PARED) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[3] = Conexion.PARED_SEMIRROTA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[3] = Casilla.Conexion.PARED_SEMIRROTA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY][posicionX - 1].getConexiones();
-				conexiones[1] = Conexion.PARED_SEMIRROTA;
+				conexiones[1] = Casilla.Conexion.PARED_SEMIRROTA;
 				mapa[posicionY][posicionX - 1].setConexiones(conexiones);
 
-			} else if (mapa[posicionY][posicionX].getConexiones()[3] == Conexion.PARED_SEMIRROTA) {
+			} else if (mapa[posicionY][posicionX].getConexiones()[3] == Casilla.Conexion.PARED_SEMIRROTA) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[3] = Conexion.NADA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[3] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY][posicionX - 1].getConexiones();
-				conexiones[1] = Conexion.NADA;
+				conexiones[1] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX - 1].setConexiones(conexiones);
 			} else {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[3] = Conexion.PUERTA_ABIERTA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[3] = Casilla.Conexion.PUERTA_ABIERTA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY][posicionX - 1].getConexiones();
-				conexiones[1] = Conexion.PUERTA_ABIERTA;
+				conexiones[1] = Casilla.Conexion.PUERTA_ABIERTA;
 				mapa[posicionY][posicionX - 1].setConexiones(conexiones);
 
 			}
@@ -298,17 +294,17 @@ public class PropagarFuegoPlan extends Plan {
 		posicionX = elegida.getPosicion()[0] + 1;
 		calle = false;
 
-		while (mapa[posicionY][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[1] != Conexion.PARED)
-				&& (elegida.getConexiones()[1] != Conexion.PARED_SEMIRROTA)
-				&& (elegida.getConexiones()[1] != Conexion.PUERTA_CERRADA)) {
+		while (mapa[posicionY][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[1] != Casilla.Conexion.PARED)
+				&& (elegida.getConexiones()[1] != Casilla.Conexion.PARED_SEMIRROTA)
+				&& (elegida.getConexiones()[1] != Casilla.Conexion.PUERTA_CERRADA)) {
 
-			if (mapa[posicionY][posicionX].getPuntoInteresReal() == PuntoInteresReal.VICTIMA) {
+			if (mapa[posicionY][posicionX].getPuntoInteresReal() == Casilla.PuntoInteresReal.VICTIMA) {
 				int victim = (int) getBeliefbase().getBelief("victimaMuertas").getFact();
 				getBeliefbase().getBeliefSet("victimaMuertas").removeFact(victim);
 				victim += 1;
 				getBeliefbase().getBeliefSet("victimaMuertas").addFact(victim);
-				mapa[posicionY][posicionX].setPuntoInteres(PuntoInteres.NADA);
-				mapa[posicionY][posicionX].setPuntoInteresReal(PuntoInteresReal.NADA);
+				mapa[posicionY][posicionX].setPuntoInteres(Casilla.PuntoInteres.NADA);
+				mapa[posicionY][posicionX].setPuntoInteresReal(Casilla.PuntoInteresReal.NADA);
 
 				// Se decrementa el contador de fichas de interes
 				int PDIEnTablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
@@ -327,15 +323,15 @@ public class PropagarFuegoPlan extends Plan {
 			}
 
 			// Si hay una puerta abierta la rompe
-			if (mapa[posicionY][posicionX].getConexiones()[1] == Conexion.PUERTA_ABIERTA) {
+			if (mapa[posicionY][posicionX].getConexiones()[1] == Casilla.Conexion.PUERTA_ABIERTA) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[1] = Conexion.NADA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[1] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY][posicionX + 1].getConexiones();
-				conexiones[3] = Conexion.NADA;
+				conexiones[3] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX + 1].setConexiones(conexiones);
 			}
 
@@ -349,36 +345,36 @@ public class PropagarFuegoPlan extends Plan {
 		}
 
 		if (!calle) {
-			if (mapa[posicionY][posicionX].getConexiones()[1] == Conexion.PARED) {
+			if (mapa[posicionY][posicionX].getConexiones()[1] == Casilla.Conexion.PARED) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[1] = Conexion.PARED_SEMIRROTA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[1] = Casilla.Conexion.PARED_SEMIRROTA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY][posicionX + 1].getConexiones();
-				conexiones[3] = Conexion.PARED_SEMIRROTA;
+				conexiones[3] = Casilla.Conexion.PARED_SEMIRROTA;
 				mapa[posicionY][posicionX + 1].setConexiones(conexiones);
 
-			} else if (mapa[posicionY][posicionX].getConexiones()[1] == Conexion.PARED_SEMIRROTA) {
+			} else if (mapa[posicionY][posicionX].getConexiones()[1] == Casilla.Conexion.PARED_SEMIRROTA) {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[1] = Conexion.NADA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[1] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY][posicionX + 1].getConexiones();
-				conexiones[3] = Conexion.NADA;
+				conexiones[3] = Casilla.Conexion.NADA;
 				mapa[posicionY][posicionX + 1].setConexiones(conexiones);
 			} else {
 				// Modificar este lado de la puerta
-				Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
-				conexiones[1] = Conexion.PUERTA_ABIERTA;
+				Casilla.Conexion[] conexiones = mapa[posicionY][posicionX].getConexiones();
+				conexiones[1] = Casilla.Conexion.PUERTA_ABIERTA;
 				mapa[posicionY][posicionX].setConexiones(conexiones);
 
 				// Modificar la puerta en el otro lado
 				conexiones = mapa[posicionY][posicionX + 1].getConexiones();
-				conexiones[3] = Conexion.PUERTA_ABIERTA;
+				conexiones[3] = Casilla.Conexion.PUERTA_ABIERTA;
 				mapa[posicionY][posicionX + 1].setConexiones(conexiones);
 
 			}
@@ -400,24 +396,24 @@ public class PropagarFuegoPlan extends Plan {
 
 			if (elegida.tieneFuego() == 0) { // si la elegida no tiene ni fuego ni humo
 				elegida.setTieneFuego(1);
-				if (mapa[posicionY - 1][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[2] != Conexion.PARED)
-						&& (elegida.getConexiones()[2] != Conexion.PARED_SEMIRROTA)
-						&& (elegida.getConexiones()[2] != Conexion.PUERTA_CERRADA)) {
+				if (mapa[posicionY - 1][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[2] != Casilla.Conexion.PARED)
+						&& (elegida.getConexiones()[2] != Casilla.Conexion.PARED_SEMIRROTA)
+						&& (elegida.getConexiones()[2] != Casilla.Conexion.PUERTA_CERRADA)) {
 					elegida.setTieneFuego(2);
 				} else if (mapa[posicionY + 1][posicionX].tieneFuego() == 2
-						&& (elegida.getConexiones()[0] != Conexion.PARED)
-						&& (elegida.getConexiones()[0] != Conexion.PARED_SEMIRROTA)
-						&& (elegida.getConexiones()[0] != Conexion.PUERTA_CERRADA)) {
+						&& (elegida.getConexiones()[0] != Casilla.Conexion.PARED)
+						&& (elegida.getConexiones()[0] != Casilla.Conexion.PARED_SEMIRROTA)
+						&& (elegida.getConexiones()[0] != Casilla.Conexion.PUERTA_CERRADA)) {
 					elegida.setTieneFuego(2);
 				} else if (mapa[posicionY][posicionX + 1].tieneFuego() == 2
-						&& (elegida.getConexiones()[1] != Conexion.PARED)
-						&& (elegida.getConexiones()[1] != Conexion.PARED_SEMIRROTA)
-						&& (elegida.getConexiones()[1] != Conexion.PUERTA_CERRADA)) {
+						&& (elegida.getConexiones()[1] != Casilla.Conexion.PARED)
+						&& (elegida.getConexiones()[1] != Casilla.Conexion.PARED_SEMIRROTA)
+						&& (elegida.getConexiones()[1] != Casilla.Conexion.PUERTA_CERRADA)) {
 					elegida.setTieneFuego(2);
 				} else if (mapa[posicionY][posicionX - 1].tieneFuego() == 2
-						&& (elegida.getConexiones()[3] != Conexion.PARED)
-						&& (elegida.getConexiones()[3] != Conexion.PARED_SEMIRROTA)
-						&& (elegida.getConexiones()[3] != Conexion.PUERTA_CERRADA)) {
+						&& (elegida.getConexiones()[3] != Casilla.Conexion.PARED)
+						&& (elegida.getConexiones()[3] != Casilla.Conexion.PARED_SEMIRROTA)
+						&& (elegida.getConexiones()[3] != Casilla.Conexion.PUERTA_CERRADA)) {
 					elegida.setTieneFuego(2);
 				}
 
@@ -429,7 +425,7 @@ public class PropagarFuegoPlan extends Plan {
 
 				Jugador[] listaJugadores = (Jugador[]) getBeliefbase().getBelief("jugadores").getFact();
 
-				if (elegida.getPuntoInteresReal() == PuntoInteresReal.VICTIMA) {
+				if (elegida.getPuntoInteresReal() == Casilla.PuntoInteresReal.VICTIMA) {
 					int victim = (int) getBeliefbase().getBelief("victimaMuertas").getFact();
 					getBeliefbase().getBeliefSet("victimaMuertas").removeFact(victim);
 					victim += 1;
@@ -440,11 +436,11 @@ public class PropagarFuegoPlan extends Plan {
 					PDIEnTablero -= 1;
 					getBeliefbase().getBeliefSet("PDITablero").addFact(PDIEnTablero);
 
-					mapa[posicionY][posicionX].setPuntoInteres(PuntoInteres.NADA);
-					mapa[posicionY][posicionX].setPuntoInteresReal(PuntoInteresReal.NADA);
-				} else if (elegida.getPuntoInteresReal() == PuntoInteresReal.FALSA_ALARMA) {
-					mapa[posicionY][posicionX].setPuntoInteres(PuntoInteres.NADA);
-					mapa[posicionY][posicionX].setPuntoInteresReal(PuntoInteresReal.NADA);
+					mapa[posicionY][posicionX].setPuntoInteres(Casilla.PuntoInteres.NADA);
+					mapa[posicionY][posicionX].setPuntoInteresReal(Casilla.PuntoInteresReal.NADA);
+				} else if (elegida.getPuntoInteresReal() == Casilla.PuntoInteresReal.FALSA_ALARMA) {
+					mapa[posicionY][posicionX].setPuntoInteres(Casilla.PuntoInteres.NADA);
+					mapa[posicionY][posicionX].setPuntoInteresReal(Casilla.PuntoInteresReal.NADA);
 				}
 
 				for (int i = 0; i < listaJugadores.length; i++) {
@@ -457,24 +453,24 @@ public class PropagarFuegoPlan extends Plan {
 					}
 				}
 
-				if (mapa[posicionY - 1][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[2] != Conexion.PARED)
-						&& (elegida.getConexiones()[2] != Conexion.PARED_SEMIRROTA)
-						&& (elegida.getConexiones()[2] != Conexion.PUERTA_CERRADA)) {
+				if (mapa[posicionY - 1][posicionX].tieneFuego() == 2 && (elegida.getConexiones()[2] != Casilla.Conexion.PARED)
+						&& (elegida.getConexiones()[2] != Casilla.Conexion.PARED_SEMIRROTA)
+						&& (elegida.getConexiones()[2] != Casilla.Conexion.PUERTA_CERRADA)) {
 					elegida.setTieneFuego(2);
 				} else if (mapa[posicionY + 1][posicionX].tieneFuego() == 2
-						&& (elegida.getConexiones()[0] != Conexion.PARED)
-						&& (elegida.getConexiones()[0] != Conexion.PARED_SEMIRROTA)
-						&& (elegida.getConexiones()[0] != Conexion.PUERTA_CERRADA)) {
+						&& (elegida.getConexiones()[0] != Casilla.Conexion.PARED)
+						&& (elegida.getConexiones()[0] != Casilla.Conexion.PARED_SEMIRROTA)
+						&& (elegida.getConexiones()[0] != Casilla.Conexion.PUERTA_CERRADA)) {
 					elegida.setTieneFuego(2);
 				} else if (mapa[posicionY][posicionX + 1].tieneFuego() == 2
-						&& (elegida.getConexiones()[1] != Conexion.PARED)
-						&& (elegida.getConexiones()[1] != Conexion.PARED_SEMIRROTA)
-						&& (elegida.getConexiones()[1] != Conexion.PUERTA_CERRADA)) {
+						&& (elegida.getConexiones()[1] != Casilla.Conexion.PARED)
+						&& (elegida.getConexiones()[1] != Casilla.Conexion.PARED_SEMIRROTA)
+						&& (elegida.getConexiones()[1] != Casilla.Conexion.PUERTA_CERRADA)) {
 					elegida.setTieneFuego(2);
 				} else if (mapa[posicionY][posicionX - 1].tieneFuego() == 2
-						&& (elegida.getConexiones()[3] != Conexion.PARED)
-						&& (elegida.getConexiones()[3] != Conexion.PARED_SEMIRROTA)
-						&& (elegida.getConexiones()[3] != Conexion.PUERTA_CERRADA)) {
+						&& (elegida.getConexiones()[3] != Casilla.Conexion.PARED)
+						&& (elegida.getConexiones()[3] != Casilla.Conexion.PARED_SEMIRROTA)
+						&& (elegida.getConexiones()[3] != Casilla.Conexion.PUERTA_CERRADA)) {
 					elegida.setTieneFuego(2);
 				}
 			} else { // si tiene fuego, explosion

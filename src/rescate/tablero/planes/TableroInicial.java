@@ -1,7 +1,8 @@
 package rescate.tablero.planes;
 
-import rescate.ontologia.conceptos.Casilla;
 import jadex.runtime.Plan;
+
+import rescate.ontologia.conceptos.Casilla;
 
 public class TableroInicial extends Plan {
 
@@ -17,7 +18,7 @@ public class TableroInicial extends Plan {
 				{{0, 3, 0, 0, 8, 0, 0, 0},{0, 0, 3, 3, 1, 0, 0, 6},{0, 0, 3, 0, 0, 0, 0, 6},{0, 0, 1, 0, 0, 0, 0, 6},{0, 0, 3, 0, 0, 0, 0, 6},{0, 2, 3, 0, 0, 0, 0, 6},{0, 0, 3, 2, 0, 0, 0, 7},{0, 2, 3, 0, 0, 0, 0, 7},{0, 3, 3, 2, 7, 0, 0, 8},{0, 0, 0, 3, 8, 1, 0, 0}},
 				{{0, 0, 0, 0, 8, 0, 0, 0},{3, 0, 0, 0, 8, 1, 0, 0},{3, 0, 0, 0, 8, 1, 0, 0},{1, 0, 0, 0, 8, 0, 1, 0},{3, 0, 0, 0, 8, 0, 1, 0},{3, 0, 0, 0, 8, 0, 0, 0},{3, 0, 0, 0, 8, 0, 0, 0},{3, 0, 0, 0, 8, 0, 0, 0},{3, 0, 0, 0, 8, 0, 0, 0},{0, 0, 0, 0, 8, 0, 0, 0}},
 			 };
-			 
+
 	Casilla[][] habitaciones = new Casilla[9][];
 	Casilla[][] mapa = new Casilla[modelo.length][modelo[0].length];
 
@@ -74,50 +75,50 @@ public class TableroInicial extends Plan {
 		 * habitaciones[i][j].setConexiones(new int [][] {{0, 0},{0, 0},{0, 0},{0, 0}});
 		 * habitaciones[i][j].setPuntoInteres(new int [] {0, 0});
 		 * habitaciones[i][j].setFlecha(new boolean[]{false, false, false, false}); } }
-		 * 
+		 *
 		 * habitaciones[0][0].setPosicion(new int[] {0, 0});
 		 * habitaciones[0][0].setAdyacentes(new Casilla[] {null, habitaciones[0][1],
 		 * habitaciones[0][10], null});
-		 * 
+		 *
 		 * habitaciones[0][1].setPosicion(new int[] {0, 1});
 		 * habitaciones[0][1].setAdyacentes(new Casilla[] {null, habitaciones[0][2],
 		 * habitaciones[4][0], habitaciones[0][0]});
 		 * habitaciones[0][1].setConexiones(new int [][] {{0, 0},{0, 0},{2, 0},{0, 0}});
-		 * 
+		 *
 		 * habitaciones[0][2].setPosicion(new int[] {0, 2});
 		 * habitaciones[0][2].setAdyacentes(new Casilla[] {null, habitaciones[0][3],
 		 * habitaciones[4][1], habitaciones[0][1]});
 		 * habitaciones[0][2].setConexiones(new int [][] {{0, 0},{0, 0},{2, 0},{0, 0}});
-		 * 
+		 *
 		 * habitaciones[0][3].setPosicion(new int[] {0, 3});
 		 * habitaciones[0][3].setAdyacentes(new Casilla[] {null, habitaciones[0][4],
 		 * habitaciones[4][2], habitaciones[0][2]});
 		 * habitaciones[0][3].setConexiones(new int [][] {{0, 0},{0, 0},{2, 0},{0, 0}});
 		 * habitaciones[0][3].setEsAparcamientoCamion(true);
-		 * 
+		 *
 		 * habitaciones[0][4].setPosicion(new int[] {0, 4});
 		 * habitaciones[0][4].setAdyacentes(new Casilla[] {null, habitaciones[0][5],
 		 * habitaciones[6][0], habitaciones[0][3]});
 		 * habitaciones[0][4].setConexiones(new int [][] {{0, 0},{0, 0},{2, 0},{0, 0}});
 		 * habitaciones[0][4].setEsAparcamientoCamion(true);
-		 * 
+		 *
 		 * habitaciones[0][5].setPosicion(new int[] {0, 5});
 		 * habitaciones[0][5].setAdyacentes(new Casilla[] {null, habitaciones[0][6],
 		 * habitaciones[6][1], habitaciones[0][4]});
 		 * habitaciones[0][5].setConexiones(new int [][] {{0, 0},{0, 0},{2, 0},{0, 0}});
 		 * habitaciones[0][5].setEsAparcamientoAmbulancia(true);
-		 * 
+		 *
 		 * habitaciones[0][6].setPosicion(new int[] {0, 6});
 		 * habitaciones[0][6].setAdyacentes(new Casilla[] {null, habitaciones[0][7],
 		 * habitaciones[5][0], habitaciones[0][5]});
 		 * habitaciones[0][6].setConexiones(new int [][] {{0, 0},{0, 0},{2, 0},{0, 0}});
 		 * habitaciones[0][6].setEsAparcamientoAmbulancia(true);
-		 * 
+		 *
 		 * habitaciones[0][7].setPosicion(new int[] {0, 7});
 		 * habitaciones[0][7].setAdyacentes(new Casilla[] {null, habitaciones[0][8],
 		 * habitaciones[5][1], habitaciones[0][6]});
 		 * habitaciones[0][7].setConexiones(new int [][] {{0, 0},{0, 0},{2, 0},{0, 0}});
-		 * 
+		 *
 		 * habitaciones[0][7].setPosicion(new int[] {0, 7});
 		 * habitaciones[0][7].setAdyacentes(new Casilla[] {null, habitaciones[0][8],
 		 * habitaciones[5][1], habitaciones[0][6]});

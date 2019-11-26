@@ -6,7 +6,9 @@ import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
-import rescate.ontologia.*;
+import rescate.ontologia.acciones.*;
+import rescate.ontologia.conceptos.*;
+import rescate.ontologia.predicados.*;
 
 class PlanVacio extends Plan {
 

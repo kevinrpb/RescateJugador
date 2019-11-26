@@ -40,7 +40,7 @@
     <belief name="PDI" class="int">
       <fact>18</fact>
     </belief>
-	
+
 	<!-- Puntos de interes en el tablero -->
     <belief name="PDITablero" class="int">
       <fact>0</fact>
@@ -90,7 +90,7 @@
     <belief name="finPartida" class="boolean">
       <fact>false</fact>
     </belief>
-	
+
 	   <!-- Materias peligrosas disponibles -->
     <beliefset name="casillas" class="Casilla">
       <fact>null</fact>
@@ -108,12 +108,12 @@
     <belief name="finTurno" class="boolean">
       <fact>false</fact>
     </belief>
-	
+
 	<!-- Victimas Salvadas -->
     <belief name="victimaSalvadas" class="int">
       <fact>0</fact>
     </belief>
-	
+
 	<!-- Victimas Muertas -->
     <belief name="victimaMuertas" class="int">
       <fact>0</fact>
@@ -122,7 +122,7 @@
     <beliefset name="jugadores" class="Jugador">
       <fact>null</fact>
     </beliefset>
-	
+
   </beliefs>
 
   <!-- Metas -->
@@ -131,20 +131,20 @@
     <achievegoalref name="df_register">
       <concrete ref="dfcap.df_register" />
     </achievegoalref>
-	
+
 	<performgoal name="quieroColocarPuntos"  retry="true" retrydelay="3000" exclude="never" >
 			<contextcondition>
-				(($beliefbase.finTurno) &amp;&amp; 
+				(($beliefbase.finTurno) &amp;&amp;
         (($beliefbase.PDITablero) &lt; 3))
 			</contextcondition>
 	</performgoal>
-	
-	
+
+
   </goals>
 
   <!-- Planes -->
   <plans>
-  
+
     <!-- Cambia una puerta de cerrada a abierta -->
     <plan name="TableroInicial">
       <body class="TableroInicial" />
@@ -328,12 +328,12 @@
         <messageevent ref="Request_Eliminar_materia_peligrosa" />
       </trigger>
     </plan>
-	
+
 	<!--  -->
 	<plan name="ColocarPuntosInteres">
       <body class="ColocarPuntosInteresPlan" />
 	  <trigger>	<goal ref="quieroColocarPuntos"/> </trigger>
-	  
+
     </plan>
 
   </plans>
@@ -345,7 +345,7 @@
           <value>SFipa.REQUEST</value>
         </parameter>
         <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value> 
+          <value>SFipa.NUGGETS_XML</value>
         </parameter>
         <parameter name="content-class" class="Class" direction="fixed">
           <value>UnirsePartidaAccion.class</value>
@@ -363,7 +363,7 @@
             <value>SFipa.REQUEST</value>
           </parameter>
           <parameter name="language" class="String" direction="fixed">
-            <value>SFipa.NUGGETS_XML</value> 
+            <value>SFipa.NUGGETS_XML</value>
           </parameter>
           <parameter name="content-class" class="Class" direction="fixed">
             <value>ApagarFuegoAccion.class</value>
@@ -375,7 +375,7 @@
           <value>SFipa.INFORM</value>
         </parameter>
         <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value> 
+          <value>SFipa.NUGGETS_XML</value>
         </parameter>
         <parameter name="content-class" class="Class" direction="fixed">
           <value>FuegoApagadoPredicado.class</value>
@@ -387,7 +387,7 @@
           <value>SFipa.FAILURE</value>
         </parameter>
         <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value> 
+          <value>SFipa.NUGGETS_XML</value>
         </parameter>
         <parameter name="content-class" class="Class" direction="fixed">
           <value>FuegoApagadoPredicado.class</value>
@@ -399,7 +399,7 @@
             <value>SFipa.REQUEST</value>
           </parameter>
           <parameter name="language" class="String" direction="fixed">
-            <value>SFipa.NUGGETS_XML</value> 
+            <value>SFipa.NUGGETS_XML</value>
           </parameter>
           <parameter name="content-class" class="Class" direction="fixed">
             <value>ExtinguirFuegoAccion.class</value>
@@ -411,7 +411,7 @@
           <value>SFipa.INFORM</value>
         </parameter>
         <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value> 
+          <value>SFipa.NUGGETS_XML</value>
         </parameter>
         <parameter name="content-class" class="Class" direction="fixed">
           <value>FuegoExtinguidoPredicado.class</value>
@@ -423,7 +423,7 @@
           <value>SFipa.FAILURE</value>
         </parameter>
         <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value> 
+          <value>SFipa.NUGGETS_XML</value>
         </parameter>
         <parameter name="content-class" class="Class" direction="fixed">
           <value>FuegoExtinguidoPredicado.class</value>
@@ -435,7 +435,7 @@
             <value>SFipa.REQUEST</value>
           </parameter>
           <parameter name="language" class="String" direction="fixed">
-            <value>SFipa.NUGGETS_XML</value> 
+            <value>SFipa.NUGGETS_XML</value>
           </parameter>
           <parameter name="content-class" class="Class" direction="fixed">
             <value>ExtinguirHumoAccion.class</value>
@@ -447,7 +447,7 @@
           <value>SFipa.INFORM</value>
         </parameter>
         <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value> 
+          <value>SFipa.NUGGETS_XML</value>
         </parameter>
         <parameter name="content-class" class="Class" direction="fixed">
           <value>HumoExtinguidoPredicado.class</value>
@@ -459,7 +459,7 @@
           <value>SFipa.FAILURE</value>
         </parameter>
         <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value> 
+          <value>SFipa.NUGGETS_XML</value>
         </parameter>
         <parameter name="content-class" class="Class" direction="fixed">
           <value>HumoExtinguidoPredicado.class</value>

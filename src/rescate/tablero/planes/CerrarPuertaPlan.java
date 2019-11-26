@@ -4,9 +4,11 @@ import java.util.*;
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-import rescate.ontologia.*;
-import rescate.ontologia.conceptos.Casilla;
-import rescate.ontologia.conceptos.Casilla.Conexion;
+
+import rescate.ontologia.acciones.*;
+import rescate.ontologia.conceptos.*;
+import rescate.ontologia.predicados.*;
+
 class CerrarPuertaPlan extends Plan {
 
 	@Override
@@ -18,7 +20,7 @@ class CerrarPuertaPlan extends Plan {
 		boolean ok = false;
 		int posicionConex = 0;
 		for (int i = 0; i < 4 && ok != true; i++) {
-			if (puertaSolicitada.getConexiones()[i] == Conexion.PUERTA_ABIERTA) {
+			if (puertaSolicitada.getConexiones()[i] == Casilla.Conexion.PUERTA_ABIERTA) {
 				ok = true;
 				posicionConex = i;
 			}
@@ -29,8 +31,8 @@ class CerrarPuertaPlan extends Plan {
 			System.out.println("tablero deniega peticion de cerrar puerta: no hay conexiones de puertas abiertas");
 		} else {
 			IMessageEvent msg = createMessageEvent("agreed Cerrar");
-			Conexion[] conexiones = puertaSolicitada.getConexiones();
-			conexiones[posicionConex] = Conexion.PUERTA_CERRADA;
+			Casilla.Conexion[] conexiones = puertaSolicitada.getConexiones();
+			conexiones[posicionConex] = Casilla.Conexion.PUERTA_CERRADA;
 			puertaSolicitada.setConexiones(conexiones);
 			Casilla[][] mapa = (Casilla[][]) getBeliefbase().getBeliefSet("casillas").getFacts();
 			getBeliefbase().getBeliefSet("casillas").removeFact(mapa);

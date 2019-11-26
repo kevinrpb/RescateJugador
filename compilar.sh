@@ -18,6 +18,6 @@ lib/xmlpull_1_1_4.jar:\
 lib/xpp3.jar"
 
 find ./src -name "*.java" > sources.txt
-javac -d bin @sources.txt
+javac -d bin/ @sources.txt
 
 jar cvf RescateTableroJadex *

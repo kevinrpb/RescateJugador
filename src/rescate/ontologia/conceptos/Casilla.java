@@ -1,7 +1,4 @@
-
 package rescate.ontologia.conceptos;
-
-
 
 public class Casilla extends Concepto {
 
