@@ -15,8 +15,8 @@
       "*.bat": true,
       "*.sh": true,
       "*.txt": true,
-      ".git*": true,
-      "jadex.pr*": true,
+      ".git*": false,
+      "jadex.pr*": false,
       "RescateTablero*": true
     },
     "editor.insertSpaces": true,
