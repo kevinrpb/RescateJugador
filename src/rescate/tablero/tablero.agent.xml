@@ -245,10 +245,10 @@
     </plan>
 
     <!-- Conduce un vehiculo en el que este montado el jugador -->
-    <plan name="conducirVehiculo_plan">
-      <body class="ConducirVehiculoPlan" />
+    <plan name="conducirCamion_plan">
+      <body class="ConducirCamionPlan" />
       <trigger>
-        <messageevent ref="Request_Conducir_vehiculo" />
+        <messageevent ref="Request_Conducir_Camion" />
       </trigger>
     </plan>
 
@@ -587,7 +587,57 @@
       </messageevent>
       <!-- HECHO -->
 
-      
+      <!-- HECHO -->
+          <messageevent name="Request_Conducir_Camion" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REQUEST</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>ConducirCamionPlan.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Inform_Camion_Conducido" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.INFORM</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>CamionConducido.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Refuse_Conducir_Camion" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REFUSE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>ConducirCamionPlan.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Failure_Conducir_Camion" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.FAILURE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>ConducirCamionPlan.class</value>
+        </parameter>
+      </messageevent>
+      <!-- HECHO -->
+
+
       <messageevent name="Request_Derribar_pared" direction="send" type="fipa">
       </messageevent>
       <messageevent name="Request_Trasladar_victima" direction="send" type="fipa">
