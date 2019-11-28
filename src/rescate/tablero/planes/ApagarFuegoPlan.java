@@ -1,7 +1,5 @@
 package rescate.tablero.planes;
 
-import java.util.*;
-
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
@@ -28,30 +26,34 @@ class ApagarFuegoPlan extends Plan {
     ApagarFuego accion = (ApagarFuego) peticion.getContent();
 
     // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
-    Jugador jugador = null;
-    int indice = -1;
-    for (int i = 0; i < t.getJugadores().size(); i++) {
-      if (t.getJugadores().get(i).getIdAgente() == idJugador) {
-        jugador = t.getJugadores().get(i);
-        indice = i;
-        break;
-      }
-    }
+    Jugador jugador = t.getJugador(idJugador);
+
+    // Casilla en la que está el jugador
+    Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
 
     // Si la casilla no tiene fuego...
-		if (accion.getCasilla().tieneFuego() == Casilla.Fuego.FUEGO) {
-      System.out.println("[ERROR] La casilla no tiene un fuego activo");
+    if (accion.getCasilla().tieneFuego() != Casilla.Fuego.FUEGO) {
+      System.out.println("[FALLO] La casilla no tiene un fuego activo");
       // Se rechaza la petición de acción del jugador
       IMessageEvent respuesta = createMessageEvent("Failure_Apagar_Fuego");
       respuesta.setContent(accion);
       respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
       sendMessage(respuesta);
     } 
-    // Si la casilla tiene fuego...
+    // Si el bombero no está cerca...
+    else if (!c.esColindante(accion.getCasilla()) && !c.mismaPosicion(accion.getCasilla())) {
+      System.out.println("[FALLO] El jugador no está cerca del fuego");
+      // Se rechaza la petición de acción del jugador
+      IMessageEvent respuesta = createMessageEvent("Failure_Apagar_Fuego");
+      respuesta.setContent(accion);
+      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      sendMessage(respuesta);
+    } 
+    // Si las condiciones permiten extinguir el fuego...
     else {
       // No hay PA suficientes para realizar la acción (en función del rol)
       if (jugador.getPuntosAccion() + jugador.getPuntosAccionExtincion() < ((jugador.getRol() == Jugador.Rol.SANITARIO) ? 2 : 1)) {
-        System.out.println("[ERROR] El jugador con id " + idJugador + " no tiene suficientes PA para apagar un fuego");
+        System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene suficientes PA para apagar un fuego");
         // Se rechaza la petición de acción del jugador
         IMessageEvent respuesta = createMessageEvent("Refuse_Apagar_Fuego");
         respuesta.setContent(accion);
@@ -70,7 +72,6 @@ class ApagarFuegoPlan extends Plan {
         else if (jugador.getPuntosAccion() > ((jugador.getRol() == Jugador.Rol.SANITARIO) ? 1 : 0)) {
           jugador.setPuntosAccion(jugador.getPuntosAccion() - ((jugador.getRol() == Jugador.Rol.SANITARIO) ? 2 : 1));
         }
-        t.setJugador(indice, jugador);
         // Se actualiza la casilla sobre la que se ha realizado la apertura de la puerta
         t.setCasilla(accion.getCasilla().getPosicion()[0], accion.getCasilla().getPosicion()[1], accion.getCasilla());
         // Se actualiza en la base de creencias el hecho tablero

@@ -28,15 +28,7 @@ class AtenderPlan extends Plan {
     AtenderHerido accion = (AtenderHerido) peticion.getContent();
 
     // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
-    Jugador jugador = null;
-    int indice = -1;
-    for (int i = 0; i < t.getJugadores().size(); i++) {
-      if (t.getJugadores().get(i).getIdAgente() == idJugador) {
-        jugador = t.getJugadores().get(i);
-        indice = i;
-        break;
-      }
-    }
+    Jugador jugador = t.getJugador(idJugador);
 
     // Fichas atención medica
     int primerosAuxilios = (int) getBeliefbase().getBelief("primerosAuxilios").getFact();
@@ -48,7 +40,6 @@ class AtenderPlan extends Plan {
         System.out.println("[INFO] El jugador con id " + idJugador + " atiende a la víctima que actualmente lleva");
         // Se actualiza el estado de llevando víctima del jugador
         jugador.setLlevandoVictima(Jugador.LlevandoVictima.CURADA);
-        t.setJugador(indice, jugador);
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se reduce en uno el número de fichas de atención médica
@@ -71,7 +62,7 @@ class AtenderPlan extends Plan {
     }
     // En caso contrario no puede atender a la víctima
     else {
-      System.out.println("[ERROR] El jugador con id " + idJugador + " no tiene el rol necesario o no está llevando a una víctima");
+      System.out.println("[ERROR] El jugador con id " + idJugador + " no tiene el rol necesario o no está llevando a una víctima (o ya está curada)");
       // Se rechaza la petición de acción del jugador
       IMessageEvent respuesta = createMessageEvent("Failure_Atender");
       respuesta.setContent(accion);

@@ -31,7 +31,6 @@ public class Casilla extends Concepto {
 	private boolean tieneMateriaPeligrosa;
   private boolean tieneFocoCalor;
 
-  private boolean puntoInteresOculto;
   private PuntoInteres puntoInteres;
   
 	private Direccion flecha;
@@ -56,8 +55,8 @@ public class Casilla extends Concepto {
 		return conexiones;
 	}
 
-	public void setConexiones(int pos, Conexion con) {
-		this.conexiones[pos] = con;
+	public void setConexiones(Conexion[] conexiones) {
+		this.conexiones = conexiones;
 	}
 
 	public Fuego tieneFuego() {
@@ -132,20 +131,24 @@ public class Casilla extends Concepto {
 		this.esAparcamientoAmbulancia = esAparcamientoAmbulancia;
 	}
 
-  public boolean puntoInteresOculto() {
-    return puntoInteresOculto;
-  }
-
-  public void setPuntoInteresOculto(boolean puntoInteresOculto) {
-    this.puntoInteresOculto = puntoInteresOculto;
-  }
-
   public int getHabitacion() {
     return habitacion;
   }
 
   public void setHabitacion(int habitacion) {
     this.habitacion = habitacion;
+  }
+
+  public boolean esColindante(Casilla c) {
+    return 
+      (getPosicion()[0] == c.getPosicion()[0] && getPosicion()[1] == c.getPosicion()[1] - 1) || 
+      (getPosicion()[0] == c.getPosicion()[0] && getPosicion()[1] == c.getPosicion()[1] + 1) || 
+      (getPosicion()[0] == c.getPosicion()[0] - 1 && getPosicion()[1] == c.getPosicion()[1]) || 
+      (getPosicion()[0] == c.getPosicion()[0] + 1 && getPosicion()[1] == c.getPosicion()[1]);
+  }
+
+  public boolean mismaPosicion(Casilla c) {
+    return (getPosicion()[0] == c.getPosicion()[0] && getPosicion()[1] == c.getPosicion()[1]);
   }
 
 }

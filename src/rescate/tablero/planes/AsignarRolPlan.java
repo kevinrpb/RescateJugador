@@ -33,12 +33,10 @@ class AsignarRolPlan extends Plan {
     roles.remove(Jugador.Rol.NINGUNO);
     // ...se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
     Jugador jugador = null;
-    int indice = -1;
     for (int i = 0; i < t.getJugadores().size(); i++) {
       roles.remove(t.getJugadores().get(i).getRol());
       if (t.getJugadores().get(i).getIdAgente() == idJugador) {
         jugador = t.getJugadores().get(i);
-        indice = i;
       }
     }
 
@@ -47,7 +45,6 @@ class AsignarRolPlan extends Plan {
       System.out.println("[INFO] El jugador con id " + idJugador + " cambia al rol " + accion.getRol());
       // Se actualiza el rol del jugador
       jugador.setRol(accion.getRol());
-      t.setJugador(indice, jugador);
       // Se actualiza en la base de creencias el hecho tablero
       getBeliefbase().getBelief("tablero").setFact(t);
       // Se confirma al jugador la asignación del rol elegido
@@ -58,7 +55,7 @@ class AsignarRolPlan extends Plan {
     }
     // Si no...
     else {
-      System.out.println("[ERROR] El rol " + accion.getRol() + " solicitado por el jugador con id " + idJugador + " no está disponible");
+      System.out.println("[RECHAZADO] El rol " + accion.getRol() + " solicitado por el jugador con id " + idJugador + " no está disponible");
       // Se contesta al jugador rechazando la elección de rol y con la lista de roles disponibles
       IMessageEvent respuesta = createMessageEvent("Refuse_Rol_Elegido");
       RolesDisponibles predicado = new RolesDisponibles();

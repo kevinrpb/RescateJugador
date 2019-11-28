@@ -2,6 +2,8 @@ package rescate.ontologia.conceptos;
 
 import java.util.ArrayList;
 
+import jadex.adapter.fipa.AgentIdentifier;
+
 public class Tablero extends Concepto {
 
   /*** Constructor ***/
@@ -30,8 +32,17 @@ public class Tablero extends Concepto {
     return jugadores;
   }
 
-  public void setJugador(int indice, Jugador j) {
-    this.jugadores.set(indice, j);
+  public Jugador getJugador(AgentIdentifier idJugador) {
+    for (int i = 0; i < getJugadores().size(); i++) {
+      if (getJugadores().get(i).getIdAgente() == idJugador) {
+        return getJugadores().get(i);
+      }
+    }
+    return null;
+  }
+
+  public void setJugadores(ArrayList<Jugador> jugadores) {
+    this.jugadores = jugadores;
   }
 
   public Casilla[][] getMapa() {

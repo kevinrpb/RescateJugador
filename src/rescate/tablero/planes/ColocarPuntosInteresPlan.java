@@ -157,14 +157,12 @@ public class ColocarPuntosInteresPlan extends Plan {
   public void colocarVictima(Casilla c, Tablero t) {
     System.out.println("[INFO] Se ha colocado un PDI de víctima");
     c.setPuntoInteres(Casilla.PuntoInteres.VICTIMA);
-    c.setPuntoInteresOculto(true);
     t.setCasilla(c.getPosicion()[0], c.getPosicion()[1], c);
   }
 
   public void colocarFalsaAlarma(Casilla c, Tablero t) {
     System.out.println("[INFO] Se ha colocado un PDI de falsa alarma");
     c.setPuntoInteres(Casilla.PuntoInteres.FALSA_ALARMA);
-    c.setPuntoInteresOculto(true);
     t.setCasilla(c.getPosicion()[0], c.getPosicion()[1], c);
   }
 
