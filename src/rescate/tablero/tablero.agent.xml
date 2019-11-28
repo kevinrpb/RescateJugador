@@ -192,7 +192,7 @@
     <plan name="cerrarPuerta_plan">
       <body class="CerrarPuertaPlan" />
       <trigger>
-        <messageevent ref="Request_Cerrar_puerta" />
+        <messageevent ref="Request_Cerrar_Puerta" />
       </trigger>
     </plan>
 
@@ -653,8 +653,12 @@
       </messageevent>
       <messageevent name="Request_Montar_en_vehiculo" direction="send" type="fipa">
       </messageevent>
-      <messageevent name="Request_Conducir_vehiculo" direction="send" type="fipa">
+
+
+      <messageevent name="Request_Conducir_Camion" direction="send" type="fipa">
       </messageevent>
+
+
       <messageevent name="Request_Desplazar_ambulancia" direction="send" type="fipa">
       </messageevent>
       <messageevent name="Request_Usar_canon_de_agua" direction="send" type="fipa">

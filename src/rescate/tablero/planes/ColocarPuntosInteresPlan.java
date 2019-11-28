@@ -2,12 +2,9 @@ package rescate.tablero.planes;
 
 import java.util.*;
 
-import jadex.adapter.fipa.SFipa;
-import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 
 import rescate.ontologia.conceptos.*;
-import rescate.ontologia.predicados.HabitacionActualizada;
 
 public class ColocarPuntosInteresPlan extends Plan {
 
@@ -42,7 +39,7 @@ public class ColocarPuntosInteresPlan extends Plan {
     // Casilla en la posicion X e Y
     Casilla c = mapa[Y][X];
 
-    // Mientras el número de PDI en el tablero sea menor a 3
+    // Hasta que se coloque el PDI
     while (true) {
 
       // Hay bombero
@@ -57,27 +54,10 @@ public class ColocarPuntosInteresPlan extends Plan {
       // Se puede colocar...
       if (c.getPuntoInteres() == Casilla.PuntoInteres.NADA && c.tieneFuego() != Casilla.Fuego.FUEGO && !hayBombero) {
 
-        // Si no queda de un tipo, se coloca del otro...
-        if (PDIVictima == 0) {
-          colocarFalsaAlarma(c, t);
-          PDIFalsaAlarma--;
-          break;
-        } else if (PDIFalsaAlarma == 0) {
-          colocarVictima(c, t);
-          PDIVictima--;
-          break;
-        }
-
-        // Si quedan de los dos tipos, de manera aleatoria...
-        if (Math.random() < 0.5) {
-          colocarFalsaAlarma(c, t);
-          PDIFalsaAlarma--;
-          break;
-        } else {
-          colocarVictima(c, t);
-          PDIVictima--;
-          break;
-        }
+        // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma o víctima)
+        System.out.println("[INFO] Se ha colocado un PDI de víctima [" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
+        c.setPuntoInteres(Casilla.PuntoInteres.VICTIMA);
+        break;
 
       }
 
@@ -124,8 +104,6 @@ public class ColocarPuntosInteresPlan extends Plan {
 
     // Una vez colocado el nuevo PDI, se actualizan las creencias
 		getBeliefbase().getBelief("PDITablero").setFact(PDITablero + 1);
-		getBeliefbase().getBelief("PDIVictima").setFact(PDIVictima);
-		getBeliefbase().getBelief("PDIFalsaAlarma").setFact(PDIFalsaAlarma);
     getBeliefbase().getBelief("tablero").setFact(t);
 
     /*
@@ -152,18 +130,6 @@ public class ColocarPuntosInteresPlan extends Plan {
       }
     }
     */
-  }
-
-  public void colocarVictima(Casilla c, Tablero t) {
-    System.out.println("[INFO] Se ha colocado un PDI de víctima");
-    c.setPuntoInteres(Casilla.PuntoInteres.VICTIMA);
-    t.setCasilla(c.getPosicion()[0], c.getPosicion()[1], c);
-  }
-
-  public void colocarFalsaAlarma(Casilla c, Tablero t) {
-    System.out.println("[INFO] Se ha colocado un PDI de falsa alarma");
-    c.setPuntoInteres(Casilla.PuntoInteres.FALSA_ALARMA);
-    t.setCasilla(c.getPosicion()[0], c.getPosicion()[1], c);
   }
 
 }

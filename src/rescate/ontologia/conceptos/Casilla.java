@@ -99,7 +99,7 @@ public class Casilla extends Concepto {
 		this.flecha = flecha;
 	}
 
-	public boolean isCamionBomberos() {
+	public boolean esCamionBomberos() {
 		return camionBomberos;
 	}
 
@@ -107,7 +107,7 @@ public class Casilla extends Concepto {
 		this.camionBomberos = camionBomberos;
 	}
 
-	public boolean isAmbulancia() {
+	public boolean esAmbulancia() {
 		return ambulancia;
 	}
 

@@ -2,7 +2,7 @@ package rescate.ontologia.acciones;
 
 import rescate.ontologia.conceptos.Casilla;
 
-public class DerribarPared extends Accion {
+public class DannarPared extends Accion {
 
   private Casilla casilla;
   private int conexion;
