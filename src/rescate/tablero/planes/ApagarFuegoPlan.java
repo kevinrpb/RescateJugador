@@ -13,7 +13,7 @@ class ApagarFuegoPlan extends Plan {
   @Override
   public void body() {
 
-    System.out.println("[PLAN] El tablero recibe petición de apagar fuego");
+    System.out.println("[PLAN] El tablero recibe petición de apagar fuego o humo");
 
     // Petición
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
@@ -32,7 +32,7 @@ class ApagarFuegoPlan extends Plan {
     Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
 
     // Si la casilla no tiene fuego...
-    if (accion.getCasilla().tieneFuego() != Casilla.Fuego.FUEGO) {
+    if (accion.getCasilla().tieneFuego() == Casilla.Fuego.FUEGO || accion.getCasilla().tieneFuego() == Casilla.Fuego.HUMO) {
       System.out.println("[FALLO] La casilla no tiene un fuego activo");
       // Se rechaza la petición de acción del jugador
       IMessageEvent respuesta = createMessageEvent("Failure_Apagar_Fuego");
@@ -62,9 +62,9 @@ class ApagarFuegoPlan extends Plan {
       }
       // PA suficientes
       else {
-        System.out.println("[INFO] Se ha apagado un fuego en la casilla[" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
+        System.out.println("[INFO] Se ha apagado un fuego o humo en la casilla[" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
         // Se apaga el fuego (pasa a humo)
-        accion.getCasilla().setTieneFuego(Casilla.Fuego.HUMO);
+        accion.getCasilla().setTieneFuego(Casilla.Fuego.values()[c.tieneFuego().ordinal()-1]);
         // Se actualiza el jugador (consumo de PA)
         if (jugador.getPuntosAccionExtincion() > 0) {
           jugador.setPuntosAccionExtincion(jugador.getPuntosAccionExtincion() - 1);
