@@ -2,17 +2,21 @@ package rescate.ontologia.acciones;
 
 public class Desplazar extends Accion {
 
-  private int[] destino;
+  public enum Direccion {
+    ARRIBA, DERECHA, ABAJO, IZQUIERDA
+  }
+
+  private Direccion direccion;
 
   public Desplazar() {
   }
 
-  public int[] getDestino() {
-    return destino;
+  public Direccion getDireccion() {
+    return direccion;
   }
 
-  public void setDestino(int[] destino) {
-    this.destino = destino;
+  public void setDireccion(Direccion direccion) {
+    this.direccion = direccion;
   }
 
 }

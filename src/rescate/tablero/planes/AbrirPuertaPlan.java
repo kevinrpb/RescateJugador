@@ -53,7 +53,7 @@ class AbrirPuertaPlan extends Plan {
       }
       // PA suficientes...
       else {
-        System.out.println("[INFO] Se ha abierto una puerta en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
+        System.out.println("[INFO] El jugador con id " + idJugador + " ha abierto una puerta en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
         // Se modifica la conexion a puerta abierta
         c.getConexiones()[accion.getConexion()] = Casilla.Conexion.PUERTA_ABIERTA;
         // Casilla colindante (donde también esta la referencia a la puerta cerrada y hay que abrirla)

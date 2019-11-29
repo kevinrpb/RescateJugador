@@ -30,16 +30,34 @@ class AtenderPlan extends Plan {
     // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
     Jugador jugador = t.getJugador(idJugador);
 
+    // Casilla en la que está el jugador
+    Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
+
     // Fichas atención medica
     int primerosAuxilios = (int) getBeliefbase().getBelief("primerosAuxilios").getFact();
 
-    // Si el jugador está llevando una víctima y tiene el rol SANITARIO...
-    if (jugador.llevandoVictima() == Jugador.LlevandoVictima.SI && jugador.getRol() == Jugador.Rol.SANITARIO) {
+    if (c.getPuntoInteres() != Casilla.PuntoInteres.VICTIMA) {
+      System.out.println("[FALLO] El jugador con id " + idJugador + " no está en una casilla con víctima");
+      // Se rechaza la petición de acción del jugador
+      IMessageEvent respuesta = createMessageEvent("Failure_Atender");
+      respuesta.setContent(accion);
+      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      sendMessage(respuesta);
+    }
+    else if (jugador.getRol() != Jugador.Rol.SANITARIO) {
+      System.out.println("[FALLO] El jugador con id " + idJugador + " no tiene el rol necesario para atender (sanitario)");
+      // Se rechaza la petición de acción del jugador
+      IMessageEvent respuesta = createMessageEvent("Failure_Atender");
+      respuesta.setContent(accion);
+      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      sendMessage(respuesta);
+    }
+    else {
       // Si tiene PA suficientes y hay suficientes fichas de primeros auxilios...
       if (jugador.getPuntosAccion() > 0 && primerosAuxilios > 0) {
-        System.out.println("[INFO] El jugador con id " + idJugador + " atiende a la víctima que actualmente lleva");
-        // Se actualiza el estado de llevando víctima del jugador
-        jugador.setLlevandoVictima(Jugador.LlevandoVictima.CURADA);
+        System.out.println("[INFO] El jugador con id " + idJugador + " atiende a la víctima en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
+        // Se actualiza el PDI
+        c.setPuntoInteres(Casilla.PuntoInteres.VICTIMA_CURADA);
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se reduce en uno el número de fichas de atención médica
@@ -52,22 +70,13 @@ class AtenderPlan extends Plan {
       }
       // En caso contrario...
       else {
-        System.out.println("[ERROR] El jugador con id " + idJugador + " no tiene suficientes PA o no quedan fichas de primeros auxilios");
+        System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene suficientes PA o no quedan fichas de primeros auxilios");
         // Se rechaza la petición de acción del jugador
         IMessageEvent respuesta = createMessageEvent("Refuse_Atender");
         respuesta.setContent(accion);
         respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
         sendMessage(respuesta);
       }
-    }
-    // En caso contrario no puede atender a la víctima
-    else {
-      System.out.println("[ERROR] El jugador con id " + idJugador + " no tiene el rol necesario o no está llevando a una víctima (o ya está curada)");
-      // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Failure_Atender");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
-      sendMessage(respuesta);
     }
 
   }
