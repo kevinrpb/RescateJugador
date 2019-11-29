@@ -4,18 +4,9 @@ import rescate.ontologia.conceptos.Casilla;
 
 public class DannarPared extends Accion {
 
-  private Casilla casilla;
   private int conexion;
 
-  public DerribarPared() {
-  }
-
-  public Casilla getCasilla() {
-    return casilla;
-  }
-
-  public void setCasilla(Casilla casilla) {
-    this.casilla = casilla;
+  public DannarPared() {
   }
 
   public int getConexion() {

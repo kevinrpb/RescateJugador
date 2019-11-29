@@ -194,7 +194,7 @@ class ConducirCamionPlan extends Plan {
       respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
       sendMessage(respuesta);
     }
-
+    
   }
 
 }

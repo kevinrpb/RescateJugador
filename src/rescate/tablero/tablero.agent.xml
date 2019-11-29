@@ -197,8 +197,8 @@
     </plan>
 
     <!-- Suma un punto de dano a una pared -->
-    <plan name="derribarPared_plan">
-      <body class="DerribarParedPlan" />
+    <plan name="Dannar_Pared_plan">
+      <body class="DannarParedPlan" />
       <trigger>
         <messageevent ref="Request_Derribar_pared" />
       </trigger>
@@ -697,6 +697,106 @@
       </messageevent>
       <!-- HECHO -->
 
+
+       <!-- HECHO -->
+      <messageevent name="Request_Dannar_Pared" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REQUEST</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>DannarPared.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Inform_Dannar_Pared" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.INFORM</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>ParedDannana.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Refuse_Dannar_Pared" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REFUSE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>DannarPared.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Failure_Dannar_Pared" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.FAILURE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>DannarPared.class</value>
+        </parameter>
+      </messageevent>
+       <!-- HECHO -->
+
+       <!-- HECHO -->
+          <messageevent name="Request_Desplazar_Ambulancia" direction="receive" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REQUEST</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>DesplazarAmbulanciaPlan.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Inform_Desplazar_Ambulancia" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.INFORM</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>AmbulanciaDesplazada.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Refuse_Desplazar_Ambulancia" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.REFUSE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>DesplazarAmbulanciaPlan.class</value>
+        </parameter>
+      </messageevent>
+
+      <messageevent name="Failure_Desplazar_Ambulancia" direction="send" type="fipa">
+        <parameter name="performative" class="String" direction="fixed">
+          <value>SFipa.FAILURE</value>
+        </parameter>
+        <parameter name="language" class="String" direction="fixed">
+          <value>SFipa.NUGGETS_XML</value>
+        </parameter>
+        <parameter name="content-class" class="Class" direction="fixed">
+          <value>DesplazarAmbulanciaPlan.class</value>
+        </parameter>
+      </messageevent>
+      <!-- HECHO -->
 
 
 
