@@ -15,6 +15,8 @@ class EliminarMateriaPeligrosaPlan extends Plan {
   @Override
   public void body() {
 
+    
+
   }
 
 }

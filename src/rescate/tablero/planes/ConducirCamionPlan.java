@@ -10,7 +10,7 @@ import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
-class ConducirVehiculoPlan extends Plan {
+class ConducirCamionPlan extends Plan {
 
   @Override
   public void body() {
@@ -54,18 +54,18 @@ class ConducirVehiculoPlan extends Plan {
               // Vienen de la IZQUIERDA
               if (jugador.getPosicion()[0] == 0) {
                 // El camión abandona el aparcamiento actual
-                t.getMapa()[0][1].setCamionBomberos(false);
-                t.getMapa()[0][2].setCamionBomberos(false);
+                t.getMapa()[1][0].setCamionBomberos(false);
+                t.getMapa()[2][0].setCamionBomberos(false);
               }
               // Vienen de la DERECHA
               else {
                 // El camión abandona el aparcamiento actual
-                t.getMapa()[9][5].setCamionBomberos(false);
-                t.getMapa()[9][6].setCamionBomberos(false);
+                t.getMapa()[5][9].setCamionBomberos(false);
+                t.getMapa()[6][9].setCamionBomberos(false);
               }
               // Se desplaza al aparcamiento ARRIBA
-              t.getMapa()[7][0].setCamionBomberos(true);
-              t.getMapa()[8][0].setCamionBomberos(true);
+              t.getMapa()[0][7].setCamionBomberos(true);
+              t.getMapa()[0][8].setCamionBomberos(true);
               // Los jugadores se desplazan
               jugador.setPosicion(new int[]{0, 7});
               if (montado != null) {
@@ -80,18 +80,18 @@ class ConducirVehiculoPlan extends Plan {
               // Vienen de ARRIBA
               if (jugador.getPosicion()[1] == 0) {
                 // El camión abandona el aparcamiento actual
-                t.getMapa()[7][0].setCamionBomberos(false);
-                t.getMapa()[8][0].setCamionBomberos(false);
+                t.getMapa()[0][7].setCamionBomberos(false);
+                t.getMapa()[0][8].setCamionBomberos(false);
               }
               // Vienen de ABAJO
               else {
                 // El camión abandona el aparcamiento actual
-                t.getMapa()[1][7].setCamionBomberos(false);
-                t.getMapa()[2][7].setCamionBomberos(false);
+                t.getMapa()[7][1].setCamionBomberos(false);
+                t.getMapa()[7][2].setCamionBomberos(false);
               }
               // Se desplaza al aparcamiento DERECHA
-              t.getMapa()[9][5].setCamionBomberos(true);
-              t.getMapa()[9][6].setCamionBomberos(true);
+              t.getMapa()[5][9].setCamionBomberos(true);
+              t.getMapa()[6][9].setCamionBomberos(true);
               // Los jugadores se desplazan
               jugador.setPosicion(new int[]{5, 9});
               if (montado != null) {
@@ -106,18 +106,18 @@ class ConducirVehiculoPlan extends Plan {
               // Vienen de la IZQUIERDA
               if (jugador.getPosicion()[0] == 0) {
                 // El camión abandona el aparcamiento actual
-                t.getMapa()[0][1].setCamionBomberos(false);
-                t.getMapa()[0][2].setCamionBomberos(false);
+                t.getMapa()[1][0].setCamionBomberos(false);
+                t.getMapa()[2][0].setCamionBomberos(false);
               }
               // Vienen de la DERECHA
               else {
                 // El camión abandona el aparcamiento actual
-                t.getMapa()[9][5].setCamionBomberos(false);
-                t.getMapa()[9][6].setCamionBomberos(false);
+                t.getMapa()[5][9].setCamionBomberos(false);
+                t.getMapa()[6][9].setCamionBomberos(false);
               }
               // Se desplaza al aparcamiento ABAJO
-              t.getMapa()[1][7].setCamionBomberos(true);
-              t.getMapa()[2][7].setCamionBomberos(true);
+              t.getMapa()[7][1].setCamionBomberos(true);
+              t.getMapa()[7][2].setCamionBomberos(true);
               // Los jugadores se desplazan
               jugador.setPosicion(new int[]{7, 1});
               if (montado != null) {
@@ -132,18 +132,18 @@ class ConducirVehiculoPlan extends Plan {
               // Vienen de ARRIBA
               if (jugador.getPosicion()[1] == 0) {
                 // El camión abandona el aparcamiento actual
-                t.getMapa()[7][0].setCamionBomberos(false);
-                t.getMapa()[8][0].setCamionBomberos(false);
+                t.getMapa()[0][7].setCamionBomberos(false);
+                t.getMapa()[0][8].setCamionBomberos(false);
               }
               // Vienen de ABAJO
               else {
                 // El camión abandona el aparcamiento actual
-                t.getMapa()[1][7].setCamionBomberos(false);
-                t.getMapa()[2][7].setCamionBomberos(false);
+                t.getMapa()[7][1].setCamionBomberos(false);
+                t.getMapa()[7][2].setCamionBomberos(false);
               }
               // Se desplaza al aparcamiento IZQUIERDA
-              t.getMapa()[0][1].setCamionBomberos(true);
-              t.getMapa()[0][2].setCamionBomberos(true);
+              t.getMapa()[1][0].setCamionBomberos(true);
+              t.getMapa()[2][0].setCamionBomberos(true);
               // Los jugadores se desplazan
               jugador.setPosicion(new int[]{1, 0});
               if (montado != null) {
@@ -194,8 +194,7 @@ class ConducirVehiculoPlan extends Plan {
       respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
       sendMessage(respuesta);
     }
-
-
+    
   }
 
 }

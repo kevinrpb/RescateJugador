@@ -8,7 +8,7 @@ public class Casilla extends Concepto {
 	}
 
 	public enum PuntoInteres {
-		NADA, OCULTO, FALSA_ALARMA, VICTIMA
+		NADA, OCULTO, FALSA_ALARMA, VICTIMA, VICTIMA_CURADA
 	}
 
 	public enum Direccion {
@@ -99,7 +99,7 @@ public class Casilla extends Concepto {
 		this.flecha = flecha;
 	}
 
-	public boolean isCamionBomberos() {
+	public boolean esCamionBomberos() {
 		return camionBomberos;
 	}
 
@@ -107,7 +107,7 @@ public class Casilla extends Concepto {
 		this.camionBomberos = camionBomberos;
 	}
 
-	public boolean isAmbulancia() {
+	public boolean esAmbulancia() {
 		return ambulancia;
 	}
 
@@ -149,6 +149,10 @@ public class Casilla extends Concepto {
 
   public boolean mismaPosicion(Casilla c) {
     return (getPosicion()[0] == c.getPosicion()[0] && getPosicion()[1] == c.getPosicion()[1]);
+  }
+
+  public boolean mismaPosicion(Jugador j) {
+    return (getPosicion()[0] == j.getPosicion()[0] && getPosicion()[1] == j.getPosicion()[1]);
   }
 
 }
