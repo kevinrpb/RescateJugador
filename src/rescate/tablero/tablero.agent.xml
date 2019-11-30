@@ -19,8 +19,9 @@
     <capability name="dfcap" file="jadex.planlib.DF" />
   </capabilities>
 
-  <!-- Creencias -->
+  <!-- CREENCIAS -->
   <beliefs>
+
     <!-- A quien le toca actuar -->
     <belief name="turno" class="int">
       <fact>0</fact>
@@ -76,59 +77,52 @@
       <fact>0</fact>
     </belief>
 
-    <!-- Materias peligrosas disponibles -->
+    <!-- Fin de partida -->
     <belief name="finPartida" class="boolean">
       <fact>false</fact>
     </belief>
 
-	  <!-- Los jugadores han terminado -->
+	  <!-- Ha terminado una ronda de turnos -->
     <belief name="finTurno" class="boolean">
       <fact>false</fact>
     </belief>
 
   </beliefs>
 
-  <!-- Metas -->
+  <!-- METAS -->
   <goals>
 
+    <!-- Registro en páginas amarillas -->
     <achievegoalref name="df_register">
       <concrete ref="dfcap.df_register" />
     </achievegoalref>
 
-    <performgoal name="quieroColocarPuntos" retry="true" retrydelay="3000" exclude="never">
+    <!-- Colocar PDI -->
+    <performgoal name="colocarPDImeta" retry="true" retrydelay="3000" exclude="never">
         <contextcondition>
           (($beliefbase.finTurno) &amp;&amp;
           (($beliefbase.PDITablero) &lt; 3))
         </contextcondition>
     </performgoal>
 
-
   </goals>
 
-  <!-- Planes -->
+  <!-- PLANES -->
   <plans>
-
-    <!-- Cambia una puerta de cerrada a abierta -->
-    <plan name="TableroInicial">
-      <body class="TableroInicial" />
+  
+    <!-- Abrir una puerta -->
+    <plan name="abrirPuerta_plan">
+      <body class="AbrirPuertaPlan" />
       <trigger>
-        <messageevent ref="msg_TableroInicial" />
+        <messageevent ref="Request_Abrir_Puerta" />
       </trigger>
     </plan>
 
-    <!-- Registrar a un jugador -->
-    <plan name="unirJugador_plan">
-      <body class="TableroUnirJugadorPlan" />
+    <!-- Reduce en uno la potencia del fuego -->
+    <plan name="apagarFuego_plan">
+      <body class="ApagarFuegoPlan" />
       <trigger>
-        <messageevent ref="Request_Unirse_a_la_partida" />
-      </trigger>
-    </plan>
-
-    <!-- Empieza la partida creando el tablero -->
-    <plan name="empezar_plan">
-      <body class="EmpezarPlan" />
-      <trigger>
-        <!--condicion de inicio -->
+        <messageevent ref="Request_Apagar_Fuego" />
       </trigger>
     </plan>
 
@@ -140,86 +134,6 @@
       </trigger>
     </plan>
 
-    <!-- Mueve un jugador a otra casilla (esto junta el protocolo desplazar y desplazar_llamas) -->
-    <plan name="moverJugador_plan">
-      <body class="MoverJugadorPlan" />
-      <trigger>
-        <messageevent ref="Request_Desplazar" />
-      </trigger>
-    </plan>
-
-    <!-- Cambia una ficha de fuego por humo -->
-    <plan name="apagarFuego_plan">
-      <body class="ApagarFuegoPlan" />
-      <trigger>
-        <messageevent ref="Request_Apagar_Fuego" />
-      </trigger>
-    </plan>
-
-    <!-- Retira una ficha de fuego -->
-    <plan name="extinguirFuego_plan">
-      <body class="ExtinguirFuegoPlan" />
-      <trigger>
-        <messageevent ref="Request_Extinguir_fuego" />
-      </trigger>
-    </plan>
-
-    <!-- Retira una ficha de humo -->
-    <plan name="extinguirHumo_plan">
-      <body class="ExtinguirHumoPlan" />
-      <trigger>
-        <messageevent ref="Request_Extinguir_humo" />
-      </trigger>
-    </plan>
-
-    <!-- Comunica la informacion de la habitación en la que ha entrado el bombero -->
-    <plan name="informarHabitacion_plan">
-      <body class="InformarHabitacionPlan" />
-      <trigger>
-        <!-- Cuando informa -->
-      </trigger>
-    </plan>
-
-    <!-- Cambia una puerta de cerrada a abierta -->
-    <plan name="abrirPuerta_plan">
-      <body class="AbrirPuertaPlan" />
-      <trigger>
-        <messageevent ref="Request_Abrir_Puerta" />
-      </trigger>
-    </plan>
-
-    <!-- Cambia una puerta de abierta a cerrada -->
-    <plan name="cerrarPuerta_plan">
-      <body class="CerrarPuertaPlan" />
-      <trigger>
-        <messageevent ref="Request_Cerrar_Puerta" />
-      </trigger>
-    </plan>
-
-    <!-- Suma un punto de dano a una pared -->
-    <plan name="Dannar_Pared_plan">
-      <body class="DannarParedPlan" />
-      <trigger>
-        <messageevent ref="Request_Derribar_pared" />
-      </trigger>
-    </plan>
-
-    <!-- Mueve un jugador y una victima -->
-    <plan name="trasladarVictima_plan">
-      <body class="TrasladarVictimaPlan" />
-      <trigger>
-        <messageevent ref="Request_Trasladar_victima" />
-      </trigger>
-    </plan>
-
-    <!-- Mueve un jugador con una materia peligrosa -->
-    <plan name="trasladarMateriaPeligrosa_plan">
-      <body class="TrasladarMateriaPeligrosaPlan" />
-      <trigger>
-        <messageevent ref="Request_Trasladar_materia_peligrosa" />
-      </trigger>
-    </plan>
-
     <!-- Atiende a un jugador herido -->
     <plan name="atender_plan">
       <body class="AtenderPlan" />
@@ -228,47 +142,71 @@
       </trigger>
     </plan>
 
-    <!-- Identifica un punto de interés -->
-    <plan name="identificarPuntoDeInteres_plan">
-      <body class="IdentificarPuntoDeInteresPlan" />
+    <!-- Cerrar una puerta -->
+    <plan name="cerrarPuerta_plan">
+      <body class="CerrarPuertaPlan" />
       <trigger>
-        <messageevent ref="Request_Identificar_materia_peligrosa" />
+        <messageevent ref="Request_Cerrar_Puerta" />
       </trigger>
     </plan>
-
-    <!-- El jugador se monta en un vehiculo -->
-    <plan name="montarEnVehiculo_plan">
-      <body class="MontarEnVehiculoPlan" />
-      <trigger>
-        <messageevent ref="Request_Montar_en_vehiculo" />
-      </trigger>
+    
+    <!-- Colocar PDI -->
+    <plan name="ColocarPuntosInteres">
+        <body class="ColocarPuntosInteresPlan" />
+        <trigger>	
+          <goal ref="colocarPDImeta"/>
+        </trigger>
     </plan>
 
-    <!-- Conduce un vehiculo en el que este montado el jugador -->
+    <!-- Desplaza un vehiculo -->
     <plan name="conducirCamion_plan">
       <body class="ConducirCamionPlan" />
       <trigger>
         <messageevent ref="Request_Conducir_Camion" />
       </trigger>
     </plan>
-
-    <!-- Llama a la ambulancia para que se desplace a la casilla designada -->
+    
+    <!-- Suma un punto de danno a una pared -->
+    <plan name="Dannar_Pared_plan">
+      <body class="DannarParedPlan" />
+      <trigger>
+        <messageevent ref="Request_Derribar_Pared" />
+      </trigger>
+    </plan>
+  
+    <!-- Llama a la ambulancia para que se desplace -->
     <plan name="desplazarAmbulancia_plan">
       <body class="DesplazarAmbulanciaPlan" />
       <trigger>
-        <messageevent ref="Request_Desplazar_ambulancia" />
+        <messageevent ref="Request_Desplazar_Ambulancia" />
       </trigger>
     </plan>
-
-    <!-- Usa el canon de agua de la ambulancia -->
-    <plan name="usarCanonDeAgua_plan">
-      <body class="UsarCanonDeAguaPlan" />
+    
+    <!-- Eliminar una materia peligrosa -->
+    <plan name="eliminarMateriaPeligrosa_plan">
+      <body class="EliminarMateriaPeligrosaPlan" />
       <trigger>
-        <messageevent ref="Request_Usar_canon_de_agua" />
+        <messageevent ref="Request_Eliminar_Materia_Peligrosa" />
       </trigger>
     </plan>
 
-    <!-- El jefe de bomberos manda a un jugador realizar una accion  -->
+    <!-- Empieza la partida creando el tablero -->
+    <plan name="empezar_plan">
+      <body class="EmpezarPlan" />
+      <trigger>
+        <!--condicion de inicio -->
+      </trigger>
+    </plan>
+
+    <!-- Identifica un punto de interes -->
+    <plan name="identificarPuntoDeInteres_plan">
+      <body class="IdentificarPuntoDeInteresPlan" />
+      <trigger>
+        <messageevent ref="Request_Identificar_PDI" />
+      </trigger>
+    </plan>
+    
+    <!-- El jefe de bomberos manda a un jugador realizar una accion -->
     <plan name="mando_plan">
       <body class="MandoPlan" />
       <trigger>
@@ -276,551 +214,492 @@
       </trigger>
     </plan>
 
-    <!--  -->
-    <plan name="eliminarMateriaPeligrosa_plan">
-      <body class="EliminarMateriaPeligrosaPlan" />
+    <!-- El jugador se monta en un vehiculo -->
+    <plan name="montarEnVehiculo_plan">
+      <body class="MontarEnVehiculoPlan" />
       <trigger>
-        <messageevent ref="Request_Eliminar_materia_peligrosa" />
+        <messageevent ref="Request_Montar_Vehiculo" />
+      </trigger>
+    </plan>
+    
+    <!-- Mueve un jugador a otra casilla -->
+    <plan name="moverJugador_plan">
+      <body class="MoverJugadorPlan" />
+      <trigger>
+        <messageevent ref="Request_Desplazar" />
       </trigger>
     </plan>
 
-	<!--  -->
-	<plan name="ColocarPuntosInteres">
-      <body class="ColocarPuntosInteresPlan" />
-	  <trigger>	<goal ref="quieroColocarPuntos"/> </trigger>
+    <!-- Propaga el fuego -->
+    <plan name="propagarFuego_plan">
+      <body class="PropagarFuegoPlan" />
+      <trigger>
+        <!--condicion de inicio -->
+      </trigger>
+    </plan>
 
+    <!-- Registrar a un jugador -->
+    <plan name="unirJugador_plan">
+      <body class="UnirJugadorPlan" />
+      <trigger>
+        <messageevent ref="Request_Unirse_Partida" />
+      </trigger>
+    </plan>
+    
+    <!-- Usa el cannon de agua de la ambulancia -->
+    <plan name="usarCannonDeAgua_plan">
+      <body class="UsarCannonDeAguaPlan" />
+      <trigger>
+        <messageevent ref="Request_Usar_Cannon_Agua" />
+      </trigger>
     </plan>
 
   </plans>
 
-  <!-- Eventos -->
+  <!-- EVENTOS -->
   <events>
-      <messageevent name="Request_Unirse_a_la_partida" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>UnirsePartidaAccion.class</value>
-        </parameter>
-      </messageevent>
-
-      <!-- HECHO -->
-      <messageevent name="Request_Elegir_Rol" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>ElegirRol.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Inform_Rol_Elegido" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>RolElegido.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Elegir_Rol" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REFUSE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>RolesDisponibles.class</value>
-        </parameter>
-      </messageevent>
-      <!-- HECHO -->
-
-
-
-
-      <messageevent name="Request_Desplazar" direction="send" type="fipa">
-
-      
-      </messageevent>
-
-
-
-
-
-
-      <!-- HECHO -->
-      <messageevent name="Request_Apagar_Fuego" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>ApagarFuego.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Inform_Fuego_Apagado" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>FuegoApagado.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Apagar_Fuego" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REFUSE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>ApagarFuego.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Failure_Apagar_Fuego" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>ApagarFuego.class</value>
-        </parameter>
-      </messageevent>
-      <!-- HECHO -->
-
-
-
-
-
-
-      <messageevent name="Request_Extinguir_fuego" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-            <value>SFipa.REQUEST</value>
-          </parameter>
-          <parameter name="language" class="String" direction="fixed">
-            <value>SFipa.NUGGETS_XML</value>
-          </parameter>
-          <parameter name="content-class" class="Class" direction="fixed">
-            <value>ExtinguirFuegoAccion.class</value>
-          </parameter>
-      </messageevent>
-
-      <messageevent name="Agree_Extinguir_Fuego" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>FuegoExtinguidoPredicado.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Extinguir_Fuego" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>FuegoExtinguidoPredicado.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Request_Extinguir_humo" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-            <value>SFipa.REQUEST</value>
-          </parameter>
-          <parameter name="language" class="String" direction="fixed">
-            <value>SFipa.NUGGETS_XML</value>
-          </parameter>
-          <parameter name="content-class" class="Class" direction="fixed">
-            <value>ExtinguirHumoAccion.class</value>
-          </parameter>
-      </messageevent>
-
-      <messageevent name="Agree_Extinguir_Humo" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>HumoExtinguidoPredicado.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Extinguir_Humo" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>HumoExtinguidoPredicado.class</value>
-        </parameter>
-      </messageevent>
-
-
-
-
-      <!-- HECHO -->
-      <messageevent name="Request_Abrir_Puerta" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>AbrirPuerta.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Inform_Puerta_Abierta" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>PuertaAbierta.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Abrir_Puerta" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REFUSE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>AbrirPuerta.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Failure_Abrir_Puerta" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>AbrirPuerta.class</value>
-        </parameter>
-      </messageevent>
-      <!-- HECHO -->
-
-
-      <!-- HECHO -->
-      <messageevent name="Request_Cerrar_Puerta" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>CerrarPuerta.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Inform_Puerta_Cerrada" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>PuertaCerrada.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Cerrar_Puerta" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REFUSE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>CerrarPuerta.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Failure_Cerrar_Puerta" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>CerrarPuerta.class</value>
-        </parameter>
-      </messageevent>
-      <!-- HECHO -->
-
-      <!-- HECHO -->
-          <messageevent name="Request_Conducir_Camion" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>ConducirCamionPlan.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Inform_Camion_Conducido" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>CamionConducido.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Conducir_Camion" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REFUSE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>ConducirCamionPlan.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Failure_Conducir_Camion" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>ConducirCamionPlan.class</value>
-        </parameter>
-      </messageevent>
-      <!-- HECHO -->
-
-
-      <messageevent name="Request_Derribar_pared" direction="send" type="fipa">
-      </messageevent>
-      <messageevent name="Request_Trasladar_victima" direction="send" type="fipa">
-      </messageevent>
-      <messageevent name="Request_Trasladar_materia_peligrosa" direction="send" type="fipa">
-      </messageevent>
-
-      <!-- HECHO -->
-      <messageevent name="Request_Atender" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>AtenderHerido.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Inform_Victima_Atendida" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>VictimaAtendida.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Atender" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REFUSE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>AtenderHerido.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Failure_Atender" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>AtenderHerido.class</value>
-        </parameter>
-      </messageevent>
-      <!-- HECHO -->
-
-
-       <!-- HECHO -->
-      <messageevent name="Request_Dannar_Pared" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>DannarPared.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Inform_Dannar_Pared" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>ParedDannana.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Dannar_Pared" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REFUSE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>DannarPared.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Failure_Dannar_Pared" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>DannarPared.class</value>
-        </parameter>
-      </messageevent>
-       <!-- HECHO -->
-
-       <!-- HECHO -->
-          <messageevent name="Request_Desplazar_Ambulancia" direction="receive" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REQUEST</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>DesplazarAmbulanciaPlan.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Inform_Desplazar_Ambulancia" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.INFORM</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>AmbulanciaDesplazada.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Refuse_Desplazar_Ambulancia" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.REFUSE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>DesplazarAmbulanciaPlan.class</value>
-        </parameter>
-      </messageevent>
-
-      <messageevent name="Failure_Desplazar_Ambulancia" direction="send" type="fipa">
-        <parameter name="performative" class="String" direction="fixed">
-          <value>SFipa.FAILURE</value>
-        </parameter>
-        <parameter name="language" class="String" direction="fixed">
-          <value>SFipa.NUGGETS_XML</value>
-        </parameter>
-        <parameter name="content-class" class="Class" direction="fixed">
-          <value>DesplazarAmbulanciaPlan.class</value>
-        </parameter>
-      </messageevent>
-      <!-- HECHO -->
-
-
-
-
-      <messageevent name="Request_Identificar_materia_peligrosa" direction="send" type="fipa">
-      </messageevent>
-      <messageevent name="Request_Montar_en_vehiculo" direction="send" type="fipa">
-      </messageevent>
-
-
-      <messageevent name="Request_Conducir_Camion" direction="send" type="fipa">
-      </messageevent>
-
-
-      <messageevent name="Request_Desplazar_ambulancia" direction="send" type="fipa">
-      </messageevent>
-      <messageevent name="Request_Usar_canon_de_agua" direction="send" type="fipa">
-      </messageevent>
-      <messageevent name="Request_Mando" direction="send" type="fipa">
-      </messageevent>
-      <messageevent name="Request_Eliminar_materia_peligrosa" direction="send" type="fipa">
-      </messageevent>
-      <messageevent name="msg_TableroInicial" direction="send" type="fipa">
-      </messageevent>
+
+    <!-- Abrir puerta -->
+    <messageevent name="Request_Abrir_Puerta" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AbrirPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Puerta_Abierta" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>PuertaAbierta.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Abrir_Puerta" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AbrirPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Abrir_Puerta" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AbrirPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Apagar fuego -->
+    <messageevent name="Request_Apagar_Fuego" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ApagarFuego.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Fuego_Apagado" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>FuegoApagado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Apagar_Fuego" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ApagarFuego.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Apagar_Fuego" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ApagarFuego.class</value>
+      </parameter>
+    </messageevent>
+
+     <!-- Elegir rol -->
+    <messageevent name="Request_Elegir_Rol" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ElegirRol.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Rol_Elegido" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>RolElegido.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Elegir_Rol" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>RolesDisponibles.class</value>
+      </parameter>
+    </messageevent>
+
+     <!-- Atender -->
+    <messageevent name="Request_Atender" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AtenderHerido.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Victima_Atendida" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>VictimaAtendida.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Atender" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AtenderHerido.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Atender" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AtenderHerido.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Cerrar puerta -->
+    <messageevent name="Request_Cerrar_Puerta" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CerrarPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Puerta_Cerrada" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>PuertaCerrada.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Cerrar_Puerta" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CerrarPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Cerrar_Puerta" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CerrarPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Conducir camion -->
+    <messageevent name="Request_Conducir_Camion" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ConducirCamionPlan.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Camion_Conducido" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CamionConducido.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Conducir_Camion" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ConducirCamionPlan.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Conducir_Camion" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ConducirCamionPlan.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Dannar pared -->
+    <messageevent name="Request_Dannar_Pared" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DannarPared.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Dannar_Pared" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ParedDannana.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Dannar_Pared" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DannarPared.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Dannar_Pared" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DannarPared.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Desplazar ambulancia -->
+    <messageevent name="Request_Desplazar_Ambulancia" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DesplazarAmbulanciaPlan.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Desplazar_Ambulancia" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AmbulanciaDesplazada.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Desplazar_Ambulancia" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DesplazarAmbulanciaPlan.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Desplazar_Ambulancia" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DesplazarAmbulanciaPlan.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Eliminar material peligrosa -->
+    <messageevent name="Request_Eliminar_materia_peligrosa" direction="send" type="fipa">
+    </messageevent>
+
+    <!-- Identificar PDI -->
+    <messageevent name="Request_Mando" direction="send" type="fipa">
+    </messageevent>
+
+    <!-- Mando -->
+    <messageevent name="Request_Mando" direction="send" type="fipa">
+    </messageevent>
+
+    <!-- Montar en vehiculo -->
+    <messageevent name="Request_Montar_Vehiculo" direction="send" type="fipa">
+    </messageevent>
+
+    <!-- Desplazar jugador -->
+    <messageevent name="Request_Desplazar" direction="send" type="fipa">
+    </messageevent>
+
+    <!-- Unirse partida -->
+    <messageevent name="Request_Unirse_Partida" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>UnirsePartida.class</value>
+      </parameter>
+    </messageevent>
+    
+    <messageevent name="Inform_Jugador_Unido" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>JugadorUnido.class</value>
+      </parameter>
+    </messageevent>
+    
+    <messageevent name="Refuse_Unirse_Partida" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>UnirsePartida.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Usar cannon de agua -->
+    <messageevent name="Request_Usar_cannon_Agua" direction="send" type="fipa">
+    </messageevent>
+
   </events>
 
   <!-- Propiedades -->
@@ -842,4 +721,5 @@
 
     </configuration>
   </configurations>
+  
 </agent>

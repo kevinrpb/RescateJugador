@@ -32,7 +32,7 @@ class ApagarFuegoPlan extends Plan {
     Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
 
     // Si la casilla no tiene fuego...
-    if (accion.getCasilla().tieneFuego() == Casilla.Fuego.FUEGO || accion.getCasilla().tieneFuego() == Casilla.Fuego.HUMO) {
+    if (accion.getCasilla().tieneFuego() != Casilla.Fuego.FUEGO && accion.getCasilla().tieneFuego() != Casilla.Fuego.HUMO) {
       System.out.println("[FALLO] La casilla no tiene un fuego activo");
       // Se rechaza la petición de acción del jugador
       IMessageEvent respuesta = createMessageEvent("Failure_Apagar_Fuego");

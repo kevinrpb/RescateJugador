@@ -1,7 +1,5 @@
 package rescate.tablero.planes;
 
-import java.util.*;
-
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
@@ -155,7 +153,7 @@ class ConducirCamionPlan extends Plan {
         } 
         // Si finalmente se ha desplazado...
         if (desplazado) {
-          System.out.println("[INFO] El camión  y los jugadores en él se han desplazado al aparcamiento: " + accion.getDestino());
+          System.out.println("[INFO] El camión y los jugadores en él se han desplazado al aparcamiento: " + accion.getDestino());
           // Se actualiza el jugador (consumo de PA)
           jugador.setPuntosAccion(jugador.getPuntosAccion() - 2);
           // Se actualiza en la base de creencias el hecho tablero

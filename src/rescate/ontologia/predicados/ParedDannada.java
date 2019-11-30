@@ -1,8 +1,8 @@
 package rescate.ontologia.predicados;
 
-public class ParedRota extends Predicado {
+public class ParedDannada extends Predicado {
 
-  public ParedRota() {
+  public ParedDannada() {
   }
 
 }
