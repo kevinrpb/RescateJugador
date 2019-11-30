@@ -31,6 +31,7 @@ public class Jugador extends Concepto {
   private int puntosAccionMovimiento;
 
   private boolean subidoCamion;
+  private boolean subidoAmbulancia;
 
   private LlevandoVictima llevandoVictima;
   private boolean llevandoMateriaPeligrosa;
@@ -98,6 +99,14 @@ public class Jugador extends Concepto {
 
   public void setSubidoCamion(boolean subidoCamion) {
     this.subidoCamion = subidoCamion;
+  }
+  
+  public boolean subidoAmbulancia() {
+    return subidoAmbulancia;
+  }
+
+  public void setSubidoAmbulancia(boolean subidoAmbulancia) {
+    this.subidoAmbulancia = subidoAmbulancia;
   }
 
   public LlevandoVictima llevandoVictima() {
