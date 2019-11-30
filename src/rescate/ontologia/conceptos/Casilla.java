@@ -8,7 +8,7 @@ public class Casilla extends Concepto {
 	}
 
 	public enum PuntoInteres {
-		NADA, OCULTO, FALSA_ALARMA, VICTIMA, VICTIMA_CURADA
+		NADA, OCULTO, VICTIMA, VICTIMA_CURADA
 	}
 
 	public enum Direccion {

@@ -29,7 +29,8 @@ class AsignarRolPlan extends Plan {
     ElegirRol accion = (ElegirRol) peticion.getContent();
 
     // Se identifican los roles disponibles y...
-    ArrayList<Jugador.Rol> roles = (ArrayList<Jugador.Rol>) Arrays.asList(Jugador.Rol.values());
+    ArrayList<Jugador.Rol> roles = new ArrayList<Jugador.Rol>();
+    Collections.addAll(roles, Jugador.Rol.values());
     roles.remove(Jugador.Rol.NINGUNO);
     // ...se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
     Jugador jugador = null;
