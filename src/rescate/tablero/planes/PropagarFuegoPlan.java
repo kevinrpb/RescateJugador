@@ -34,6 +34,25 @@ public class PropagarFuegoPlan extends Plan {
     // Aturdir y otros efectos
     // TODO:
 
+    //
+    for (int i = 0; i < mapa.length; i++) {
+      for (int j = 0; j < mapa[i].length; j++) {
+        Casilla.Fuego fuego = mapa[i][j].tieneFuego();
+        Casilla.PuntoInteres pdi = mapa[i][j].getPuntoInteres();
+
+        // Si la casilla no tiene fuego o si no hay punto de interés, no se produce nada
+        if (fuego != Casilla.Fuego.FUEGO || pdi == Casilla.PuntoInteres.NADA) {
+          continue;
+        }
+
+        // En caso contrario, tenemos PDI en fuego -> Se pierde
+        int _pdi = (int) getBeliefbase().getBelief("pdi").getFact();
+
+        getBeliefbase().getBelief("pdi").setFact(_pdi - 1);
+        mapa[i][j].setPuntoInteres(Casilla.PuntoInteres.NADA);
+      }
+    }
+
     // Guardar tablero
     getBeliefbase().getBelief("tablero").setFact(t);
   }
