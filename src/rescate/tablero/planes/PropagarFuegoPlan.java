@@ -32,9 +32,19 @@ public class PropagarFuegoPlan extends Plan {
     t.setMapa(mapa);
 
     // Aturdir y otros efectos
-    // TODO:
+    ArrayList<Jugador> jugadores = t.getJugadores();
 
-    //
+    for (Jugador jugador : jugadores) {
+      int X = jugador.getPosicion()[0];
+      int Y = jugador.getPosicion()[1];
+
+      if (mapa[Y][X].tieneFuego() == Casilla.Fuego.FUEGO) {
+        // TODO: Aturdir al jugador
+        //        -
+      }
+    }
+
+    // Retirar PDI de casillas en llamas
     for (int i = 0; i < mapa.length; i++) {
       for (int j = 0; j < mapa[i].length; j++) {
         Casilla.Fuego fuego = mapa[i][j].tieneFuego();
@@ -46,10 +56,17 @@ public class PropagarFuegoPlan extends Plan {
         }
 
         // En caso contrario, tenemos PDI en fuego -> Se pierde
-        int _pdi = (int) getBeliefbase().getBelief("pdi").getFact();
-
-        getBeliefbase().getBelief("pdi").setFact(_pdi - 1);
         mapa[i][j].setPuntoInteres(Casilla.PuntoInteres.NADA);
+
+        // Actualizamos los pdi en tablero
+        int _pdi = (int) getBeliefbase().getBelief("PDITablero").getFact();
+        getBeliefbase().getBelief("PDITablero").setFact(_pdi - 1);
+
+        // Si era una víctima, acutalizamos las víctimas perdidas
+        if (pdi == Casilla.PuntoInteres.VICTIMA || pdi == Casilla.PuntoInteres.VICTIMA_CURADA) {
+          int _victimas = (int) getBeliefbase().getBelief("victimas").getFact();
+          getBeliefbase().getBelief("victimas").setFact(_victimas - 1);
+        }
       }
     }
 
@@ -63,7 +80,7 @@ public class PropagarFuegoPlan extends Plan {
     int x = (int) (Math.random() * mapa.length + 1);
     int y = (int) (Math.random() * mapa[0].length + 1);
 
-    Casilla c = mapa[x][y];
+    Casilla c = mapa[y][x];
 
     // Si tenía un foco de calor, hacer otra propagación después
     if (c.tieneFocoCalor()) {
@@ -88,20 +105,20 @@ public class PropagarFuegoPlan extends Plan {
       explosion(c, mapa);
     } else if(tieneHumo(c) || esAdyancenteAFuego(c, mapa)) {
       // La casilla no tiene fuego, pero tiene humo o es adyacente a fuego, poner fuego y ya
-      mapa[x][y].setTieneFuego(Casilla.Fuego.FUEGO);
+      mapa[y][x].setTieneFuego(Casilla.Fuego.FUEGO);
 
       // Si la casilla tenía una materia peligrosa, se produce explosión
       if (c.tieneMateriaPeligrosa()) {
         explosion(c, mapa);
 
         // La materia peligrosa se convierte en un foco de calor
-        mapa[x][y].setTieneMateriaPeligrosa(false);
-        mapa[x][y].setTieneFocoCalor(true);
+        mapa[y][x].setTieneMateriaPeligrosa(false);
+        mapa[y][x].setTieneFocoCalor(true);
       }
 
     } else {
       // La casilla no tenía nada ni es adyacente, poner humo y ya
-      mapa[x][y].setTieneFuego(Casilla.Fuego.HUMO);
+      mapa[y][x].setTieneFuego(Casilla.Fuego.HUMO);
     }
   }
 
@@ -116,13 +133,15 @@ public class PropagarFuegoPlan extends Plan {
   // Realiza explosión en un casilla en una dirección
   private void explosion(Casilla c, Casilla[][] mapa, int direccion) {
     int[] pos = c.getPosicion();
+    int x = pos[0];
+    int y = pos[1];
 
     // Primero actuar en la propia casilla
     // Si no tiene fuego, simplemente ponerla en llamas y acabar
     if (!tieneFuego(c)) {
       c.setTieneFuego(Casilla.Fuego.FUEGO);
 
-      mapa[pos[0]][pos[1]] = c;
+      mapa[y][x] = c;
       return;
     }
 
@@ -135,7 +154,7 @@ public class PropagarFuegoPlan extends Plan {
 
     // Obtenemos datos para tratar casilla colindante
     int[] posC = posicionColindante(pos, direccion);
-    Casilla cC = mapa[posC[0]][posC[1]];
+    Casilla cC = mapa[y][x];
     int direccionO = direccionOpuesta(direccion);
 
     // Si la casilla en esa direccion es adyacente, se hace onda expansiva (solo se hace explosión en la misma dirección)
@@ -149,8 +168,8 @@ public class PropagarFuegoPlan extends Plan {
       c.dannarConexion(direccion);
       cC.dannarConexion(direccionO);
 
-      mapa[pos[0]][pos[1]] = c;
-      mapa[posC[0]][posC[1]] = cC;
+      mapa[y][x] = c;
+      mapa[posC[1]][posC[0]] = cC;
     }
 
   }
@@ -195,22 +214,22 @@ public class PropagarFuegoPlan extends Plan {
     int y = c.getPosicion()[1];
 
     // Comprueba si tiene una casilla adyacente hacia arriba y si esta tiene fuego
-    if (c.tieneAdyacencia(0) && mapa[x][y - 1].tieneFuego() == Casilla.Fuego.FUEGO) {
+    if (c.tieneAdyacencia(0) && mapa[y - 1][x].tieneFuego() == Casilla.Fuego.FUEGO) {
           return true;
     }
 
     // Comprueba si tiene una casilla adyacente hacia la derecha y si esta tiene fuego
-    if (c.tieneAdyacencia(1) && mapa[x + 1][y].tieneFuego() == Casilla.Fuego.FUEGO) {
+    if (c.tieneAdyacencia(1) && mapa[y][x + 1].tieneFuego() == Casilla.Fuego.FUEGO) {
           return true;
     }
 
     // Comprueba si tiene una casilla adyacente hacia abajo y si esta tiene fuego
-    if (c.tieneAdyacencia(2) && mapa[x][y + 1].tieneFuego() == Casilla.Fuego.FUEGO) {
+    if (c.tieneAdyacencia(2) && mapa[y + 1][x].tieneFuego() == Casilla.Fuego.FUEGO) {
           return true;
     }
 
     // Comprueba si tiene una casilla adyacente hacia la izquierda y si esta tiene fuego
-    if (c.tieneAdyacencia(3) && mapa[x - 1][y].tieneFuego() == Casilla.Fuego.FUEGO) {
+    if (c.tieneAdyacencia(3) && mapa[y][x - 1].tieneFuego() == Casilla.Fuego.FUEGO) {
           return true;
     }
 
@@ -222,7 +241,7 @@ public class PropagarFuegoPlan extends Plan {
     int[] pos = c.getPosicion();
     int[] posC = posicionColindante(pos, direccion);
 
-    return mapa[posC[0]][posC[1]] != null;
+    return mapa[posC[1]][posC[0]] != null;
   }
 
   // Calcula la posicion colindante a otra en una direccion
@@ -230,13 +249,13 @@ public class PropagarFuegoPlan extends Plan {
     int[] p = new int[] { pos[0], pos[1] };
 
     if (d == 0) {
-      p[1] = pos[1] - 1;
-    } else if (d == 1) {
-      p[0] = pos[0] + 1;
-    } else if (d == 2) {
-      p[1] = pos[1] + 1;
-    } else {
       p[0] = pos[0] - 1;
+    } else if (d == 1) {
+      p[1] = pos[1] + 1;
+    } else if (d == 2) {
+      p[0] = pos[0] + 1;
+    } else {
+      p[1] = pos[1] - 1;
     }
 
     return p;
