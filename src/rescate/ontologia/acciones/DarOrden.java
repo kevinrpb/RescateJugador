@@ -5,15 +5,15 @@ import jadex.adapter.fipa.*;
 public class DarOrden extends Accion {
 
   public enum Mandato {
-    MOVER,ABRIR,CERRAR;
- }
+    MOVER, ABRIR, CERRAR;
+  }
 
- private Mandato accion; 
- private int conexion;
- AgentIdentifier idJugador;
+  private Mandato accion; 
+  private int conexion;
+  private AgentIdentifier idJugador;
 
- public DarOrden(){
- }
+  public DarOrden(){
+  }
 
   public Mandato getAccion() {
     return accion;
@@ -38,6 +38,5 @@ public class DarOrden extends Accion {
   public void setIdJugador(AgentIdentifier idJugador) {
     this.idJugador = idJugador;
   }
- 
 
 }

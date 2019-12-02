@@ -149,7 +149,7 @@ class MoverJugadorPlan extends Plan {
     return con == Casilla.Conexion.PUERTA_CERRADA || con == Casilla.Conexion.PARED || con == Casilla.Conexion.PARED_SEMIRROTA;
   }
 
-  public int puntosAccionNecesarios(Casilla destino, Jugador j) {
+  public static int puntosAccionNecesarios(Casilla destino, Jugador j) {
     if (destino.tieneFuego() == Casilla.Fuego.FUEGO || j.llevandoVictima() == Jugador.LlevandoVictima.SI || j.llevandoMateriaPeligrosa()) {
       return 2;
     }
