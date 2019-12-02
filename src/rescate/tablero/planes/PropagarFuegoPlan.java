@@ -294,6 +294,26 @@ public class PropagarFuegoPlan extends Plan {
 
   // Comprueba el tablero para ver si hay casillas de humo adyacentes a fuego
   private Boolean humoAdyacenteAFuego(Casilla[][] mapa) {
+    // Buscamos entre las casillas las que tienen humo
+    for (int i = 0; i < mapa.length; i++) {
+      for (int j = 0; j < mapa[i].length; j++) {
+        // Si la casilla no tiene humo, nada
+        if (mapa[i][j].tieneFuego() != Casilla.Fuego.HUMO) {
+          continue;
+        }
+
+        // Para cada una de las direcciones, si la casilla tiene colindancia ahí y adyacencia, comprobamos si esa casilla tiene fuego. En tal caso devolvemos TRUE
+        for (int k = 0; k < 4; k ++) {
+          if (tieneColindancia(mapa[i][j], 0, mapa) && mapa[i][j].tieneAdyacencia(0)) {
+            int[] _pos = posicionColindante(mapa[i][j].getPosicion(), k);
+
+            if (mapa[_pos[1]][_pos[0]].tieneFuego() == Casilla.Fuego.FUEGO) {
+              return true;
+            }
+          }
+        }
+      }
+    }
 
     return false;
   }
