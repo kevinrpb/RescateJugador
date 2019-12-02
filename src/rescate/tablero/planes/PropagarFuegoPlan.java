@@ -39,8 +39,25 @@ public class PropagarFuegoPlan extends Plan {
       int Y = jugador.getPosicion()[1];
 
       if (mapa[Y][X].tieneFuego() == Casilla.Fuego.FUEGO) {
-        // TODO: Aturdir al jugador
-        //        -
+        // Si lleva víctima, ésta se pierde. Se hace esto en lugar de dejarla primero porque puede ser que el jugador pase por una casilla en la que haya otro PDI...
+        if (jugador.llevandoVictima() != Jugador.LlevandoVictima.NO) {
+          jugador.setLlevandoVictima(Jugador.LlevandoVictima.NO);
+
+          int _pdi = (int) getBeliefbase().getBelief("PDITablero").getFact();int _victimas = (int) getBeliefbase().getBelief("victimas").getFact();
+          getBeliefbase().getBelief("PDITablero").setFact(_pdi - 1);
+          getBeliefbase().getBelief("victimas").setFact(_victimas + 1);
+        }
+
+        // Se mueve al bombero a la casilla en la que está la ambulancia
+        if (mapa[3][0].esAmbulancia()) {
+          jugador.setPosicion(new int[] {0, 3});
+        } else if (mapa[0][5].esAmbulancia()) {
+          jugador.setPosicion(new int[] {5, 0});
+        } else if (mapa[3][9].esAmbulancia()) {
+          jugador.setPosicion(new int[] {9, 3});
+        } else {
+          jugador.setPosicion(new int[] {3, 7});
+        }
       }
     }
 
@@ -65,7 +82,7 @@ public class PropagarFuegoPlan extends Plan {
         // Si era una víctima, acutalizamos las víctimas perdidas
         if (pdi == Casilla.PuntoInteres.VICTIMA || pdi == Casilla.PuntoInteres.VICTIMA_CURADA) {
           int _victimas = (int) getBeliefbase().getBelief("victimas").getFact();
-          getBeliefbase().getBelief("victimas").setFact(_victimas - 1);
+          getBeliefbase().getBelief("victimas").setFact(_victimas + 1);
         }
       }
     }
@@ -165,6 +182,12 @@ public class PropagarFuegoPlan extends Plan {
     // Si tiene una puerta o pared en la dirección, se daña en ambas casillas
     // Esto hace que una pared se rompa y que las puertas desaparezcan
     if (c.conexionEsPared(direccion) || c.conexionEsPuerta(direccion)) {
+
+      // Actualizar cubos de daño
+      if (c.conexionEsPared(direccion)) {
+        getBeliefbase().getBelief("cubosDanno").setFact((int) getBeliefbase().getBelief("cubosDanno").getFact() - 1);
+      }
+
       c.dannarConexion(direccion);
       cC.dannarConexion(direccionO);
 
