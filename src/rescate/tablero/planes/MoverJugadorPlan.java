@@ -77,11 +77,11 @@ class MoverJugadorPlan extends Plan {
 
   }
 
-  public boolean hayObstaculo(Casilla.Conexion con) {
+  public static boolean hayObstaculo(Casilla.Conexion con) {
     return con == Casilla.Conexion.PUERTA_CERRADA || con == Casilla.Conexion.PARED || con == Casilla.Conexion.PARED_SEMIRROTA;
   }
 
-  public int puntosAccionNecesarios(Casilla destino, Jugador j) {
+  public static int puntosAccionNecesarios(Casilla destino, Jugador j) {
 
     return 1;
   }
