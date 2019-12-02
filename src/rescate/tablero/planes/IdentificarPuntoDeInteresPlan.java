@@ -55,6 +55,7 @@ class IdentificarPuntoDeInteresPlan extends Plan {
     else {
       // Suficientes PA
       if (jugador.getPuntosAccion() > 0) {
+        System.out.println("[INFO] Se identifica el PDI de la casilla[" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
         // Si no queda de un tipo, se coloca del otro...
         if (PDIVictima == 0) {
           accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.NADA);

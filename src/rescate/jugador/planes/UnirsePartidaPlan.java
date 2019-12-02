@@ -45,8 +45,7 @@ public class UnirsePartidaPlan extends Plan {
       AgentIdentifier tablero = result[0].getName();
 
       // Solicitud unirse
-      UnirsePartidaAccion accion = new UnirsePartidaAccion();
-      accion.setJugador(jugador);
+      UnirsePartida accion = new UnirsePartida();
 
       IMessageEvent msgsend = createMessageEvent("RequestUnirsePartidaMsg");
       msgsend.setContent(accion);

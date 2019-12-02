@@ -70,7 +70,7 @@ class MoverJugadorPlan extends Plan {
       int PA = puntosAccionNecesarios(destino, jugador);
       if (jugador.getPuntosAccion() + jugador.getPuntosAccionMovimiento() >= PA) {
         // La casilla destino tiene FUEGO y se está llevando una víctima
-        if (destino.tieneFuego() == Casilla.Fuego.FUEGO && (jugador.llevandoVictima() || jugador.llevandoMateriaPeligrosa())) {
+        if (destino.tieneFuego() == Casilla.Fuego.FUEGO && (jugador.llevandoVictima() != Jugador.LlevandoVictima.NO || jugador.llevandoMateriaPeligrosa())) {
           System.out.println("[RECHAZADO] Desde la casilla del jugador con id " + idJugador + " en dirección " + accion.getDireccion() + " hay fuego y el jugador lleva una victima/mat. peligrosa");
           // Se rechaza la petición de acción del jugador
           IMessageEvent respuesta = createMessageEvent("Refuse_Desplazar");
@@ -127,7 +127,7 @@ class MoverJugadorPlan extends Plan {
           // Se informa al jugador de que la acción ha sido llevada a cabo
           // TODO: Enviar habitacion
           IMessageEvent respuesta = createMessageEvent("Inform_Desplazado");
-          respuesta.setContent(new PuntoInteresIdentificado());
+          respuesta.setContent(new Desplazado());
           respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
           sendMessage(respuesta);
         }
@@ -150,7 +150,7 @@ class MoverJugadorPlan extends Plan {
   }
 
   public int puntosAccionNecesarios(Casilla destino, Jugador j) {
-    if (destino.tieneFuego() == Casilla.Fuego.FUEGO || j.llevandoVictima() || j.llevandoMateriaPeligrosa()) {
+    if (destino.tieneFuego() == Casilla.Fuego.FUEGO || j.llevandoVictima() == Jugador.LlevandoVictima.SI || j.llevandoMateriaPeligrosa()) {
       return 2;
     }
     return 1;
