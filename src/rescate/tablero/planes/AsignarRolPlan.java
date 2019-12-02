@@ -46,6 +46,10 @@ class AsignarRolPlan extends Plan {
       // Si dentro de los roles disponibles está el que quiere el jugador...
       if (roles.contains(accion.getRol())) {
         System.out.println("[INFO] El jugador con id " + idJugador + " cambia al rol " + accion.getRol());
+        // Se reducen los PA si es necesario
+        if (jugador.getRol() != Jugador.Rol.NINGUNO) {
+          jugador.setPuntosAccion(jugador.getPuntosAccion() - 2);
+        }
         // Se actualiza el rol del jugador
         jugador.setRol(accion.getRol());
         // Se actualiza en la base de creencias el hecho tablero
@@ -70,10 +74,13 @@ class AsignarRolPlan extends Plan {
     }
     // No PA suficientes
     else {
-
+      System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene PA suficientes");
+      // Se contesta al jugador rechazando la elección de rol y con la lista de roles disponibles
+      IMessageEvent respuesta = createMessageEvent("Refuse_Rol_Elegido");
+      respuesta.setContent(accion);
+      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      sendMessage(respuesta);
     }
-
-    
 
   }
 
