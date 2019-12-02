@@ -57,21 +57,26 @@ class IdentificarPuntoDeInteresPlan extends Plan {
       if (jugador.getPuntosAccion() > 0) {
         System.out.println("[INFO] Se identifica el PDI de la casilla[" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
         // Si no queda de un tipo, se coloca del otro...
+        PuntoInteresIdentificado predicado = new PuntoInteresIdentificado();
         if (PDIVictima == 0) {
           accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.NADA);
+          predicado.setVictima(false);
           PDIFalsaAlarma--;
           PDITablero--;
         } else if (PDIFalsaAlarma == 0) {
           accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.VICTIMA);
+          predicado.setVictima(true);
           PDIVictima--;
         }
         // Si quedan de los dos tipos, de manera aleatoria...
         else if (Math.random() < 0.5) {
           accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.NADA);
+          predicado.setVictima(false);
           PDIFalsaAlarma--;
           PDITablero--;
         } else {
           accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.VICTIMA);
+          predicado.setVictima(true);
           PDIVictima--;
         }
         // Se actualiza la casilla
@@ -86,7 +91,7 @@ class IdentificarPuntoDeInteresPlan extends Plan {
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se informa al jugador de que la acción ha sido llevada a cabo
         IMessageEvent respuesta = createMessageEvent("Inform_PDI_Identificado");
-        respuesta.setContent(new PuntoInteresIdentificado());
+        respuesta.setContent(predicado);
         respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
         sendMessage(respuesta);
       }
