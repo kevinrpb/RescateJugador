@@ -93,7 +93,7 @@ class UsarCannonDeAguaPlan extends Plan {
 
 
   public int[] tirarDados(){
-    int[] posicion;
+    int[] posicion = new int[2];
         if (t.getMapa()[0][7].esCamionBomberos()) {
           //Cuadrante de arriba-derecha
           posicion[0] = (int)(Math.random() * 4 + 5);// entre 5 y 8
@@ -141,8 +141,6 @@ class UsarCannonDeAguaPlan extends Plan {
     }
 
     
-  }
-
   }
 
 }
