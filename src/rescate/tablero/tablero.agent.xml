@@ -234,6 +234,8 @@
     <plan name="propagarFuego_plan">
       <body class="PropagarFuegoPlan" />
       <trigger>
+        <!-- Esto debería hacer que se active cada vez que termina el plan de cambiar el turno -->
+        <goalfinished ref="CambiarTurnoPlan"/>
         <!--condicion de inicio -->
       </trigger>
     </plan>
