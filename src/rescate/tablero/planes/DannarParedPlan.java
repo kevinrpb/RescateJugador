@@ -88,6 +88,8 @@ class DannarParedPlan extends Plan {
         }
         // Se actualiza el jugador (consumo de PA) en funcionn de su rol
         jugador.setPuntosAccion(jugador.getPuntosAccion() - ((jugador.getRol() == Jugador.Rol.RESCATES) ? 1 : 2));
+        // Se reduce en uno los cubos de daño
+        getBeliefbase().getBelief("cubosDanno").setFact((int) getBeliefbase().getBelief("cubosDanno").getFact() - 1);
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se informa al jugador de que la acción ha sido llevada a cabo

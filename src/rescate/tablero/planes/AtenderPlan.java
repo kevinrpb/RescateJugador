@@ -58,6 +58,8 @@ class AtenderPlan extends Plan {
         System.out.println("[INFO] El jugador con id " + idJugador + " atiende a la víctima en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
         // Se actualiza el PDI
         c.setPuntoInteres(Casilla.PuntoInteres.VICTIMA_CURADA);
+         // Se reduce los puntos de acción del jugador 
+        jugador.setPuntosAccion(jugador.getPuntosAccion()-1);
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se reduce en uno el número de fichas de atención médica

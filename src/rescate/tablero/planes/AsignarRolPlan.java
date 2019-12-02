@@ -29,7 +29,8 @@ class AsignarRolPlan extends Plan {
     ElegirRol accion = (ElegirRol) peticion.getContent();
 
     // Se identifican los roles disponibles y...
-    ArrayList<Jugador.Rol> roles = (ArrayList<Jugador.Rol>) Arrays.asList(Jugador.Rol.values());
+    ArrayList<Jugador.Rol> roles = new ArrayList<Jugador.Rol>();
+    Collections.addAll(roles, Jugador.Rol.values());
     roles.remove(Jugador.Rol.NINGUNO);
     // ...se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
     Jugador jugador = null;
@@ -40,27 +41,43 @@ class AsignarRolPlan extends Plan {
       }
     }
 
-    // Si dentro de los roles disponibles está el que quiere el jugador...
-    if (roles.contains(accion.getRol())) {
-      System.out.println("[INFO] El jugador con id " + idJugador + " cambia al rol " + accion.getRol());
-      // Se actualiza el rol del jugador
-      jugador.setRol(accion.getRol());
-      // Se actualiza en la base de creencias el hecho tablero
-      getBeliefbase().getBelief("tablero").setFact(t);
-      // Se confirma al jugador la asignación del rol elegido
-      IMessageEvent respuesta = createMessageEvent("Inform_Rol_Elegido");
-      respuesta.setContent(new RolElegido());
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
-      sendMessage(respuesta);
+    // PA suficientes (no necesario si no tiene ningun rol previamente)
+    if (jugador.getRol() == Jugador.Rol.NINGUNO || (jugador.getRol() != Jugador.Rol.NINGUNO && jugador.getPuntosAccion() > 1)) {
+      // Si dentro de los roles disponibles está el que quiere el jugador...
+      if (roles.contains(accion.getRol())) {
+        System.out.println("[INFO] El jugador con id " + idJugador + " cambia al rol " + accion.getRol());
+        // Se reducen los PA si es necesario
+        if (jugador.getRol() != Jugador.Rol.NINGUNO) {
+          jugador.setPuntosAccion(jugador.getPuntosAccion() - 2);
+        }
+        // Se actualiza el rol del jugador
+        jugador.setRol(accion.getRol());
+        // Se actualiza en la base de creencias el hecho tablero
+        getBeliefbase().getBelief("tablero").setFact(t);
+        // Se confirma al jugador la asignación del rol elegido
+        IMessageEvent respuesta = createMessageEvent("Inform_Rol_Elegido");
+        respuesta.setContent(new RolElegido());
+        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        sendMessage(respuesta);
+      }
+      // Si no...
+      else {
+        System.out.println("[RECHAZADO] El rol " + accion.getRol() + " solicitado por el jugador con id " + idJugador + " no está disponible");
+        // Se contesta al jugador rechazando la elección de rol y con la lista de roles disponibles
+        IMessageEvent respuesta = createMessageEvent("Refuse_Rol_Elegido");
+        RolesDisponibles predicado = new RolesDisponibles();
+        predicado.setRolesDisponibles(roles);
+        respuesta.setContent(predicado);
+        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        sendMessage(respuesta);
+      }
     }
-    // Si no...
+    // No PA suficientes
     else {
-      System.out.println("[RECHAZADO] El rol " + accion.getRol() + " solicitado por el jugador con id " + idJugador + " no está disponible");
+      System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene PA suficientes");
       // Se contesta al jugador rechazando la elección de rol y con la lista de roles disponibles
       IMessageEvent respuesta = createMessageEvent("Refuse_Rol_Elegido");
-      RolesDisponibles predicado = new RolesDisponibles();
-      predicado.setRolesDisponibles(roles);
-      respuesta.setContent(predicado);
+      respuesta.setContent(accion);
       respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
       sendMessage(respuesta);
     }

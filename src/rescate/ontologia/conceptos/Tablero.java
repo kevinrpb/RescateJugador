@@ -49,6 +49,10 @@ public class Tablero extends Concepto {
     return mapa;
   }
 
+  public void setMapa(Casilla[][] mapa) {
+    this.mapa = mapa;
+  }
+
   public void setCasilla(int X, int Y, Casilla c) {
     this.mapa[Y][X] = c;
   }

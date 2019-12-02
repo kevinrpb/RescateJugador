@@ -13,7 +13,7 @@ public class ColocarPuntosInteresPlan extends Plan {
 
     System.out.println("[PLAN] El tablero trata de colocar un PDI");
 
-    // PDI tipo victima sin colocar
+    // PDI en el tablero
     int PDITablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
     // PDI tipo victima sin colocar
     int PDIVictima = (int) getBeliefbase().getBelief("PDIVictima").getFact();

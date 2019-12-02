@@ -10,7 +10,7 @@ public class Jugador extends Concepto {
   }
 
   public enum LlevandoVictima {
-    NO, SI, CURADA
+    SI, NO, CURADA
   }
 
   /*** Constructor ***/
