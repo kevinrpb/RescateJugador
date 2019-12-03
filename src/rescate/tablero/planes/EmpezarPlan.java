@@ -54,7 +54,7 @@ public class EmpezarPlan extends Plan{
 		t.setMapa(mapa);
 		
 		// 3 fuegos con foco de calor y una explosión en cada uno
-		PropagarFuegoPlan p = new PropagarFuegoPlan();
+		/*PropagarFuegoPlan p = new PropagarFuegoPlan();
 		for (int i = 0; i < 3; i++) {
 			// Posiciones aleatorias para la materia peligrosa
 		    int X = (int) (Math.random() * 8 + 1);
@@ -66,7 +66,7 @@ public class EmpezarPlan extends Plan{
 				mapa[Y][X].setTieneFocoCalor(true);
 				p.metodoExplosion(mapa[Y][X], mapa);
 			}else i--;
-		}
+		}*/
 		
 		// Colocamos 3 PDI en posiciones random
 		ColocarPuntosInteresPlan c = new ColocarPuntosInteresPlan();

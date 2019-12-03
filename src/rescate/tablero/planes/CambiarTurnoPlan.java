@@ -47,16 +47,16 @@ class CambiarTurnoPlan extends Plan {
     int indexNextJugador = turno % t.getJugadores().size();
     Jugador jugador = t.getJugadores().get(indexNextJugador);
 
-    //Se añaden los PA genéricos y se restauran los de clase
+    //Se añaden los PA genericos y se restauran los de clase
     if (jugador.getRol() == Jugador.Rol.ESPUMA_IGNIFUGA) {
-      jugador.setPuntosAccion(jugador.getPuntosAccion()+3);
+      jugador.setPuntosAccion(jugador.getPuntosAccion() + 3);
       jugador.setPuntosAccionExtincion(3);
     }
     else if (jugador.getRol() == Jugador.Rol.GENERALISTA) {
-      jugador.setPuntosAccion(jugador.getPuntosAccion()+5);
+      jugador.setPuntosAccion(jugador.getPuntosAccion() + 5);
     }
     else{
-      jugador.setPuntosAccion(jugador.getPuntosAccion()+4);
+      jugador.setPuntosAccion(jugador.getPuntosAccion() + 4);
       if (jugador.getRol() == Jugador.Rol.JEFE) {
         jugador.setPuntosAccionMando(2);
       }
@@ -64,6 +64,8 @@ class CambiarTurnoPlan extends Plan {
         jugador.setPuntosAccionMovimiento(3);
       }
     }
+
+    System.out.println("[INFO] Turno cambiado, ahora juega el jugador con id " + idJugador);
     
     // Se informa al jugador que el turno se ha cambiado correctamente
     IMessageEvent respuesta = createMessageEvent("Inform_Turno_Cambiado");
