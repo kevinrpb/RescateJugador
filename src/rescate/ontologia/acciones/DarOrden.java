@@ -1,29 +1,42 @@
 package rescate.ontologia.acciones;
+import jadex.adapter.fipa.*;
 
-import rescate.ontologia.conceptos.Jugador;
 
 public class DarOrden extends Accion {
 
-  private Jugador recibeOrden;
-  private Accion accion;
-
-  public DarOrden() {
+  public enum Mandato {
+    MOVER, ABRIR, CERRAR;
   }
 
-  public Jugador getRecibeOrden() {
-    return recibeOrden;
+  private Mandato accion; 
+  private int conexion;
+  private AgentIdentifier idJugador;
+
+  public DarOrden(){
   }
 
-  public void setRecibeOrden(Jugador recibeOrden) {
-    this.recibeOrden = recibeOrden;
-  }
-
-  public Accion getAccion() {
+  public Mandato getAccion() {
     return accion;
   }
 
-  public void setAccion(Accion accion) {
+  public void setAccion(Mandato accion) {
     this.accion = accion;
+  }
+
+  public int getConexion() {
+    return conexion;
+  }
+
+  public void setConexion(int conexion) {
+    this.conexion = conexion;
+  }
+
+  public AgentIdentifier getIdJugador() {
+    return idJugador;
+  }
+
+  public void setIdJugador(AgentIdentifier idJugador) {
+    this.idJugador = idJugador;
   }
 
 }

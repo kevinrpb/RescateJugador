@@ -64,7 +64,7 @@ class ApagarFuegoPlan extends Plan {
       else {
         System.out.println("[INFO] Se ha apagado un fuego o humo en la casilla[" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
         // Se apaga el fuego (pasa a humo)
-        accion.getCasilla().setTieneFuego(Casilla.Fuego.values()[c.tieneFuego().ordinal()-1]);
+        accion.getCasilla().setTieneFuego(Casilla.Fuego.values()[accion.getCasilla().tieneFuego().ordinal() - 1]);
         // Se actualiza el jugador (consumo de PA)
         if (jugador.getPuntosAccionExtincion() > 0) {
           jugador.setPuntosAccionExtincion(jugador.getPuntosAccionExtincion() - 1);
@@ -73,7 +73,7 @@ class ApagarFuegoPlan extends Plan {
           jugador.setPuntosAccion(jugador.getPuntosAccion() - ((jugador.getRol() == Jugador.Rol.SANITARIO) ? 2 : 1));
         }
         // Se actualiza la casilla sobre la que se ha realizado la apertura de la puerta
-        t.setCasilla(accion.getCasilla().getPosicion()[0], accion.getCasilla().getPosicion()[1], accion.getCasilla());
+        t.setCasilla(accion.getCasilla().getPosicion()[1], accion.getCasilla().getPosicion()[0], accion.getCasilla());
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se informa al jugador de que la acción ha sido llevada a cabo

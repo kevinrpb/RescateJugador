@@ -56,6 +56,7 @@ class DesplazarAmbulanciaPlan extends Plan {
         }
       }
       boolean desplazado = false;
+      int victimas_salvadas = 0;
       // Dependiendo del destino...
       switch (accion.getDestino()) {
         case ARRIBA:
@@ -73,9 +74,21 @@ class DesplazarAmbulanciaPlan extends Plan {
               t.getMapa()[3][9].setAmbulancia(false);
               t.getMapa()[4][9].setAmbulancia(false);
             }
+            
             // Se desplaza al aparcamiento ARRIBA
             t.getMapa()[0][5].setAmbulancia(true);
             t.getMapa()[0][6].setAmbulancia(true);
+
+            // Se salvan las victimas de esas posiciones 
+            if(t.getMapa()[0][5].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
+              t.getMapa()[0][5].setPuntoInteres(Casilla.PuntoInteres.NADA);
+              victimas_salvadas++;
+            } 
+            if(t.getMapa()[0][6].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
+              t.getMapa()[0][6].setPuntoInteres(Casilla.PuntoInteres.NADA);
+              victimas_salvadas++;
+            }
+            
             // Los jugadores se desplazan
             for (int i = 0; i < 2 && !jugadoresMontados.isEmpty(); i++) {
               jugadoresMontados.get(0).setPosicion(new int[] {5 + i, 0});
@@ -102,6 +115,17 @@ class DesplazarAmbulanciaPlan extends Plan {
             // Se desplaza al aparcamiento DERECHA
             t.getMapa()[3][9].setAmbulancia(true);
             t.getMapa()[4][9].setAmbulancia(true);
+            
+            // Se salvan las victimas de esas posiciones 
+            if(t.getMapa()[3][9].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
+              t.getMapa()[3][9].setPuntoInteres(Casilla.PuntoInteres.NADA);
+              victimas_salvadas++;
+            }
+            if(t.getMapa()[4][9].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA){
+              t.getMapa()[4][9].setPuntoInteres(Casilla.PuntoInteres.NADA);
+              victimas_salvadas++;
+            }
+
             // Los jugadores se desplazan
             for (int i = 0; i < 2 && !jugadoresMontados.isEmpty(); i++) {
               jugadoresMontados.get(0).setPosicion(new int[] {9, 3 + i});
@@ -129,6 +153,17 @@ class DesplazarAmbulanciaPlan extends Plan {
             // Se desplaza al aparcamiento ABAJO
             t.getMapa()[7][3].setAmbulancia(true);
             t.getMapa()[7][4].setAmbulancia(true);
+
+            // Se salvan las victimas de esas posiciones 
+            if(t.getMapa()[7][3].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
+              t.getMapa()[7][3].setPuntoInteres(Casilla.PuntoInteres.NADA);
+              victimas_salvadas++;
+            }
+            if(t.getMapa()[7][4].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
+              t.getMapa()[7][4].setPuntoInteres(Casilla.PuntoInteres.NADA);
+              victimas_salvadas++;
+            }
+
             // Los jugadores se desplazan
             for (int i = 0; i < 2 && !jugadoresMontados.isEmpty(); i++) {
               jugadoresMontados.get(0).setPosicion(new int[] {3 + i, 7});
@@ -155,11 +190,23 @@ class DesplazarAmbulanciaPlan extends Plan {
             // Se desplaza al aparcamiento IZQUIERDA
             t.getMapa()[3][0].setAmbulancia(true);
             t.getMapa()[4][0].setAmbulancia(true);
+
+            // Se salvan las victimas de esas posiciones 
+            if(t.getMapa()[3][0].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
+              t.getMapa()[3][0].setPuntoInteres(Casilla.PuntoInteres.NADA);
+              victimas_salvadas++;
+            }
+            if(t.getMapa()[4][0].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA){
+              t.getMapa()[4][0].setPuntoInteres(Casilla.PuntoInteres.NADA);
+              victimas_salvadas++;
+            }
+
             // Los jugadores se desplazan
             for (int i = 0; i < 2 && !jugadoresMontados.isEmpty(); i++) {
               jugadoresMontados.get(0).setPosicion(new int[] {0, 3 + i});
               jugadoresMontados.remove(0);
             }
+            
             desplazado = true;
           }
           break;
@@ -171,6 +218,11 @@ class DesplazarAmbulanciaPlan extends Plan {
         jugador.setPuntosAccion(jugador.getPuntosAccion() - 2);
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
+        // Se reduce en uno los PDI en el tablero
+        getBeliefbase().getBelief("PDITablero").setFact((int) getBeliefbase().getBelief("PDITablero").getFact() - victimas_salvadas);
+        // Se aumenta en uno las victimas salvadas
+        getBeliefbase().getBelief("salvados").setFact((int) getBeliefbase().getBelief("salvados").getFact() + victimas_salvadas);
+
         // Se informa al jugador de que la acción ha sido llevada a cabo
         IMessageEvent respuesta = createMessageEvent("Inform_Desplazar_Ambulancia");
         respuesta.setContent(new AmbulanciaDesplazada());

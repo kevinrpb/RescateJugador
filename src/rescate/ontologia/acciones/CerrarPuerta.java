@@ -1,7 +1,5 @@
 package rescate.ontologia.acciones;
 
-import rescate.ontologia.conceptos.Casilla;
-
 public class CerrarPuerta extends Accion {
 
   private int conexion;

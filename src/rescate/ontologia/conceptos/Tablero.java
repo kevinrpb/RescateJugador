@@ -41,12 +41,25 @@ public class Tablero extends Concepto {
     return null;
   }
 
+  public int getIndiceJugador(AgentIdentifier idJugador) {
+    for (int i = 0; i < getJugadores().size(); i++) {
+      if (getJugadores().get(i).getIdAgente() == idJugador) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   public void setJugadores(ArrayList<Jugador> jugadores) {
     this.jugadores = jugadores;
   }
 
   public Casilla[][] getMapa() {
     return mapa;
+  }
+
+  public void setMapa(Casilla[][] mapa) {
+    this.mapa = mapa;
   }
 
   public void setCasilla(int X, int Y, Casilla c) {
