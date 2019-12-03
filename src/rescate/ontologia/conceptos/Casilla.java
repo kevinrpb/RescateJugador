@@ -59,43 +59,6 @@ public class Casilla extends Concepto {
     this.conexiones = conexiones;
   }
 
-  public Boolean tieneAdyacencia(int c) {
-    return conexiones[c] == Conexion.PUERTA_ABIERTA ||
-        conexiones[c] == Conexion.PARED_ROTA ||
-        conexiones[c] == Conexion.NADA;
-  }
-
-  public Boolean conexionEsPuerta(int c) {
-    return conexiones[c] == Conexion.PUERTA_CERRADA ||
-        conexiones[c] == Conexion.PUERTA_ABIERTA;
-  }
-
-  // Este método no devuelve si la pared está rota ya que a efectos prácticos es como si no hubiese nada
-  // Este método se usa principalmente para calcular efectos de epxlosiones
-  public Boolean conexionEsPared(int c) {
-    return conexiones[c] == Conexion.PARED ||
-        conexiones[c] == Conexion.PARED_SEMIRROTA;
-  }
-
-  public Conexion dannarConexion(int c) {
-    switch (conexiones[c]) {
-      case PARED:
-        conexiones[c] = Conexion.PARED_SEMIRROTA;
-        return Conexion.PARED_SEMIRROTA;
-      case PARED_SEMIRROTA:
-        conexiones[c] = Conexion.PARED_ROTA;
-        return Conexion.PARED_ROTA;
-      case PUERTA_ABIERTA:
-        conexiones[c] = Conexion.NADA;
-        return Conexion.NADA;
-      case PUERTA_CERRADA:
-        conexiones[c] = Conexion.NADA;
-        return Conexion.NADA;
-      default:
-        return Conexion.NADA;
-    }
-  }
-
   public Fuego tieneFuego() {
     return tieneFuego;
   }
@@ -189,6 +152,25 @@ public class Casilla extends Concepto {
 
   public boolean mismaPosicion(Jugador j) {
     return (getPosicion()[0] == j.getPosicion()[0] && getPosicion()[1] == j.getPosicion()[1]);
+  }
+  
+  public void dannarConexion(int c) {
+    switch (conexiones[c]) {
+      case PARED:
+        conexiones[c] = Conexion.PARED_SEMIRROTA;
+        break;
+      case PARED_SEMIRROTA:
+        conexiones[c] = Conexion.PARED_ROTA;
+        break;
+      case PUERTA_ABIERTA:
+        conexiones[c] = Conexion.NADA;
+        break;
+      case PUERTA_CERRADA:
+        conexiones[c] = Conexion.NADA;
+        break;
+      default:
+        break;
+    }
   }
 
 }
