@@ -77,22 +77,22 @@ public class Casilla extends Concepto {
         conexiones[c] == Conexion.PARED_SEMIRROTA;
   }
 
-  public void dannarConexion(int c) {
+  public Conexion dannarConexion(int c) {
     switch (conexiones[c]) {
       case PARED:
         conexiones[c] = Conexion.PARED_SEMIRROTA;
-        break;
+        return Conexion.PARED_SEMIRROTA;
       case PARED_SEMIRROTA:
         conexiones[c] = Conexion.PARED_ROTA;
-        break;
+        return Conexion.PARED_ROTA;
       case PUERTA_ABIERTA:
         conexiones[c] = Conexion.NADA;
-        break;
+        return Conexion.NADA;
       case PUERTA_CERRADA:
         conexiones[c] = Conexion.NADA;
-        break;
+        return Conexion.NADA;
       default:
-        break;
+        return Conexion.NADA;
     }
   }
 

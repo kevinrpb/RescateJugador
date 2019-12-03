@@ -56,10 +56,10 @@ public class ColocarPuntosInteresPlan extends Plan {
             // Se encuentra la primera casilla en la que sea viable poner el PDI
             Casilla c_ = mapa[i][j];
             if (c_.getPuntoInteres() == Casilla.PuntoInteres.NADA && c_.tieneFuego() != Casilla.Fuego.FUEGO && !hayBombero(j, i, jugadores)) {
-              c = mapa[i][j];
-              X = j;
-              Y = i;
-              break;
+              // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma o víctima)
+              System.out.println("[INFO] Se ha colocado un PDI en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
+              c.setPuntoInteres(Casilla.PuntoInteres.OCULTO);
+              return;
             }
           }
         }

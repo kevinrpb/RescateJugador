@@ -44,8 +44,8 @@ class CambiarTurnoPlan extends Plan {
     getBeliefbase().getBelief("turno").setFact(turno);
     
     // Se encuentra en la lista de jugadores del tablero el jugador al que le toca jugar en el siguiente turno
-    int indexNextJugador = turno % t.getJugadores().size();
-    Jugador jugador = t.getJugadores().get(indexNextJugador);
+    int indiceProximoJugador = turno % t.getJugadores().size();
+    Jugador jugador = t.getJugadores().get(indiceProximoJugador);
 
     //Se añaden los PA genericos y se restauran los de clase
     if (jugador.getRol() == Jugador.Rol.ESPUMA_IGNIFUGA) {
