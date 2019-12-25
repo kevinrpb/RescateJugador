@@ -4,15 +4,6 @@ import jadex.adapter.fipa.AgentIdentifier;
 
 public class Jugador extends Concepto {
 
-  /*** Enums ***/
-  public enum Rol {
-    NINGUNO, SANITARIO, JEFE, EXPERTO_EN_IMAGENES, ESPUMA_IGNIFUGA, MATERIAS_PELIGROSAS, GENERALISTA, RESCATES, CONDUCTOR
-  }
-
-  public enum LlevandoVictima {
-    SI, NO, CURADA
-  }
-
   /*** Constructor ***/
   public Jugador() {
   }
@@ -20,7 +11,7 @@ public class Jugador extends Concepto {
   /*** Atributos ***/
   private AgentIdentifier idAgente;
 
-  private Rol rol;
+  private int rol;
 
   private int[] posicion;
   private int habitacion;
@@ -33,7 +24,7 @@ public class Jugador extends Concepto {
   private boolean subidoCamion;
   private boolean subidoAmbulancia;
 
-  private LlevandoVictima llevandoVictima;
+  private int llevandoVictima;
   private boolean llevandoMateriaPeligrosa;
 
   /*** Getters & Setters ***/
@@ -45,11 +36,11 @@ public class Jugador extends Concepto {
     this.idAgente = idAgente;
   }
 
-  public Rol getRol() {
+  public int getRol() {
     return rol;
   }
 
-  public void setRol(Rol rol) {
+  public void setRol(int rol) {
     this.rol = rol;
   }
 
@@ -109,11 +100,11 @@ public class Jugador extends Concepto {
     this.subidoAmbulancia = subidoAmbulancia;
   }
 
-  public LlevandoVictima llevandoVictima() {
+  public int llevandoVictima() {
     return llevandoVictima;
   }
 
-  public void setLlevandoVictima(LlevandoVictima llevandoVictima) {
+  public void setLlevandoVictima(int llevandoVictima) {
     this.llevandoVictima = llevandoVictima;
   }
 

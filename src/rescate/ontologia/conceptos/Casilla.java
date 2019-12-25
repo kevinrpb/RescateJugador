@@ -2,38 +2,21 @@ package rescate.ontologia.conceptos;
 
 public class Casilla extends Concepto {
 
-  /*** Enums ***/
-  public enum Conexion {
-    NADA, PUERTA_ABIERTA, PUERTA_CERRADA, PARED, PARED_SEMIRROTA, PARED_ROTA
-  }
-
-	public enum PuntoInteres {
-		NADA, OCULTO, VICTIMA, VICTIMA_CURADA
-	}
-
-  public enum Direccion {
-    ARRIBA, ARRIBA_DERECHA, DERECHA, ABAJO_DERECHA, ABAJO, ABAJO_IZQUIERDA, IZQUIERDA, ARRIBA_IZQUIERDA, NADA
-  }
-
-  public enum Fuego {
-    NADA, HUMO, FUEGO
-  }
-
   /*** Constructor ***/
   public Casilla() {
   }
 
   /*** Atributos ***/
   private int[] posicion; // [x, y]
-  private Conexion[] conexiones; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
+  private int[] conexiones; // 0: arriba, 1: derecha, 2: abajo, 3: izquierda
 
-  private Fuego tieneFuego;
+  private int tieneFuego;
   private boolean tieneMateriaPeligrosa;
   private boolean tieneFocoCalor;
 
-  private PuntoInteres puntoInteres;
+  private int puntoInteres;
 
-  private Direccion flecha;
+  private int flecha;
 
   private boolean camionBomberos;
   private boolean ambulancia;
@@ -51,19 +34,19 @@ public class Casilla extends Concepto {
     this.posicion = posicion;
   }
 
-  public Conexion[] getConexiones() {
+  public int[] getConexiones() {
     return conexiones;
   }
 
-  public void setConexiones(Conexion[] conexiones) {
+  public void setConexiones(int[] conexiones) {
     this.conexiones = conexiones;
   }
 
-  public Fuego tieneFuego() {
+  public int tieneFuego() {
     return tieneFuego;
   }
 
-  public void setTieneFuego(Fuego tieneFuego) {
+  public void setTieneFuego(int tieneFuego) {
     this.tieneFuego = tieneFuego;
   }
 
@@ -83,19 +66,19 @@ public class Casilla extends Concepto {
     this.tieneFocoCalor = tieneFocoCalor;
   }
 
-  public PuntoInteres getPuntoInteres() {
+  public int getPuntoInteres() {
     return puntoInteres;
   }
 
-  public void setPuntoInteres(PuntoInteres puntoInteres) {
+  public void setPuntoInteres(int puntoInteres) {
     this.puntoInteres = puntoInteres;
   }
 
-  public Direccion getFlecha() {
+  public int getFlecha() {
     return flecha;
   }
 
-  public void setFlecha(Direccion flecha) {
+  public void setFlecha(int flecha) {
     this.flecha = flecha;
   }
 
@@ -156,17 +139,17 @@ public class Casilla extends Concepto {
   
   public void dannarConexion(int c) {
     switch (conexiones[c]) {
-      case PARED:
-        conexiones[c] = Conexion.PARED_SEMIRROTA;
+      case 3:
+        conexiones[c] = 4;
         break;
-      case PARED_SEMIRROTA:
-        conexiones[c] = Conexion.PARED_ROTA;
+      case 4:
+        conexiones[c] = 5;
         break;
-      case PUERTA_ABIERTA:
-        conexiones[c] = Conexion.NADA;
+      case 1:
+        conexiones[c] = 0;
         break;
-      case PUERTA_CERRADA:
-        conexiones[c] = Conexion.NADA;
+      case 2:
+        conexiones[c] = 0;
         break;
       default:
         break;

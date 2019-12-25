@@ -3,17 +3,17 @@ package rescate.tablero.planes;
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
-class EliminarMateriaPeligrosaPlan extends Plan {
+public class EliminarMateriaPeligrosaPlan extends Plan {
 
   @Override
   public void body() {
 
-    System.out.println("[PLAN] El tablero recibe petición de atender víctima");
+    System.out.println("[PLAN] El tablero recibe petición de atender victima");
 
     // Petición
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
@@ -35,17 +35,13 @@ class EliminarMateriaPeligrosaPlan extends Plan {
     if (!c.tieneMateriaPeligrosa()) {
       System.out.println("[FALLO] La casilla sobre la que esta el jugador " + idJugador + " no tiene materia peligrosa");
       // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Failure_Eliminar_Materia_Peligrosa");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      IMessageEvent respuesta = peticion.createReply("Failure_Eliminar_Materia_Peligrosa", accion);
       sendMessage(respuesta);
     }
-    else if (jugador.getRol() != Jugador.Rol.MATERIAS_PELIGROSAS) {
+    else if (jugador.getRol() != 5) {
       System.out.println("[FALLO] El jugador con id " + idJugador + " no tiene el rol necesario para eliminar materia peligrosa (Experto en Materias Peligrosas)");
       // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Failure_Eliminar_Materia_Peligrosa");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      IMessageEvent respuesta = peticion.createReply("Failure_Eliminar_Materia_Peligrosa", accion);
       sendMessage(respuesta);
     }
     else {
@@ -55,22 +51,22 @@ class EliminarMateriaPeligrosaPlan extends Plan {
         // Se actualiza el PDI
         c.setTieneMateriaPeligrosa(false);
         // Se reduce los puntos de acción del jugador 
-        jugador.setPuntosAccion(jugador.getPuntosAccion()-2);
+        jugador.setPuntosAccion(jugador.getPuntosAccion() - 2);
+        // Se actualiza la vista
+        ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+        viewUpdater.updateTablero(t);
+        getBeliefbase().getBelief("view").setFact(viewUpdater);
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se informa al jugador de que la acción ha sido llevada a cabo
-        IMessageEvent respuesta = createMessageEvent("Inform_Materia_Peligrosa_Eliminada");
-        respuesta.setContent(new MateriaPeligrosaEliminada());
-        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        IMessageEvent respuesta = peticion.createReply("Inform_Materia_Peligrosa_Eliminada", new MateriaPeligrosaEliminada());
         sendMessage(respuesta);
       }
       // En caso contrario...
       else {
         System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene suficientes PA para eliminar materia peligrosa");
         // Se rechaza la petición de acción del jugador
-        IMessageEvent respuesta = createMessageEvent("Refuse_Eliminar_Materia_Peligrosa");
-        respuesta.setContent(accion);
-        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        IMessageEvent respuesta = peticion.createReply("Refuse_Eliminar_Materia_Peligrosa", accion);
         sendMessage(respuesta);
       }
     }

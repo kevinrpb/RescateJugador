@@ -9,6 +9,7 @@
     <import>java.util.logging.*</import>
     <import>java.util.*</import>
 
+    <import>rescate.gui.*</import>
     <import>rescate.ontologia.acciones.*</import>
     <import>rescate.ontologia.conceptos.*</import>
     <import>rescate.ontologia.predicados.*</import>
@@ -21,6 +22,11 @@
 
   <!-- CREENCIAS -->
   <beliefs>
+    
+    <!-- Vista -->
+    <belief name="view" class="ViewUpdater">
+      <fact>new ViewUpdater()</fact>
+    </belief>
 
     <!-- A quien le toca actuar -->
     <belief name="turno" class="int">
@@ -32,6 +38,11 @@
       <fact>new Tablero()</fact>
     </belief>
     
+    <!-- Numero de jugadores -->
+    <belief name="numJugadores" class="int">
+      <fact>0</fact>
+    </belief>
+
     <!-- PDI en el tablero -->
     <belief name="PDITablero" class="int">
       <fact>0</fact>
@@ -57,11 +68,6 @@
       <fact>3</fact>
     </belief>
 
-    <!-- Materias peligrosas disponibles -->
-    <belief name="fichasMateriaPeligrosa" class="int">
-      <fact>6</fact>
-    </belief>
-
     <!-- Focos de calor disponibles -->
     <belief name="focosCalor" class="int">
       <fact>24</fact>
@@ -77,9 +83,9 @@
       <fact>0</fact>
     </belief>
 
-    <!-- Fin de partida -->
-    <belief name="finPartida" class="boolean">
-      <fact>false</fact>
+    <!-- Jugando -->
+    <belief name="jugando" class="boolean">
+      <fact>true</fact>
     </belief>
 
 	  <!-- Ha terminado una ronda de turnos -->
@@ -87,29 +93,111 @@
       <fact>false</fact>
     </belief>
 
+    <!-- Se deben propagar los fuegos -->
+    <belief name="propagarFuego" class="boolean">
+      <fact>false</fact>
+    </belief>
+
+    <!-- Ha terminado una ronda de turnos -->
+    <belief name="siguienteTurno" class="boolean">
+      <fact>false</fact>
+    </belief>
+
+    <!-- Ha terminado una ronda de turnos -->
+    <belief name="empezar" class="boolean">
+      <fact>true</fact>
+    </belief>
+
+    <!-- Instante en el que se comienza -->
+    <belief name="tiempoInicio" class="int">
+      <fact> (int)(System.currentTimeMillis()/1000) </fact>
+    </belief>
+
+    <!-- Tiempo transcurrido -->
+    <belief name="tiempo" class="int" updaterate="750">  
+      <fact> (int)(System.currentTimeMillis()/1000) </fact>
+    </belief>
+
   </beliefs>
 
   <!-- METAS -->
   <goals>
-
+  
     <!-- Registro en páginas amarillas -->
     <achievegoalref name="df_register">
       <concrete ref="dfcap.df_register" />
     </achievegoalref>
 
+    <!-- Objetivo finalizar partida -->
+    <performgoal name="acabarPartida" retrydelay="30000" exclude="when_succeeded" >
+      <creationcondition>
+        <!-- Que  -->
+        $beliefbase.jugando &amp;&amp;
+        (($beliefbase.victimas &gt; 3) &#124;&#124;
+        ($beliefbase.salvados &gt; 6) &#124;&#124;
+        ($beliefbase.cubosDanno &lt; 1))
+      </creationcondition>
+    </performgoal>
+
     <!-- Colocar PDI -->
-    <performgoal name="colocarPDImeta" retry="true" retrydelay="3000" exclude="never">
+    <performgoal name="colocarPDIMeta" retry="true" retrydelay="3000" exclude="never">
         <contextcondition>
+          $beliefbase.jugando &amp;&amp;
           (($beliefbase.finTurno) &amp;&amp;
           (($beliefbase.PDITablero) &lt; 3))
         </contextcondition>
     </performgoal>
+
+    <!-- Objetivo para propagar el fuego -->
+		<performgoal name="propagarFuegoMeta" retry="true" retrydelay="3000" exclude="never">
+			<creationcondition>
+				<!-- Que se active cuando tenga que activarse-->
+        $beliefbase.jugando &amp;&amp;
+				$beliefbase.propagarFuego == true
+			</creationcondition>
+		</performgoal>
+
+    <!-- Objetivo para cambiar el turno -->
+		<performgoal name="cambiarTurnoMeta" retry="true" retrydelay="3000" exclude="never">
+			<creationcondition>
+				<!-- Que se active cuando tenga que activarse-->
+        $beliefbase.jugando &amp;&amp;
+				$beliefbase.siguienteTurno == true
+			</creationcondition>
+		</performgoal>
+
+    <!-- Objetivo para empezar la partida -->
+		<performgoal name="empezarMeta1" retry="true" retrydelay="30000" exclude="when_succeeded">
+			<creationcondition>
+				<!-- Que se active cuando empezar sea true y que el número de jugadores sea como minimo 2 -->
+        $beliefbase.jugando &amp;&amp;
+				$beliefbase.tiempo-$beliefbase.tiempoInicio &gt; 300 &amp;&amp; $beliefbase.empezar &amp;&amp; $beliefbase.numJugadores &gt; 1
+			</creationcondition>
+		</performgoal>
+
+    <!-- Objetivo para empezar la partida -->
+		<performgoal name="empezarMeta2" retrydelay="10000" exclude="when_succeeded">
+			<creationcondition>
+				<!-- Que se active cuando empezar sea true y que el número de jugadores sea 6 -->
+        $beliefbase.jugando &amp;&amp;
+				$beliefbase.empezar &amp;&amp; $beliefbase.numJugadores == 6
+			</creationcondition>
+		</performgoal>
+
 
   </goals>
 
   <!-- PLANES -->
   <plans>
   
+    <!-- Acabar partida -->
+    <plan name="acabarPartida_plan">
+      <body class="AcabarPartidaPlan" />
+      <trigger>
+        <goal ref="acabarPartida"></goal>
+      </trigger>
+    </plan>
+
     <!-- Abrir una puerta -->
     <plan name="abrirPuerta_plan">
       <body class="AbrirPuertaPlan" />
@@ -143,19 +231,43 @@
     </plan>
 
     <!-- Cerrar una puerta -->
+    <plan name="cambiarTurno_plan">
+      <body class="CambiarTurnoPlan" />
+      <trigger>
+        <goal ref="cambiarTurnoMeta" />
+      </trigger>
+    </plan>
+
+    <!-- Cerrar una puerta -->
     <plan name="cerrarPuerta_plan">
       <body class="CerrarPuertaPlan" />
       <trigger>
         <messageevent ref="Request_Cerrar_Puerta" />
       </trigger>
     </plan>
-    
+  
     <!-- Colocar PDI -->
     <plan name="ColocarPuntosInteres">
         <body class="ColocarPuntosInteresPlan" />
-        <trigger>	
-          <goal ref="colocarPDImeta"/>
+        <trigger>
+          <goal ref="colocarPDIMeta"/>
         </trigger>
+    </plan>
+
+    <!-- Coger mat peligrosa -->
+    <plan name="cogerMateriaPeligrosa_plan">
+      <body class="CogerMateriaPeligrosaPlan" />
+      <trigger>
+        <messageevent ref="Request_Coger_Materia_Peligrosa" />
+      </trigger>
+    </plan>
+
+    <!-- Coger victima -->
+    <plan name="cogerVictima_plan">
+      <body class="CogerVictimaPlan" />
+      <trigger>
+        <messageevent ref="Request_Coger_Victima" />
+      </trigger>
     </plan>
 
     <!-- Desplaza un vehiculo -->
@@ -167,13 +279,45 @@
     </plan>
     
     <!-- Suma un punto de danno a una pared -->
-    <plan name="Dannar_Pared_plan">
+    <plan name="dannarPared_plan">
       <body class="DannarParedPlan" />
       <trigger>
-        <messageevent ref="Request_Derribar_Pared" />
+        <messageevent ref="Request_Dannar_Pared" />
+      </trigger>
+    </plan>
+
+    <!-- Suma un punto de danno a una pared -->
+    <plan name="darOrden_plan">
+      <body class="DarOrdenPlan" />
+      <trigger>
+        <messageevent ref="Request_Dar_Orden" />
       </trigger>
     </plan>
   
+    <!-- Dejar mat peligrosa -->
+    <plan name="dejarMateriaPeligrosa_plan">
+      <body class="DejarMateriaPeligrosaPlan" />
+      <trigger>
+        <messageevent ref="Request_Dejar_Materia_Peligrosa" />
+      </trigger>
+    </plan>
+
+    <!-- Dejar victima -->
+    <plan name="dejarVictima_plan">
+      <body class="DejarVictimaPlan" />
+      <trigger>
+        <messageevent ref="Request_Dejar_Victima" />
+      </trigger>
+    </plan>
+
+    <!-- Mueve un jugador a otra casilla -->
+    <plan name="desplazar_plan">
+      <body class="DesplazarPlan" />
+      <trigger>
+        <messageevent ref="Request_Desplazar" />
+      </trigger>
+    </plan>
+   
     <!-- Llama a la ambulancia para que se desplace -->
     <plan name="desplazarAmbulancia_plan">
       <body class="DesplazarAmbulanciaPlan" />
@@ -194,7 +338,16 @@
     <plan name="empezar_plan">
       <body class="EmpezarPlan" />
       <trigger>
-        <!--condicion de inicio -->
+        <goal ref="empezarMeta1" />
+        <goal ref="empezarMeta2" />
+      </trigger>
+    </plan>
+
+    <!-- Identifica un punto de interes -->
+    <plan name="finTurno_plan">
+      <body class="FinTurnoPlan" />
+      <trigger>
+        <messageevent ref="Request_Cambiar_Turno" />
       </trigger>
     </plan>
 
@@ -203,14 +356,6 @@
       <body class="IdentificarPuntoDeInteresPlan" />
       <trigger>
         <messageevent ref="Request_Identificar_PDI" />
-      </trigger>
-    </plan>
-    
-    <!-- El jefe de bomberos manda a un jugador realizar una accion -->
-    <plan name="mando_plan">
-      <body class="MandoPlan" />
-      <trigger>
-        <messageevent ref="Request_Mando" />
       </trigger>
     </plan>
 
@@ -222,21 +367,12 @@
       </trigger>
     </plan>
     
-    <!-- Mueve un jugador a otra casilla -->
-    <plan name="moverJugador_plan">
-      <body class="MoverJugadorPlan" />
-      <trigger>
-        <messageevent ref="Request_Desplazar" />
-      </trigger>
-    </plan>
-
     <!-- Propaga el fuego -->
     <plan name="propagarFuego_plan">
       <body class="PropagarFuegoPlan" />
       <trigger>
-        <!-- Esto debería hacer que se active cada vez que termina el plan de cambiar el turno -->
-        <goalfinished ref="CambiarTurnoPlan"/>
-        <!--condicion de inicio -->
+        <!-- Se activa cada vez que termina el plan de cambiar el turno -->
+        <goal ref="propagarFuegoMeta"/>
       </trigger>
     </plan>
 
@@ -250,7 +386,7 @@
     
     <!-- Usa el cannon de agua de la ambulancia -->
     <plan name="usarCannonDeAgua_plan">
-      <body class="UsarCannonDeAguaPlan" />
+      <body class="UsarCannonAguaPlan" />
       <trigger>
         <messageevent ref="Request_Usar_Cannon_Agua" />
       </trigger>
@@ -260,6 +396,19 @@
 
   <!-- EVENTOS -->
   <events>
+
+    <!-- Acabar Partida -->
+    <messageevent name="Inform_Partida_Acabada" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ResultadoPartida.class</value>
+      </parameter>
+    </messageevent>
 
     <!-- Abrir puerta -->
     <messageevent name="Request_Abrir_Puerta" direction="receive" type="fipa">
@@ -359,7 +508,7 @@
       </parameter>
     </messageevent>
 
-     <!-- Elegir rol -->
+    <!-- Elegir rol -->
     <messageevent name="Request_Elegir_Rol" direction="receive" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.REQUEST</value>
@@ -367,6 +516,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>ElegirRol.class</value>
       </parameter>
@@ -445,6 +597,55 @@
       </parameter>
     </messageevent>
 
+    <!-- Cambiar de turno (FinTurnoPlan y CambiarTurnoPlan) -->
+    <messageevent name="Request_Cambiar_Turno" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CambiarTurno.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Turno_Cambiado" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>TurnoCambiado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Turno_Asignado" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>TurnoAsignado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Cambiar_Turno" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CambiarTurno.class</value>
+      </parameter>
+    </messageevent>
+
     <!-- Cerrar puerta -->
     <messageevent name="Request_Cerrar_Puerta" direction="receive" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
@@ -494,6 +695,104 @@
       </parameter>
     </messageevent>
 
+    <!-- Coger materia peligrosa -->
+    <messageevent name="Request_Coger_Materia_Peligrosa" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerMateriaPeligrosa.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Materia_Peligrosa_Cogida" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>MateriaPeligrosaCogida.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Coger_Materia_Peligrosa" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerMateriaPeligrosa.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Coger_Materia_Peligrosa" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerMateriaPeligrosa.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Coger victima -->
+    <messageevent name="Request_Coger_Victima" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Victima_Cogida" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>VictimaCogida.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Coger_Victima" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Coger_Victima" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerVictima.class</value>
+      </parameter>
+    </messageevent>
+
     <!-- Conducir camion -->
     <messageevent name="Request_Conducir_Camion" direction="receive" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
@@ -503,7 +802,7 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
-        <value>ConducirCamionPlan.class</value>
+        <value>ConducirCamion.class</value>
       </parameter>
     </messageevent>
 
@@ -527,7 +826,7 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
-        <value>ConducirCamionPlan.class</value>
+        <value>ConducirCamion.class</value>
       </parameter>
     </messageevent>
 
@@ -539,7 +838,7 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
-        <value>ConducirCamionPlan.class</value>
+        <value>ConducirCamion.class</value>
       </parameter>
     </messageevent>
 
@@ -592,6 +891,204 @@
       </parameter>
     </messageevent>
 
+    <!-- Dar ordenes -->
+    <messageevent name="Request_Dar_Orden" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DarOrden.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Orden_Completada" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>OrdenCompletada.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Dar_Orden" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DarOrden.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Dar_Orden" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DarOrden.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Dejar materia peligrosa -->
+    <messageevent name="Request_Dejar_Materia_Peligrosa" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarMateriaPeligrosa.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Materia_Peligrosa_Dejada" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>MateriaPeligrosaDejada.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Dejar_Materia_Peligrosa" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarMateriaPeligrosa.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Dejar_Materia_Peligrosa" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarMateriaPeligrosa.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Dejar victima -->
+    <messageevent name="Request_Dejar_Victima" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Victima_Dejada" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>VictimaDejada.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Dejar_Victima" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Dejar_Victima" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarVictima.class</value>
+      </parameter>
+    </messageevent>
+
+
+    <!-- Desplazar jugador -->
+    <messageevent name="Request_Desplazar" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Desplazar.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Desplazado" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Desplazado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Desplazar" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Desplazar.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Desplazar" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Desplazar.class</value>
+      </parameter>
+    </messageevent>
+
+
     <!-- Desplazar ambulancia -->
     <messageevent name="Request_Desplazar_Ambulancia" direction="receive" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
@@ -601,11 +1098,11 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
-        <value>DesplazarAmbulanciaPlan.class</value>
+        <value>DesplazarAmbulancia.class</value>
       </parameter>
     </messageevent>
 
-    <messageevent name="Inform_Desplazar_Ambulancia" direction="send" type="fipa">
+    <messageevent name="Inform_Ambulancia_Desplazada" direction="send" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.INFORM</value>
       </parameter>
@@ -625,11 +1122,48 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
-        <value>DesplazarAmbulanciaPlan.class</value>
+        <value>DesplazarAmbulancia.class</value>
       </parameter>
     </messageevent>
 
-    <messageevent name="Failure_Desplazar_Ambulancia" direction="send" type="fipa">
+    <!-- Eliminar materia peligrosa -->
+    <messageevent name="Request_Eliminar_Materia_Peligrosa" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>EliminarMateriaPeligrosa.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Materia_Peligrosa_Eliminada" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>MateriaPeligrosaEliminada.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Eliminar_Materia_Peligrosa" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>EliminarMateriaPeligrosa.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Eliminar_Materia_Peligrosa" direction="send" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.FAILURE</value>
       </parameter>
@@ -637,28 +1171,106 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
-        <value>DesplazarAmbulanciaPlan.class</value>
+        <value>EliminarMateriaPeligrosa.class</value>
       </parameter>
     </messageevent>
 
-    <!-- Eliminar material peligrosa -->
-    <messageevent name="Request_Eliminar_materia_peligrosa" direction="send" type="fipa">
-    </messageevent>
-
     <!-- Identificar PDI -->
-    <messageevent name="Request_Mando" direction="send" type="fipa">
+    <messageevent name="Request_Identificar_PDI" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>IdentificarPuntoInteres.class</value>
+      </parameter>
     </messageevent>
 
-    <!-- Mando -->
-    <messageevent name="Request_Mando" direction="send" type="fipa">
+    <messageevent name="Inform_PDI_Identificado" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>PuntoInteresIdentificado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Identificar_PDI" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>IdentificarPuntoInteres.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Identificar_PDI" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>IdentificarPuntoInteres.class</value>
+      </parameter>
     </messageevent>
 
     <!-- Montar en vehiculo -->
-    <messageevent name="Request_Montar_Vehiculo" direction="send" type="fipa">
+    <messageevent name="Request_Montar_Vehiculo" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>MontarVehiculo.class</value>
+      </parameter>
     </messageevent>
 
-    <!-- Desplazar jugador -->
-    <messageevent name="Request_Desplazar" direction="send" type="fipa">
+    <messageevent name="Inform_Montado_vehiculo" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>MontadoVehiculo.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Montar_Vehiculo" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>MontarVehiculo.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Montar_Vehiculo" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>MontarVehiculo.class</value>
+      </parameter>
     </messageevent>
 
     <!-- Unirse partida -->
@@ -698,8 +1310,89 @@
       </parameter>
     </messageevent>
 
+    <messageevent name="Failure_Unirse_Partida" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>UnirsePartida.class</value>
+      </parameter>
+    </messageevent>
+
     <!-- Usar cannon de agua -->
-    <messageevent name="Request_Usar_cannon_Agua" direction="send" type="fipa">
+    <messageevent name="Request_Usar_Cannon_Agua" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>UsarCannonAgua.class</value>
+      </parameter>
+    </messageevent>
+    
+    <messageevent name="Inform_Cannon_De_Agua_Usado" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CannonDeAguaUsado.class</value>
+      </parameter>
+    </messageevent>
+    
+    <messageevent name="Refuse_Usar_Cannon_De_Agua" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>UsarCannonAgua.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Usar_Cannon_De_Agua" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>UsarCannonAgua.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Request_Aceptar_Tirada" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AceptarTirada.class</value>
+      </parameter>
+    </messageevent>
+    
+    <messageevent name="Inform_Aceptar_Tirada" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AceptarTirada.class</value>
+      </parameter>
     </messageevent>
 
   </events>

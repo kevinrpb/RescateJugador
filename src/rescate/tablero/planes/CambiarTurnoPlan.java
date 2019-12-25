@@ -3,78 +3,61 @@ package rescate.tablero.planes;
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-
-import rescate.ontologia.acciones.*;
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
-class CambiarTurnoPlan extends Plan {
+public class CambiarTurnoPlan extends Plan {
 
 	@Override
 	public void body() {
 
-    System.out.println("[PLAN] El tablero recibe petición de cambiar turno");
+    System.out.println("[PLAN] El tablero cambia de turno");
     
-    // Petición
-    IMessageEvent peticion = (IMessageEvent) getInitialEvent();
-
     // Tablero
     Tablero t = (Tablero) getBeliefbase().getBelief("tablero").getFact();
-
+    
     // Turno
     int turno = (int) getBeliefbase().getBelief("turno").getFact();
-
-    // Parámetros de la peticion
-    AgentIdentifier idJugador = (AgentIdentifier) peticion.getParameter("sender").getValue();
-    CambiarTurno accion = (CambiarTurno) peticion.getContent();
-    
-    // Se comprueba que sea el turno del jugador
-    if (t.getIndiceJugador(idJugador) != (turno % t.getJugadores().size())) {
-      System.out.println("[RECHAZADO] No es el turno del jugador con id " + idJugador);
-      // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Refuse_Cambiar_Turno");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
-      sendMessage(respuesta);
-      return;
-    }
-    
-    // Se suma el turno y se pone el belief
-    turno++;
-    getBeliefbase().getBelief("turno").setFact(turno);
     
     // Se encuentra en la lista de jugadores del tablero el jugador al que le toca jugar en el siguiente turno
     int indiceProximoJugador = turno % t.getJugadores().size();
     Jugador jugador = t.getJugadores().get(indiceProximoJugador);
 
     //Se añaden los PA genericos y se restauran los de clase
-    if (jugador.getRol() == Jugador.Rol.ESPUMA_IGNIFUGA) {
+    if (jugador.getRol() == 4) {
       jugador.setPuntosAccion(jugador.getPuntosAccion() + 3);
       jugador.setPuntosAccionExtincion(3);
     }
-    else if (jugador.getRol() == Jugador.Rol.GENERALISTA) {
+    else if (jugador.getRol() == 6) {
       jugador.setPuntosAccion(jugador.getPuntosAccion() + 5);
     }
     else{
       jugador.setPuntosAccion(jugador.getPuntosAccion() + 4);
-      if (jugador.getRol() == Jugador.Rol.JEFE) {
+      if (jugador.getRol() == 2) {
         jugador.setPuntosAccionMando(2);
       }
-      else if (jugador.getRol() == Jugador.Rol.RESCATES) {
+      else if (jugador.getRol() == 7) {
         jugador.setPuntosAccionMovimiento(3);
       }
     }
 
-    System.out.println("[INFO] Turno cambiado, ahora juega el jugador con id " + idJugador);
-    
-    // Se informa al jugador que el turno se ha cambiado correctamente
-    IMessageEvent respuesta = createMessageEvent("Inform_Turno_Cambiado");
-    respuesta.setContent(new TurnoCambiado());
-    respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
-    sendMessage(respuesta);
+    getBeliefbase().getBelief("siguienteTurno").setFact(false);
+
+    // Con esto evitamos que se pueda quedar a true porque haya más de 3 PDIs y así no puede poner PDIs a mitad de turno
+    getBeliefbase().getBelief("finTurno").setFact(false);
+
+    System.out.println("[INFO] Turno cambiado, ahora juega el jugador con id " + jugador.getIdAgente());
+
+    // Se actualiza la vista
+    ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+    viewUpdater.updateTablero(t);
+    getBeliefbase().getBelief("view").setFact(viewUpdater);
+    // Se actualiza el tablero (sus jugadores)
+    getBeliefbase().getBelief("tablero").setFact(t);
 
     // Se informa también al jugador al que le toca ahora jugar
-    respuesta = createMessageEvent("Inform_Turno_Asignado");
+    IMessageEvent respuesta = createMessageEvent("Inform_Turno_Asignado");
     TurnoAsignado predicado = new TurnoAsignado();
     predicado.setHabitacion(t.getHabitacion(jugador.getHabitacion()));
     respuesta.setContent(predicado);

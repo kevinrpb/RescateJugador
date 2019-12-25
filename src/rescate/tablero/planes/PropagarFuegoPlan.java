@@ -3,7 +3,7 @@ package rescate.tablero.planes;
 import rescate.ontologia.conceptos.Casilla;
 
 import jadex.runtime.Plan;
-
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.conceptos.*;
 
 public class PropagarFuegoPlan extends Plan {
@@ -13,6 +13,8 @@ public class PropagarFuegoPlan extends Plan {
 
   @Override
   public void body() {
+    
+    System.out.println("[PLAN] El tablero propaga el incendio");
 
     // Tablero
     Tablero t = (Tablero) getBeliefbase().getBelief("tablero").getFact();
@@ -42,11 +44,11 @@ public class PropagarFuegoPlan extends Plan {
     // Para cada jugador
     for (int i = 0; i < t.getJugadores().size(); i++) {
       // Si esta en una casilla con fuego
-      if (mapa[t.getJugadores().get(i).getPosicion()[1]][t.getJugadores().get(i).getPosicion()[0]].tieneFuego() == Casilla.Fuego.FUEGO) {
+      if (mapa[t.getJugadores().get(i).getPosicion()[1]][t.getJugadores().get(i).getPosicion()[0]].tieneFuego() == 2) {
         // Si esta llevando una victima
-        if (t.getJugadores().get(i).llevandoVictima() != Jugador.LlevandoVictima.NO) {
+        if (t.getJugadores().get(i).llevandoVictima() != 0) {
           // Ya no llevas la victima
-          t.getJugadores().get(i).setLlevandoVictima(Jugador.LlevandoVictima.NO);
+          t.getJugadores().get(i).setLlevandoVictima(0);
           // Se actualizan los hechos
           getBeliefbase().getBelief("PDITablero").setFact((int) getBeliefbase().getBelief("PDITablero").getFact() - 1);
           getBeliefbase().getBelief("victimas").setFact((int) getBeliefbase().getBelief("victimas").getFact() + 1);
@@ -68,31 +70,31 @@ public class PropagarFuegoPlan extends Plan {
     for (int i = 0; i < mapa.length; i++) {
       for (int j = 0; j < mapa[i].length; j++) {
         // Si hay fuego
-        if (mapa[i][j].tieneFuego() == Casilla.Fuego.FUEGO) {
+        if (mapa[i][j].tieneFuego() == 2) {
           // Dependiendo del tipo de punto de interes
           switch(mapa[i][j].getPuntoInteres()) {
-            case NADA:
+            case 0:
               break;
-            case OCULTO:
+            case 1:
               // Se obtienen los valores de los hechos
               int PDITablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
               int PDIVictima = (int) getBeliefbase().getBelief("PDIVictima").getFact();
               int PDIFalsaAlarma = (int) getBeliefbase().getBelief("PDIFalsaAlarma").getFact();
               // Si no queda de un tipo, se coloca del otro...
               if (PDIVictima == 0) {
-                mapa[i][j].setPuntoInteres(Casilla.PuntoInteres.NADA);
+                mapa[i][j].setPuntoInteres(0);
                 PDIFalsaAlarma--;
               } else if (PDIFalsaAlarma == 0) {
-                mapa[i][j].setPuntoInteres(Casilla.PuntoInteres.NADA);
+                mapa[i][j].setPuntoInteres(0);
                 PDIVictima--;
                 getBeliefbase().getBelief("victimas").setFact((int) getBeliefbase().getBelief("victimas").getFact() + 1);
               }
               // Si quedan de los dos tipos, de manera aleatoria...
               else if (Math.random() < 0.5) {
-                mapa[i][j].setPuntoInteres(Casilla.PuntoInteres.NADA);
+                mapa[i][j].setPuntoInteres(0);
                 PDIFalsaAlarma--;
               } else {
-                mapa[i][j].setPuntoInteres(Casilla.PuntoInteres.NADA);
+                mapa[i][j].setPuntoInteres(0);
                 PDIVictima--;
                 getBeliefbase().getBelief("victimas").setFact((int) getBeliefbase().getBelief("victimas").getFact() + 1);
               }
@@ -102,9 +104,9 @@ public class PropagarFuegoPlan extends Plan {
               getBeliefbase().getBelief("PDIVictima").setFact(PDIVictima);
               getBeliefbase().getBelief("PDIFalsaAlarma").setFact(PDIFalsaAlarma);
               break;
-            case VICTIMA:
-            case VICTIMA_CURADA:
-              mapa[i][j].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            case 2:
+            case 3:
+              mapa[i][j].setPuntoInteres(0);
               getBeliefbase().getBelief("PDITablero").setFact((int) getBeliefbase().getBelief("PDITablero").getFact() - 1);
               getBeliefbase().getBelief("victimas").setFact((int) getBeliefbase().getBelief("victimas").getFact() + 1);
               break;
@@ -113,18 +115,24 @@ public class PropagarFuegoPlan extends Plan {
       }
     }
     
+    // Se actualiza la vista
+    ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+    viewUpdater.updateTablero(t);
+    getBeliefbase().getBelief("view").setFact(viewUpdater);
     // Guardar tablero
     getBeliefbase().getBelief("tablero").setFact(t);
+    getBeliefbase().getBelief("propagarFuego").setFact(false);
+    getBeliefbase().getBelief("finTurno").setFact(true);
 
   }
 
   private void expandirFuego(int X, int Y) {
     // Si la casilla tiene humo
-    if (mapa[Y][X].tieneFuego() == Casilla.Fuego.HUMO) {
+    if (mapa[Y][X].tieneFuego() == 1) {
       // Tiene fuego adyacente
       if (fuegoAdyacente(X, Y)) {
         // Se cambia a fuego
-        mapa[Y][X].setTieneFuego(Casilla.Fuego.FUEGO);
+        mapa[Y][X].setTieneFuego(2);
         // Se comprueban adyacentes
         expandirFuego(X, Y - 1);
         expandirFuego(X + 1, Y);
@@ -136,7 +144,7 @@ public class PropagarFuegoPlan extends Plan {
 
   private void explosionMatPeligrosa(int X, int Y) {
     // Si la casilla tiene fuego
-    if (mapa[Y][X].tieneFuego() == Casilla.Fuego.FUEGO) {
+    if (mapa[Y][X].tieneFuego() == 2) {
       // Y materia peligrosa
       if (mapa[Y][X].tieneMateriaPeligrosa()) {
         // Explosion en la casilla
@@ -155,17 +163,17 @@ public class PropagarFuegoPlan extends Plan {
 
   // Devuelve si hay fuego arriba, derecha, abajo o izquierda de una casilla[X, Y]
   private boolean fuegoAdyacente(int X, int Y) {
-    return (Y - 1 > -1 && mapa[Y - 1][X].tieneFuego() == Casilla.Fuego.FUEGO && !obstaculo(X, Y, 0))
-        || (X + 1 < mapa[0].length && mapa[Y][X + 1].tieneFuego() == Casilla.Fuego.FUEGO && !obstaculo(X, Y, 1))
-        || (Y + 1 < mapa.length && mapa[Y + 1][X].tieneFuego() == Casilla.Fuego.FUEGO && !obstaculo(X, Y, 2))
-        || (X - 1 > -1 && mapa[Y][X - 1].tieneFuego() == Casilla.Fuego.FUEGO && !obstaculo(X, Y, 3));
+    return (Y - 1 > -1 && mapa[Y - 1][X].tieneFuego() == 2 && !obstaculo(X, Y, 0))
+        || (X + 1 < mapa[0].length && mapa[Y][X + 1].tieneFuego() == 2 && !obstaculo(X, Y, 1))
+        || (Y + 1 < mapa.length && mapa[Y + 1][X].tieneFuego() == 2 && !obstaculo(X, Y, 2))
+        || (X - 1 > -1 && mapa[Y][X - 1].tieneFuego() == 2 && !obstaculo(X, Y, 3));
   }
 
   // Devuelve si hay un obstaculo (pared sin romper o puerta cerrada) en la direccion indicada de una casilla
   private boolean obstaculo(int X, int Y, int direccion) {
-    return mapa[Y][X].getConexiones()[direccion] == Casilla.Conexion.PUERTA_CERRADA
-        || mapa[Y][X].getConexiones()[direccion] == Casilla.Conexion.PARED
-        || mapa[Y][X].getConexiones()[direccion] == Casilla.Conexion.PARED_SEMIRROTA;
+    return mapa[Y][X].getConexiones()[direccion] == 2
+        || mapa[Y][X].getConexiones()[direccion] == 3
+        || mapa[Y][X].getConexiones()[direccion] == 4;
   }
 
   // Propaga el incendio en una casilla aleatoria
@@ -184,15 +192,15 @@ public class PropagarFuegoPlan extends Plan {
     // Dependiendo del estado de la casilla
     switch (c.tieneFuego()) {
       // Nada -> Humo
-      case NADA:
-        c.setTieneFuego(Casilla.Fuego.HUMO);
+      case 0:
+        c.setTieneFuego(1);
         break;
       // Humo -> Fuego
-      case HUMO:
-        c.setTieneFuego(Casilla.Fuego.FUEGO);
+      case 1:
+        c.setTieneFuego(2);
         break;
       // Fuego -> Explosion
-      case FUEGO:
+      case 2:
         explosion(X, Y);
         break;
     }
@@ -240,7 +248,7 @@ public class PropagarFuegoPlan extends Plan {
       // Si hay obstaculo, se daña y se para
       if (obstaculo(X, Y, direccion)) {
         // Si es una pared
-        if(mapa[Y][X].getConexiones()[direccion] != Casilla.Conexion.PUERTA_CERRADA) {
+        if(mapa[Y][X].getConexiones()[direccion] != 2) {
           // Se reduce en uno los cubos de daño
           getBeliefbase().getBelief("cubosDanno").setFact((int) getBeliefbase().getBelief("cubosDanno").getFact() - 1);
         }
@@ -249,15 +257,15 @@ public class PropagarFuegoPlan extends Plan {
         return;
       }
       // Si hay una puerta abierta, se daña y se continua
-      if (mapa[Y][X].getConexiones()[direccion] == Casilla.Conexion.PUERTA_ABIERTA) {
+      if (mapa[Y][X].getConexiones()[direccion] == 1) {
         mapa[Y][X].dannarConexion(direccion);
         mapa[Y_][X_].dannarConexion(direccion_);
       }
       // Si la nueva casilla esta dentro de los limites
       if (Y_ > -1 && X_ > -1 && Y_ < mapa.length && X_ < mapa[0].length) {
         // Si no hay fuego, se cambia a fuego y se para
-        if (mapa[Y_][X_].tieneFuego() != Casilla.Fuego.FUEGO) {
-          mapa[Y_][X_].setTieneFuego(Casilla.Fuego.FUEGO);
+        if (mapa[Y_][X_].tieneFuego() != 2) {
+          mapa[Y_][X_].setTieneFuego(2);
           return;
         }
         // Si hay fuego, se realiza una nueva explosion en la misma direccion

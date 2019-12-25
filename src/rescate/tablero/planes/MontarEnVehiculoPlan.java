@@ -1,21 +1,19 @@
 package rescate.tablero.planes;
 
-import java.util.*;
-
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
-class MontarEnVehiculoPlan extends Plan {
+public class MontarEnVehiculoPlan extends Plan {
 
   @Override
   public void body() {
 
-    System.out.println("[PLAN] El tablero recibe petición de montar en un vehículo");
+    System.out.println("[PLAN] El tablero recibe petición de montar en un vehiculo");
     
     // Petición
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
@@ -45,9 +43,7 @@ class MontarEnVehiculoPlan extends Plan {
           if (t.getJugadores().get(i).subidoAmbulancia() || t.getJugadores().get(i).subidoCamion()) {
             System.out.println("[RECHAZADO] El jugador con id " + t.getJugadores().get(i).getIdAgente() + " ya está subido " + ((ambulancia) ? "a la ambulancia" : "al camion") + " en esa posición");
             // Se rechaza la petición de acción del jugador
-            IMessageEvent respuesta = createMessageEvent("Refuse_Montar_Vehiculo");
-            respuesta.setContent(accion);
-            respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+            IMessageEvent respuesta = peticion.createReply("Refuse_Montar_Vehiculo", accion);
             sendMessage(respuesta);
             return;
           }
@@ -60,21 +56,21 @@ class MontarEnVehiculoPlan extends Plan {
       } else {
         jugador.setSubidoCamion(true);
       }
+      // Se actualiza la vista
+      ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+      viewUpdater.updateTablero(t);
+      getBeliefbase().getBelief("view").setFact(viewUpdater);
       // Se actualiza en la base de creencias el hecho tablero
       getBeliefbase().getBelief("tablero").setFact(t);
       // Se informa al jugador de que la acción ha sido llevada a cabo
-      IMessageEvent respuesta = createMessageEvent("Inform_Montado_Vehiculo");
-      respuesta.setContent(new MontadoVehiculo());
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      IMessageEvent respuesta = peticion.createReply("Inform_Montado_Vehiculo", new MontadoVehiculo());
       sendMessage(respuesta);
     }
     // No hay ningun vehículo en el que montarse en la casilla del jugador
     else {
       System.out.println("[FALLO] No hay ningun vehiculo en el que montarse en la casilla del jugador con id " + idJugador);
       // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Failure_Montar_Vehiculo");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      IMessageEvent respuesta = peticion.createReply("Failure_Montar_Vehiculo", accion);
       sendMessage(respuesta);
     }
   }

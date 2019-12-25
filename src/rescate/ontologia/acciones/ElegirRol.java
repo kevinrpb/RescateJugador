@@ -1,19 +1,18 @@
 package rescate.ontologia.acciones;
 
-import rescate.ontologia.conceptos.Jugador.Rol;
 
 public class ElegirRol extends Accion {
 
-  private Rol rol;
+  private int rol;
 
   public ElegirRol() {
   }
 
-  public Rol getRol() {
+  public int getRol() {
     return rol;
   }
 
-  public void setRol(Rol rol) {
+  public void setRol(int rol) {
     this.rol = rol;
   }
 

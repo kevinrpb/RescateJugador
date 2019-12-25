@@ -5,23 +5,20 @@ import java.util.*;
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
-class DesplazarAmbulanciaPlan extends Plan {
+public class DesplazarAmbulanciaPlan extends Plan {
 
-  public enum Aparcamiento {
-    ARRIBA, DERECHA, ABAJO, IZQUIERDA
-  }
 
   @Override
   public void body() {
 
-    System.out.println("[PLAN] El tablero recibe petición de desplazar la ambulancia");
+    System.out.println("[PLAN] El tablero recibe peticion de desplazar la ambulancia");
 
-    // Petición
+    // Peticion
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
 
     // Tablero
@@ -31,19 +28,19 @@ class DesplazarAmbulanciaPlan extends Plan {
     AgentIdentifier idJugador = (AgentIdentifier) peticion.getParameter("sender").getValue();
     DesplazarAmbulancia accion = (DesplazarAmbulancia) peticion.getContent();
 
-    // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
+    // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la peticion
     Jugador jugador = t.getJugador(idJugador);
 
-    // Posición ambulancia
-    Aparcamiento posicionAmbulancia;
+    // Posicion ambulancia
+    int posicionAmbulancia;
     if (t.getMapa()[3][0].esAmbulancia()) {
-      posicionAmbulancia = Aparcamiento.IZQUIERDA;
+      posicionAmbulancia = 3;
     } else if (t.getMapa()[0][5].esAmbulancia()) {
-      posicionAmbulancia = Aparcamiento.ARRIBA;
+      posicionAmbulancia = 0;
     } else if (t.getMapa()[3][9].esAmbulancia()) {
-      posicionAmbulancia = Aparcamiento.DERECHA;
+      posicionAmbulancia = 1;
     } else {
-      posicionAmbulancia = Aparcamiento.ABAJO;
+      posicionAmbulancia = 2;
     }
 
     // El jugador tiene PA suficientes
@@ -59,18 +56,18 @@ class DesplazarAmbulanciaPlan extends Plan {
       int victimas_salvadas = 0;
       // Dependiendo del destino...
       switch (accion.getDestino()) {
-        case ARRIBA:
+        case 0:
           // No puede conducir desde ABAJO
-          if (posicionAmbulancia != Aparcamiento.ABAJO) {
+          if (posicionAmbulancia != 1) {
             // Vienen de la IZQUIERDA
-            if (posicionAmbulancia == Aparcamiento.IZQUIERDA) {
-              // El camión abandona el aparcamiento actual
+            if (posicionAmbulancia == 3) {
+              // El camion abandona el aparcamiento actual
               t.getMapa()[3][0].setAmbulancia(false);
               t.getMapa()[4][0].setAmbulancia(false);
             }
             // Vienen de la DERECHA
             else {
-              // El camión abandona el aparcamiento actual
+              // El camion abandona el aparcamiento actual
               t.getMapa()[3][9].setAmbulancia(false);
               t.getMapa()[4][9].setAmbulancia(false);
             }
@@ -80,12 +77,12 @@ class DesplazarAmbulanciaPlan extends Plan {
             t.getMapa()[0][6].setAmbulancia(true);
 
             // Se salvan las victimas de esas posiciones 
-            if(t.getMapa()[0][5].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
-              t.getMapa()[0][5].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            if(t.getMapa()[0][5].getPuntoInteres() == 2) {
+              t.getMapa()[0][5].setPuntoInteres(0);
               victimas_salvadas++;
             } 
-            if(t.getMapa()[0][6].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
-              t.getMapa()[0][6].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            if(t.getMapa()[0][6].getPuntoInteres() == 2) {
+              t.getMapa()[0][6].setPuntoInteres(0);
               victimas_salvadas++;
             }
             
@@ -97,18 +94,18 @@ class DesplazarAmbulanciaPlan extends Plan {
             desplazado = true;
           }
           break;
-        case DERECHA:
+        case 1:
           // No puede conducir desde IZQUIERDA
-          if (posicionAmbulancia != Aparcamiento.IZQUIERDA) {
+          if (posicionAmbulancia != 3) {
             // Vienen de ARRIBA
-            if (posicionAmbulancia == Aparcamiento.ARRIBA) {
-              // El camión abandona el aparcamiento actual
+            if (posicionAmbulancia == 0) {
+              // El camion abandona el aparcamiento actual
               t.getMapa()[0][5].setAmbulancia(false);
               t.getMapa()[0][6].setAmbulancia(false);
             }
             // Vienen de ABAJO
             else {
-              // El camión abandona el aparcamiento actual
+              // El camion abandona el aparcamiento actual
               t.getMapa()[7][3].setAmbulancia(false);
               t.getMapa()[7][4].setAmbulancia(false);
             }
@@ -117,12 +114,12 @@ class DesplazarAmbulanciaPlan extends Plan {
             t.getMapa()[4][9].setAmbulancia(true);
             
             // Se salvan las victimas de esas posiciones 
-            if(t.getMapa()[3][9].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
-              t.getMapa()[3][9].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            if(t.getMapa()[3][9].getPuntoInteres() == 2) {
+              t.getMapa()[3][9].setPuntoInteres(0);
               victimas_salvadas++;
             }
-            if(t.getMapa()[4][9].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA){
-              t.getMapa()[4][9].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            if(t.getMapa()[4][9].getPuntoInteres() == 2){
+              t.getMapa()[4][9].setPuntoInteres(0);
               victimas_salvadas++;
             }
 
@@ -135,18 +132,18 @@ class DesplazarAmbulanciaPlan extends Plan {
             desplazado = true;
           }
           break;
-        case ABAJO:
+        case 2:
           // No puede conducir desde ARRIBA
-          if (posicionAmbulancia != Aparcamiento.ARRIBA) {
+          if (posicionAmbulancia != 0) {
             // Vienen de la IZQUIERDA
-            if (posicionAmbulancia == Aparcamiento.IZQUIERDA) {
-              // El camión abandona el aparcamiento actual
+            if (posicionAmbulancia == 3) {
+              // El camion abandona el aparcamiento actual
               t.getMapa()[3][0].setAmbulancia(false);
               t.getMapa()[4][0].setAmbulancia(false);
             }
             // Vienen de la DERECHA
             else {
-              // El camión abandona el aparcamiento actual
+              // El camion abandona el aparcamiento actual
               t.getMapa()[3][9].setAmbulancia(false);
               t.getMapa()[4][9].setAmbulancia(false);
             }
@@ -155,12 +152,12 @@ class DesplazarAmbulanciaPlan extends Plan {
             t.getMapa()[7][4].setAmbulancia(true);
 
             // Se salvan las victimas de esas posiciones 
-            if(t.getMapa()[7][3].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
-              t.getMapa()[7][3].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            if(t.getMapa()[7][3].getPuntoInteres() == 2) {
+              t.getMapa()[7][3].setPuntoInteres(0);
               victimas_salvadas++;
             }
-            if(t.getMapa()[7][4].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
-              t.getMapa()[7][4].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            if(t.getMapa()[7][4].getPuntoInteres() == 2) {
+              t.getMapa()[7][4].setPuntoInteres(0);
               victimas_salvadas++;
             }
 
@@ -172,18 +169,18 @@ class DesplazarAmbulanciaPlan extends Plan {
             desplazado = true;
           }
           break;
-        case IZQUIERDA:
+        case 3:
           // No puede conducir desde DERECHA
-          if (posicionAmbulancia != Aparcamiento.DERECHA) {
+          if (posicionAmbulancia != 1) {
             // Vienen de ARRIBA
-            if (posicionAmbulancia == Aparcamiento.ARRIBA) {
-              // El camión abandona el aparcamiento actual
+            if (posicionAmbulancia == 0) {
+              // El camion abandona el aparcamiento actual
               t.getMapa()[0][5].setAmbulancia(false);
               t.getMapa()[0][6].setAmbulancia(false);
             }
             // Vienen de ABAJO
             else {
-              // El camión abandona el aparcamiento actual
+              // El camion abandona el aparcamiento actual
               t.getMapa()[7][3].setAmbulancia(false);
               t.getMapa()[7][4].setAmbulancia(false);
             }
@@ -192,12 +189,12 @@ class DesplazarAmbulanciaPlan extends Plan {
             t.getMapa()[4][0].setAmbulancia(true);
 
             // Se salvan las victimas de esas posiciones 
-            if(t.getMapa()[3][0].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA) {
-              t.getMapa()[3][0].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            if(t.getMapa()[3][0].getPuntoInteres() == 2) {
+              t.getMapa()[3][0].setPuntoInteres(0);
               victimas_salvadas++;
             }
-            if(t.getMapa()[4][0].getPuntoInteres() == Casilla.PuntoInteres.VICTIMA){
-              t.getMapa()[4][0].setPuntoInteres(Casilla.PuntoInteres.NADA);
+            if(t.getMapa()[4][0].getPuntoInteres() == 2){
+              t.getMapa()[4][0].setPuntoInteres(0);
               victimas_salvadas++;
             }
 
@@ -216,34 +213,32 @@ class DesplazarAmbulanciaPlan extends Plan {
         System.out.println("[INFO] La ambulancia y los jugadores en ella se han desplazado al aparcamiento: " + accion.getDestino());
         // Se actualiza el jugador (consumo de PA)
         jugador.setPuntosAccion(jugador.getPuntosAccion() - 2);
+        // Se actualiza la vista
+        ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+        viewUpdater.updateTablero(t);
+        getBeliefbase().getBelief("view").setFact(viewUpdater);
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se reduce en uno los PDI en el tablero
         getBeliefbase().getBelief("PDITablero").setFact((int) getBeliefbase().getBelief("PDITablero").getFact() - victimas_salvadas);
         // Se aumenta en uno las victimas salvadas
         getBeliefbase().getBelief("salvados").setFact((int) getBeliefbase().getBelief("salvados").getFact() + victimas_salvadas);
-
-        // Se informa al jugador de que la acción ha sido llevada a cabo
-        IMessageEvent respuesta = createMessageEvent("Inform_Desplazar_Ambulancia");
-        respuesta.setContent(new AmbulanciaDesplazada());
-        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        // Se informa al jugador de que la accion ha sido llevada a cabo
+        IMessageEvent respuesta = peticion.createReply("Inform_Ambulancia_Desplazada", new AmbulanciaDesplazada());
         sendMessage(respuesta);
+      // No se ha desplazado...
       } else {
-        System.out.println("[RECHAZADO] El aparcamiento de destino es inalcanzable desde la posición actual");
-        // Se rechaza la petición de acción del jugador
-        IMessageEvent respuesta = createMessageEvent("Refuse_Desplazar_Ambulancia");
-        respuesta.setContent(accion);
-        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        System.out.println("[RECHAZADO] El aparcamiento de destino es inalcanzable desde la posicion actual");
+        // Se rechaza la peticion de accion del jugador
+        IMessageEvent respuesta = peticion.createReply("Refuse_Desplazar_Ambulancia", accion);
         sendMessage(respuesta);
       }
     }
     // No PA suficientes
     else {
-      System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene PA suficientes para conducir el camión");
-      // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Refuse_Desplazar_Ambulancia");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene PA suficientes para conducir el camion");
+      // Se rechaza la peticion de accion del jugador
+      IMessageEvent respuesta = peticion.createReply("Refuse_Desplazar_Ambulancia", accion);
       sendMessage(respuesta);
     }
   }

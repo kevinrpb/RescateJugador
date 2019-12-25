@@ -1,27 +1,27 @@
 # Rescate Tablero
 
-Este repositorio contiene el código fuente del Agente Tablero correspondiente al juego de mesa _Rescate_ desarrollado por la clase de Colmenarejo de Inteligencia Artificial en las Organizaciones durante el curso 2019-2020.
+Este repositorio contiene el codigo fuente del Agente Tablero correspondiente al juego de mesa _Rescate_ desarrollado por la clase de Colmenarejo de Inteligencia Artificial en las Organizaciones durante el curso 2019-2020.
 
-A continuación se incluyen las instrucciones necesarias para ejecutar dicho código, así como los pasos a seguir para realizar contribuciones al mismo.
+A continuacion se incluyen las instrucciones necesarias para ejecutar dicho codigo, así como los pasos a seguir para realizar contribuciones al mismo.
 
 ## Contenidos
 
 - [Rescate Tablero](#rescate-tablero)
   - [Contenidos](#contenidos)
-  - [Ejecutando el código](#ejecutando-el-c%c3%b3digo)
+  - [Ejecutando el codigo](#ejecutando-el-c%c3%b3digo)
     - [Prerrequisitos](#prerrequisitos)
     - [Compilando e iniciando JADEX](#compilando-e-iniciando-jadex)
       - [Desde la consola de comandos](#desde-la-consola-de-comandos)
       - [Usando Visual Studio Code (Recomendado)](#usando-visual-studio-code-recomendado)
       - [Usando Eclipse IDE](#usando-eclipse-ide)
     - [Lanzando el agente](#lanzando-el-agente)
-  - [Contribuyendo al código](#contribuyendo-al-c%c3%b3digo)
+  - [Contribuyendo al codigo](#contribuyendo-al-c%c3%b3digo)
 
-## Ejecutando el código
+## Ejecutando el codigo
 
 ### Prerrequisitos
 
-- Instala la última versión de Java 1.8 (u231 en el momento de escribir este documento)
+- Instala la última version de Java 1.8 (u231 en el momento de escribir este documento)
 - Descarga el repositorio y descomprimelo en un directorio en tu PC
 - (_Opcional_) [Visual Studio Code](https://code.visualstudio.com)
 - (_Opcional_) [Eclipse IDE](https://www.eclipse.org/downloads/)
@@ -30,7 +30,7 @@ A continuación se incluyen las instrucciones necesarias para ejecutar dicho có
 
 #### Desde la consola de comandos
 
-Una vez situados en el directorio del repositorio, encontraremos dos _scripts_: `compilar` y `ejecutar`. Se incluyen tanto la versión para Windows (`.bat`) como la usada por terminales en sistemas UNIX (`.sh`). Para compilar, ejecuta dicho script. Una vez compilado, ejecuta el otro script y se lanzará el entorno JADEX.
+Una vez situados en el directorio del repositorio, encontraremos dos _scripts_: `compilar` y `ejecutar`. Se incluyen tanto la version para Windows (`.bat`) como la usada por terminales en sistemas UNIX (`.sh`). Para compilar, ejecuta dicho script. Una vez compilado, ejecuta el otro script y se lanzará el entorno JADEX.
 
 #### Usando Visual Studio Code (Recomendado)
 
@@ -44,9 +44,9 @@ Abre el archivo `RescateTablero.code-workspace` con Visual Studio Code. Asegurat
 }
 ```
 
-Una vez VSC sepa dónde encontrar Java, pulsa F5 (ejecutar el modo Debug) y el entorno JADEX se ejecutará.
+Una vez VSC sepa donde encontrar Java, pulsa F5 (ejecutar el modo Debug) y el entorno JADEX se ejecutará.
 
-> NOTA: En Windows, asegurate de que la configuración que se está lanzando es la indicada como "Externa". Esto previene problemas causados cuando la terminal integrada de VSC no se corresponde con CMD.
+> NOTA: En Windows, asegurate de que la configuracion que se está lanzando es la indicada como "Externa". Esto previene problemas causados cuando la terminal integrada de VSC no se corresponde con CMD.
 
 #### Usando Eclipse IDE
 
@@ -56,9 +56,9 @@ Una vez VSC sepa dónde encontrar Java, pulsa F5 (ejecutar el modo Debug) y el e
 
 > TODO: describir los pasos para ejecutar los agentes
 
-## Contribuyendo al código
+## Contribuyendo al codigo
 
-> NOTA: Antes de nada, para poder contribuir, deberás ser parte de la organización.
+> NOTA: Antes de nada, para poder contribuir, deberás ser parte de la organizacion.
 
 1. Aignate a una de las tareas pendientes en el [documento correspondiente](https://docs.google.com/spreadsheets/d/1UepllTSWQi2oH7iajYn6p4yURnyUvm-_o1md8dRoFBc)
 2. Clona el repositorio en local

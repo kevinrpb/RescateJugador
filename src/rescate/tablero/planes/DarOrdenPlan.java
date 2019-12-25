@@ -1,23 +1,21 @@
 package rescate.tablero.planes;
 
-import java.util.*;
-
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
-class MandoPlan extends Plan {
+public class DarOrdenPlan extends Plan {
 
   @Override
   public void body() {
 
-    System.out.println("[PLAN] El tablero recibe petición de mando");
+    System.out.println("[PLAN] El tablero recibe peticion de mando");
     
-    // Petición
+    // Peticion
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
 
     // Tablero
@@ -27,113 +25,163 @@ class MandoPlan extends Plan {
     AgentIdentifier idJugador = (AgentIdentifier) peticion.getParameter("sender").getValue();
     DarOrden accion = (DarOrden) peticion.getContent();
 
-    // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
+    // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la peticion
     Jugador jugadorJefe = t.getJugador(idJugador);
     // Se encuentra el jugador sobre el que se hace el mando
     Jugador jugadorEsclavo = t.getJugador(accion.getIdJugador());
     
+    // Casilla del jugador esclavo
     Casilla c = t.getMapa()[jugadorEsclavo.getPosicion()[1]][jugadorEsclavo.getPosicion()[0]];
-    Casilla.Conexion conexion = c.getConexiones()[accion.getConexion()];
+    int conexion = c.getConexiones()[accion.getConexion()];
 
-    // Comprobamos si los jugadores estan en la misma habitación y si la accion sobre la conexion recibida es posible
-    if(jugadorJefe.getHabitacion()==jugadorEsclavo.getHabitacion() 
-      || (accion.getAccion() == DarOrden.Mandato.ABRIR && conexion == Casilla.Conexion.PUERTA_CERRADA)
-      || (accion.getAccion() == DarOrden.Mandato.CERRAR && conexion == Casilla.Conexion.PUERTA_ABIERTA)
-      || (accion.getAccion() == DarOrden.Mandato.MOVER && !MoverJugadorPlan.hayObstaculo(conexion))){
+    // El jugador es jefe
+    if (jugadorJefe.getRol() == 2) {
+      // Comprobamos si los jugadores estan en la misma habitacion y si la accion sobre la conexion recibida es posible
+      if (jugadorJefe.getHabitacion() == jugadorEsclavo.getHabitacion() &&
+          (accion.getAccion() == 1 && conexion == 2 || 
+          accion.getAccion() == 2 && conexion == 1 || 
+          accion.getAccion() == 0 && !DesplazarPlan.hayObstaculo(conexion))) {
 
-        boolean accionRealizada = false;
-        int puntosAccion = 0;
+          boolean accionRealizada = false;
+          int PA = 0;
 
-        // Casilla + conexion --> colindante
-        Casilla colindante = null;
-        switch(accion.getConexion()) {
-          case 0:
-            colindante = t.getMapa()[c.getPosicion()[1] - 1][c.getPosicion()[0]];
-            break;
-          case 1:
-            colindante = t.getMapa()[c.getPosicion()[1]][c.getPosicion()[0] + 1];
-            break;
-          case 2:
-            colindante = t.getMapa()[c.getPosicion()[1] + 1][c.getPosicion()[0]];
-            break;
-          case 3:
-            colindante = t.getMapa()[c.getPosicion()[1]][c.getPosicion()[0] - 1];
-            break;
-        }
-
-        // La acción es sobre una puerta (abrir o cerrar)
-        if((accion.getAccion() == DarOrden.Mandato.ABRIR || accion.getAccion() == DarOrden.Mandato.CERRAR) && jugadorJefe.getPuntosAccion() + jugadorJefe.getPuntosAccionMando() > 1){
-
-          Casilla.Conexion nuevoEstado = ((accion.getAccion() == DarOrden.Mandato.ABRIR) ? Casilla.Conexion.PUERTA_ABIERTA : Casilla.Conexion.PUERTA_CERRADA);
-          System.out.println("[INFO] El jugador con id " + accion.getIdJugador() + " ha abierto una puerta en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "] debido a la orden del jugador "+ idJugador);
-          // Se modifica la conexion a puerta abierta
-          conexion = nuevoEstado;
-          // Casilla colindante (donde también esta la referencia a la puerta cerrada y hay que abrirla)
-          
-          switch (accion.getConexion()) {
+          // Casilla + conexion --> colindante
+          Casilla colindante = null;
+          switch(accion.getConexion()) {
             // Arriba
             case 0:
-              colindante.getConexiones()[2] = nuevoEstado;
+              colindante = t.getMapa()[c.getPosicion()[1] - 1][c.getPosicion()[0]];
               break;
             // Derecha
             case 1:
-              colindante.getConexiones()[3] = nuevoEstado;
+              colindante = t.getMapa()[c.getPosicion()[1]][c.getPosicion()[0] + 1];
               break;
             // Abajo
             case 2:
-              colindante.getConexiones()[0] = nuevoEstado;
+              colindante = t.getMapa()[c.getPosicion()[1] + 1][c.getPosicion()[0]];
               break;
             // Izquierda
             case 3:
-              colindante.getConexiones()[1] = nuevoEstado;
-              break;
-            // ...
-            default:
+              colindante = t.getMapa()[c.getPosicion()[1]][c.getPosicion()[0] - 1];
               break;
           }
 
-          accionRealizada = true;
-          puntosAccion = 1;
-        
-        }
-        else if ( accion.getAccion() == DarOrden.Mandato.MOVER && jugadorJefe.getPuntosAccion() + ((jugadorEsclavo.getRol() != Jugador.Rol.ESPUMA_IGNIFUGA) ? jugadorJefe.getPuntosAccionMando() : 1)  > MoverJugadorPlan.puntosAccionNecesarios(colindante, jugadorEsclavo)){
-            jugadorEsclavo.setPosicion(colindante.getPosicion());
+          // La accion es sobre una puerta (abrir o cerrar)
+          if ((accion.getAccion() == 1 || accion.getAccion() == 2) && jugadorJefe.getPuntosAccion() + jugadorJefe.getPuntosAccionMando() > 1){
+            System.out.println("[INFO] El jugador con id " + accion.getIdJugador() + " ha abierto una puerta en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "] debido a la orden del jugador "+ idJugador);
+            // Abierta o cerrada
+            int nuevoEstado = ((accion.getAccion() == 1) ? 1 : 2);
+            c.getConexiones()[accion.getConexion()] = nuevoEstado;
+            // Casilla colindante (donde también esta la referencia a la puerta cerrada y hay que abrirla)
+            switch (accion.getConexion()) {
+              // Arriba
+              case 0:
+                colindante.getConexiones()[2] = nuevoEstado;
+                break;
+              // Derecha
+              case 1:
+                colindante.getConexiones()[3] = nuevoEstado;
+                break;
+              // Abajo
+              case 2:
+                colindante.getConexiones()[0] = nuevoEstado;
+                break;
+              // Izquierda
+              case 3:
+                colindante.getConexiones()[1] = nuevoEstado;
+                break;
+              // ...
+              default:
+                break;
+            }
+            // Accion realizada y PA consumidos
             accionRealizada = true;
-            puntosAccion = MoverJugadorPlan.puntosAccionNecesarios(colindante, jugadorEsclavo);
-        }
+            PA = 1;
+          }
+          // La accion es moverse
+          else if (accion.getAccion() == 0 && jugadorJefe.getPuntosAccion() + ((jugadorEsclavo.getRol() != 4) ? jugadorJefe.getPuntosAccionMando() : ((jugadorJefe.getPuntosAccionMando() > 0) ? 1 : 0)) > DesplazarPlan.puntosAccionNecesarios(colindante, jugadorEsclavo)){
+            // Se baja de los vehiculos si esta subido
+            jugadorEsclavo.setSubidoAmbulancia(false);
+            jugadorEsclavo.setSubidoCamion(false);
+            // Se actualiza la posicion
+            jugadorEsclavo.setPosicion(colindante.getPosicion());
+            // Se identifica PDI si lo hay
+            int PDITablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
+            int PDIVictima = (int) getBeliefbase().getBelief("PDIVictima").getFact();
+            int PDIFalsaAlarma = (int) getBeliefbase().getBelief("PDIFalsaAlarma").getFact();
+            if (colindante.getPuntoInteres() == 1) {
+              // Si no queda de un tipo, se coloca del otro...
+              if (PDIVictima == 0) {
+                colindante.setPuntoInteres(0);
+                PDIFalsaAlarma--;
+                PDITablero--;
+              } else if (PDIFalsaAlarma == 0) {
+                colindante.setPuntoInteres(2);
+                PDIVictima--;
+              }
+              // Si quedan de los dos tipos, de manera aleatoria...
+              else if (Math.random() < 0.5) {
+                colindante.setPuntoInteres(0);
+                PDIFalsaAlarma--;
+                PDITablero--;
+              } else {
+                colindante.setPuntoInteres(2);
+                PDIVictima--;
+              }
+            }
+            // Se actualizan los hechos
+            getBeliefbase().getBelief("PDITablero").setFact(PDITablero);
+            getBeliefbase().getBelief("PDIVictima").setFact(PDIVictima);
+            getBeliefbase().getBelief("PDIFalsaAlarma").setFact(PDIFalsaAlarma);
+            // Accion realizada y PA consumidos
+            accionRealizada = true;
+            PA = DesplazarPlan.puntosAccionNecesarios(colindante, jugadorEsclavo);
+          }
 
-        if (accionRealizada) {
-          // Reducimos los puntos de accion o puntos de mando del jefe 
-          if (jugadorJefe.getPuntosAccion() >= puntosAccion) {
-            jugadorJefe.setPuntosAccion(jugadorJefe.getPuntosAccion() - puntosAccion);
+          // Si la accion se ha realizado...
+          if (accionRealizada) {
+            // Reducimos los puntos de accion o puntos de mando del jefe 
+            if (jugadorJefe.getPuntosAccionMando() >= PA) {
+              jugadorJefe.setPuntosAccionMando(jugadorJefe.getPuntosAccionMando() - PA);
+            }
+            else {
+              PA -= jugadorJefe.getPuntosAccionMando();
+              jugadorJefe.setPuntosAccionMando(0);
+              jugadorJefe.setPuntosAccion(jugadorJefe.getPuntosAccion() - PA);
+            }
+            // Se actualiza la vista
+            ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+            viewUpdater.updateTablero(t);
+            getBeliefbase().getBelief("view").setFact(viewUpdater);
+            // Se actualiza en la base de creencias el hecho tablero
+            getBeliefbase().getBelief("tablero").setFact(t);
+            // Se informa al jugador de que la accion ha sido llevada a cabo
+            OrdenCompletada predicado = new OrdenCompletada();
+            predicado.setPuntosAccion(PA);
+            IMessageEvent respuesta = peticion.createReply("Inform_Orden_Completada", predicado);
+            sendMessage(respuesta);
           }
+          // Si la accion no ha sido realizada por falta de PA
           else {
-            jugadorJefe.setPuntosAccionMando(jugadorJefe.getPuntosAccionMando() - (puntosAccion - jugadorJefe.getPuntosAccion()));
-            jugadorJefe.setPuntosAccion(0);
+            System.out.println("[RECHAZAR] El jefe no dispone de PA necesarios para realizar la accion");
+            // Se rechaza la peticion de accion del jugador
+            IMessageEvent respuesta = peticion.createReply("Refuse_Dar_Orden", accion);
+            sendMessage(respuesta);
           }
-          // Se actualiza en la base de creencias el hecho tablero
-          getBeliefbase().getBelief("tablero").setFact(t);
-          // Se informa al jugador de que la acción ha sido llevada a cabo
-          IMessageEvent respuesta = createMessageEvent("Inform_Orden_Recibida");
-          respuesta.setContent(new OrdenRecibida(puntosAccion));
-          respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
-          sendMessage(respuesta);
-        }
-        else {
-          System.out.println("[FALLO] El jefe no dispone de PA necesarios para realizar la accion");
-          // Se rechaza la petición de acción del jugador
-          IMessageEvent respuesta = createMessageEvent("Refuse_Dar_Orden");
-          respuesta.setContent(accion);
-          respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
-          sendMessage(respuesta);
-        }
-    } 
+      } 
+      // Accion imposible
+      else {
+        System.out.println("[FALLO] No se puede realizar dicha orden");
+        // Se rechaza la peticion de accion del jugador
+        IMessageEvent respuesta = peticion.createReply("Failure_Dar_Orden", accion);
+        sendMessage(respuesta);
+      }
+    }
+    // El jugador no es jefe
     else {
-      System.out.println("[FALLO] No se puede realizar dicha orden");
-      // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Failure_Dar_Orden");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      System.out.println("[FALLO] El jugador con id " + jugadorJefe.getIdAgente() + " no tiene rol jefe");
+      // Se rechaza la peticion de accion del jugador
+      IMessageEvent respuesta = peticion.createReply("Failure_Dar_Orden", accion);
       sendMessage(respuesta);
     }
 

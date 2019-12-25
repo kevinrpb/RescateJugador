@@ -3,12 +3,12 @@ package rescate.tablero.planes;
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
-class IdentificarPuntoDeInteresPlan extends Plan {
+public class IdentificarPuntoDeInteresPlan extends Plan {
 
   @Override
   public void body() {
@@ -34,21 +34,17 @@ class IdentificarPuntoDeInteresPlan extends Plan {
     Jugador jugador = t.getJugador(idJugador);
 
     // Si no es un PDI oculto
-    if (accion.getCasilla().getPuntoInteres() != Casilla.PuntoInteres.OCULTO) {
-      System.out.println("[FALLO] El jugador con id " + idJugador + " no está en una casilla con PDI oculto");
+    if (accion.getCasilla().getPuntoInteres() != 1) {
+      System.out.println("[FALLO] El jugador con id " + idJugador + " no esta en una casilla con PDI oculto");
       // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Failure_Identificar_PDI");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      IMessageEvent respuesta = peticion.createReply("Failure_Identificar_PDI", accion);
       sendMessage(respuesta);
     }
     // Si el jugador no tiene rol EXP en IMG
-    else if (jugador.getRol() != Jugador.Rol.EXPERTO_EN_IMAGENES){
+    else if (jugador.getRol() != 3){
       System.out.println("[FALLO] El jugador con id " + idJugador + " no tiene rol EXPERTO EN IMAGENES");
       // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Failure_Identificar_PDI");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      IMessageEvent respuesta = peticion.createReply("Failure_Identificar_PDI", accion);
       sendMessage(respuesta);
     }
     // Si todas las condiciones se cumplen, se realiza la accion
@@ -59,23 +55,23 @@ class IdentificarPuntoDeInteresPlan extends Plan {
         // Si no queda de un tipo, se coloca del otro...
         PuntoInteresIdentificado predicado = new PuntoInteresIdentificado();
         if (PDIVictima == 0) {
-          accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.NADA);
+          accion.getCasilla().setPuntoInteres(0);
           predicado.setVictima(false);
           PDIFalsaAlarma--;
           PDITablero--;
         } else if (PDIFalsaAlarma == 0) {
-          accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.VICTIMA);
+          accion.getCasilla().setPuntoInteres(2);
           predicado.setVictima(true);
           PDIVictima--;
         }
         // Si quedan de los dos tipos, de manera aleatoria...
         else if (Math.random() < 0.5) {
-          accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.NADA);
+          accion.getCasilla().setPuntoInteres(0);
           predicado.setVictima(false);
           PDIFalsaAlarma--;
           PDITablero--;
         } else {
-          accion.getCasilla().setPuntoInteres(Casilla.PuntoInteres.VICTIMA);
+          accion.getCasilla().setPuntoInteres(2);
           predicado.setVictima(true);
           PDIVictima--;
         }
@@ -87,21 +83,21 @@ class IdentificarPuntoDeInteresPlan extends Plan {
         getBeliefbase().getBelief("PDITablero").setFact(PDITablero);
         getBeliefbase().getBelief("PDIVictima").setFact(PDIVictima);
         getBeliefbase().getBelief("PDIFalsaAlarma").setFact(PDIFalsaAlarma);
+        // Se actualiza la vista
+        ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+        viewUpdater.updateTablero(t);
+        getBeliefbase().getBelief("view").setFact(viewUpdater);
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
         // Se informa al jugador de que la acción ha sido llevada a cabo
-        IMessageEvent respuesta = createMessageEvent("Inform_PDI_Identificado");
-        respuesta.setContent(predicado);
-        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        IMessageEvent respuesta = peticion.createReply("Inform_PDI_Identificado", predicado);
         sendMessage(respuesta);
       }
       // No suficientes PA
       else {
         System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene suficientes PA");
         // Se rechaza la petición de acción del jugador
-        IMessageEvent respuesta = createMessageEvent("Refuse_Identificar_PDI");
-        respuesta.setContent(accion);
-        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        IMessageEvent respuesta = peticion.createReply("Refuse_Identificar_PDI", accion);
         sendMessage(respuesta);
       }
     }

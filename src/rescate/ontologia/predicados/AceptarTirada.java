@@ -2,12 +2,28 @@ package rescate.ontologia.predicados;
 
 public class AceptarTirada {
 
-  public Boolean tirada_aceptada; 
-  public int[] tirada;
+  private boolean tiradaAceptada; 
+  private int[] tirada;
 
   public AceptarTirada(int [] tirada){
     this.tirada = tirada;
-    tirada_aceptada = false;
+    tiradaAceptada = false;
 
+  }
+
+  public boolean tiradaAceptada() {
+    return tiradaAceptada;
+  }
+
+  public void setTiradaAceptada(boolean tiradaAceptada) {
+    this.tiradaAceptada = tiradaAceptada;
+  }
+
+  public int[] getTirada() {
+    return tirada;
+  }
+
+  public void setTirada(int[] tirada) {
+    this.tirada = tirada;
   }
 }

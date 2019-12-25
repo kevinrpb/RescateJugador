@@ -3,12 +3,12 @@ package rescate.tablero.planes;
 import jadex.adapter.fipa.*;
 import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
-
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
-class ConducirCamionPlan extends Plan {
+public class ConducirCamionPlan extends Plan {
 
   @Override
   public void body() {
@@ -28,9 +28,6 @@ class ConducirCamionPlan extends Plan {
     // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
     Jugador jugador = t.getJugador(idJugador);
 
-    // Casilla en la que está el jugador
-    Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
-
     // El jugador está subido al camión
     if (jugador.subidoCamion()) {
       // El jugador tiene PA suficientes
@@ -46,7 +43,7 @@ class ConducirCamionPlan extends Plan {
         boolean desplazado = false;
         // Dependiendo del destino...
         switch(accion.getDestino()) {
-          case ARRIBA:
+          case 0:
             // No puede conducir desde ABAJO
             if (jugador.getPosicion()[1] != t.getMapa().length - 1) {
               // Vienen de la IZQUIERDA
@@ -72,7 +69,7 @@ class ConducirCamionPlan extends Plan {
               desplazado = true;
             }
             break;
-          case DERECHA:
+          case 1:
             // No puede conducir desde IZQUIERDA
             if (jugador.getPosicion()[0] != 0) {
               // Vienen de ARRIBA
@@ -98,7 +95,7 @@ class ConducirCamionPlan extends Plan {
               desplazado = true;
             }
             break;
-          case ABAJO:
+          case 2:
             // No puede conducir desde ARRIBA
             if (jugador.getPosicion()[1] != 0) {
               // Vienen de la IZQUIERDA
@@ -124,7 +121,7 @@ class ConducirCamionPlan extends Plan {
               desplazado = true;
             }
             break;
-          case IZQUIERDA:
+          case 3:
             // No puede conducir desde DERECHA
             if (jugador.getPosicion()[0] != t.getMapa().length - 1) {
               // Vienen de ARRIBA
@@ -153,23 +150,23 @@ class ConducirCamionPlan extends Plan {
         } 
         // Si finalmente se ha desplazado...
         if (desplazado) {
-          System.out.println("[INFO] El camión y los jugadores en él se han desplazado al aparcamiento: " + accion.getDestino());
+          System.out.println("[INFO] El camión y los jugadores en el se han desplazado al aparcamiento: " + accion.getDestino());
           // Se actualiza el jugador (consumo de PA)
           jugador.setPuntosAccion(jugador.getPuntosAccion() - 2);
+          // Se actualiza la vista
+          ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+          viewUpdater.updateTablero(t);
+          getBeliefbase().getBelief("view").setFact(viewUpdater);
           // Se actualiza en la base de creencias el hecho tablero
           getBeliefbase().getBelief("tablero").setFact(t);
           // Se informa al jugador de que la acción ha sido llevada a cabo
-          IMessageEvent respuesta = createMessageEvent("Inform_Camion_Conducido");
-          respuesta.setContent(new CamionConducido());
-          respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+          IMessageEvent respuesta = peticion.createReply("Inform_Camion_Conducido", new CamionConducido());
           sendMessage(respuesta);
         }
         else {
           System.out.println("[RECHAZADO] El aparcamiento de destino es inalcanzable desde la posición actual");
           // Se rechaza la petición de acción del jugador
-          IMessageEvent respuesta = createMessageEvent("Refuse_Conducir_Camion");
-          respuesta.setContent(accion);
-          respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+          IMessageEvent respuesta = peticion.createReply("Refuse_Conducir_Camion", accion);
           sendMessage(respuesta);
         }
       }
@@ -177,9 +174,7 @@ class ConducirCamionPlan extends Plan {
       else {
         System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene PA suficientes para conducir el camión");
         // Se rechaza la petición de acción del jugador
-        IMessageEvent respuesta = createMessageEvent("Refuse_Conducir_Camion");
-        respuesta.setContent(accion);
-        respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+        IMessageEvent respuesta = peticion.createReply("Refuse_Conducir_Camion", accion);
         sendMessage(respuesta);
       }
     }
@@ -187,9 +182,7 @@ class ConducirCamionPlan extends Plan {
     else {
       System.out.println("[FALLO] El jugador con id " + idJugador + " debe estar subido al camión para conducirlo");
       // Se rechaza la petición de acción del jugador
-      IMessageEvent respuesta = createMessageEvent("Failure_Conducir_Camion");
-      respuesta.setContent(accion);
-      respuesta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
+      IMessageEvent respuesta = peticion.createReply("Failure_Conducir_Camion", accion);
       sendMessage(respuesta);
     }
     

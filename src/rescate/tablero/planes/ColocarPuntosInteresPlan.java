@@ -3,7 +3,7 @@ package rescate.tablero.planes;
 import java.util.*;
 
 import jadex.runtime.Plan;
-
+import rescate.gui.ViewUpdater;
 import rescate.ontologia.conceptos.*;
 
 public class ColocarPuntosInteresPlan extends Plan {
@@ -55,10 +55,10 @@ public class ColocarPuntosInteresPlan extends Plan {
           for (int j = 1; j < mapa[i].length - 1; j++) {
             // Se encuentra la primera casilla en la que sea viable poner el PDI
             Casilla c_ = mapa[i][j];
-            if (c_.getPuntoInteres() == Casilla.PuntoInteres.NADA && c_.tieneFuego() != Casilla.Fuego.FUEGO && !hayBombero(j, i, jugadores)) {
+            if (c_.getPuntoInteres() == 0 && c_.tieneFuego() != 2 && !hayBombero(j, i, jugadores)) {
               // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma o víctima)
               System.out.println("[INFO] Se ha colocado un PDI en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
-              c.setPuntoInteres(Casilla.PuntoInteres.OCULTO);
+              c.setPuntoInteres(1);
               return;
             }
           }
@@ -66,11 +66,11 @@ public class ColocarPuntosInteresPlan extends Plan {
       }
 
       // Se puede colocar...
-      if (c.getPuntoInteres() == Casilla.PuntoInteres.NADA && c.tieneFuego() != Casilla.Fuego.FUEGO && !hayBombero(X, Y, jugadores)) {
+      if (c.getPuntoInteres() == 0 && c.tieneFuego() != 2 && !hayBombero(X, Y, jugadores)) {
 
         // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma o víctima)
         System.out.println("[INFO] Se ha colocado un PDI en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
-        c.setPuntoInteres(Casilla.PuntoInteres.OCULTO);
+        c.setPuntoInteres(1);
         break;
 
       }
@@ -79,35 +79,35 @@ public class ColocarPuntosInteresPlan extends Plan {
       else {
         // La nueva casilla es la indica por la flecha de la casilla actual
         switch (c.getFlecha()) {
-          case ARRIBA:
+          case 0:
             Y--;
             break;
-          case ARRIBA_DERECHA:
+          case 1:
             X++;
             Y--;
             break;
-          case DERECHA:
+          case 2:
             X++;
             break;
-          case ABAJO_DERECHA:
+          case 3:
             X++;
             Y++;
             break;
-          case ABAJO:
+          case 4:
             Y++;
             break;
-          case ABAJO_IZQUIERDA:
+          case 5:
             X--;
             Y++;
             break;
-          case IZQUIERDA:
+          case 6:
             X--;
             break;
-          case ARRIBA_IZQUIERDA:
+          case 7:
             X--;
             Y--;
             break;
-          case NADA:
+          case 8:
             break;
         }
         // Se actualiza la casilla
@@ -116,34 +116,16 @@ public class ColocarPuntosInteresPlan extends Plan {
 
     }
 
+    // Se actualiza la vista
+    ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+    viewUpdater.updateTablero(t);
+    getBeliefbase().getBelief("view").setFact(viewUpdater);
     // Una vez colocado el nuevo PDI, se actualizan las creencias
 		getBeliefbase().getBelief("PDITablero").setFact(PDITablero + 1);
     getBeliefbase().getBelief("tablero").setFact(t);
-
-    /*
-    // Casillas en la habitación
-    ArrayList<Casilla> habitacion = t.getHabitacion(c.getHabitacion());
-    // Se oculta el PDI de aquellos PDI sin revelar aun
-    for (Casilla c_: habitacion) {
-      if (c_.puntoInteresOculto()) {
-        c_.setPuntoInteres(Casilla.PuntoInteres.OCULTO);
-      }
-    }
+    getBeliefbase().getBelief("finTurno").setFact(false);
+    getBeliefbase().getBelief("siguienteTurno").setFact(true);
     
-    // Se informa a los jugadores en la habitación del PDI nuevo
-    for (Jugador j: jugadores) {
-      if (j.getHabitacion() == c.getHabitacion()) {
-        System.out.println("[ACTUALIZACION] Se informa a " + j.getIdAgente() + " del nuevo PDI");
-        // Se informa al jugador
-        IMessageEvent mensaje = createMessageEvent("InformHabitacionActualizada");
-        HabitacionActualizada habitacionPredicado = new HabitacionActualizada();
-        habitacionPredicado.setCasillas(habitacion);
-        mensaje.getParameterSet(SFipa.RECEIVERS).addValue(j.getIdAgente());
-        mensaje.setContent(habitacionPredicado);
-        sendMessage(mensaje);
-      }
-    }
-    */
   }
 
   private boolean hayBombero(int X, int Y, ArrayList<Jugador> jugadores) {

@@ -4,22 +4,19 @@ import jadex.adapter.fipa.*;
 
 public class DarOrden extends Accion {
 
-  public enum Mandato {
-    MOVER, ABRIR, CERRAR;
-  }
 
-  private Mandato accion; 
+  private int accion; 
   private int conexion;
   private AgentIdentifier idJugador;
 
   public DarOrden(){
   }
 
-  public Mandato getAccion() {
+  public int getAccion() {
     return accion;
   }
 
-  public void setAccion(Mandato accion) {
+  public void setAccion(int accion) {
     this.accion = accion;
   }
 

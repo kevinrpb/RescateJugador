@@ -34,7 +34,7 @@ public class Tablero extends Concepto {
 
   public Jugador getJugador(AgentIdentifier idJugador) {
     for (int i = 0; i < getJugadores().size(); i++) {
-      if (getJugadores().get(i).getIdAgente() == idJugador) {
+      if (getJugadores().get(i).getIdAgente().equals(idJugador)) {
         return getJugadores().get(i);
       }
     }
@@ -43,7 +43,7 @@ public class Tablero extends Concepto {
 
   public int getIndiceJugador(AgentIdentifier idJugador) {
     for (int i = 0; i < getJugadores().size(); i++) {
-      if (getJugadores().get(i).getIdAgente() == idJugador) {
+      if (getJugadores().get(i).getIdAgente().equals(idJugador)) {
         return i;
       }
     }

@@ -2,20 +2,17 @@ package rescate.ontologia.acciones;
 
 public class ConducirCamion extends Accion {
 
-  public enum Aparcamiento {
-    ARRIBA, DERECHA, ABAJO, IZQUIERDA
-  }
 
-  private Aparcamiento destino;
+  private int destino;
 
   public ConducirCamion() {
   }
 
-  public Aparcamiento getDestino() {
+  public int getDestino() {
     return destino;
   }
 
-  public void setDestino(Aparcamiento destino) {
+  public void setDestino(int destino) {
     this.destino = destino;
   }
 
