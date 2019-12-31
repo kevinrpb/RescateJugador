@@ -81,6 +81,7 @@ public class DesplazarPlan extends Plan {
           jugador.setSubidoCamion(false);
           // Se actualiza la posicion
           jugador.setPosicion(destino.getPosicion());
+          jugador.setHabitacion(destino.getHabitacion());
           // Se consumen los PA
           if (jugador.getPuntosAccionMovimiento() >= PA) {
             jugador.setPuntosAccionMovimiento(jugador.getPuntosAccionMovimiento() - PA);

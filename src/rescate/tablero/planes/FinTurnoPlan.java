@@ -53,6 +53,7 @@ public class FinTurnoPlan extends Plan {
     
     // Se actualizan los hechos realicionados con el turno
     getBeliefbase().getBelief("turno").setFact(turno);
+    getBeliefbase().getBelief("siguienteTurno").setFact(true);
     getBeliefbase().getBelief("propagarFuego").setFact(true);
   }
   
