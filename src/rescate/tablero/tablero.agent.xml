@@ -140,7 +140,7 @@
     </performgoal>
 
     <!-- Colocar PDI -->
-    <performgoal name="colocarPDIMeta" retry="true" retrydelay="3000" exclude="never">
+    <performgoal name="colocarPDIMeta" retry="false">
         <contextcondition>
           $beliefbase.jugando &amp;&amp;
           (($beliefbase.finTurno) &amp;&amp;
@@ -149,7 +149,7 @@
     </performgoal>
 
     <!-- Objetivo para propagar el fuego -->
-		<performgoal name="propagarFuegoMeta" retry="true" retrydelay="3000" exclude="never">
+		<performgoal name="propagarFuegoMeta" retry="false">
 			<creationcondition>
 				<!-- Que se active cuando tenga que activarse-->
         $beliefbase.jugando &amp;&amp;
@@ -158,7 +158,7 @@
 		</performgoal>
 
     <!-- Objetivo para cambiar el turno -->
-		<performgoal name="cambiarTurnoMeta" retry="true" retrydelay="3000" exclude="never">
+		<performgoal name="cambiarTurnoMeta" retry="true" retrydelay="3000" exclude="when_succeeded">
 			<creationcondition>
 				<!-- Que se active cuando tenga que activarse-->
         $beliefbase.jugando &amp;&amp;
@@ -863,7 +863,7 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
-        <value>ParedDannana.class</value>
+        <value>ParedDannada.class</value>
       </parameter>
     </messageevent>
 
@@ -1047,6 +1047,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>Desplazar.class</value>
       </parameter>
