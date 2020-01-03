@@ -418,6 +418,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>AbrirPuerta.class</value>
       </parameter>
