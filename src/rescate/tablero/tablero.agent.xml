@@ -470,6 +470,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>ApagarFuego.class</value>
       </parameter>
@@ -559,6 +562,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>AtenderHerido.class</value>
       </parameter>
@@ -608,6 +614,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>CambiarTurno.class</value>
       </parameter>
@@ -657,6 +666,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>CerrarPuerta.class</value>
       </parameter>
@@ -706,6 +718,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>CogerMateriaPeligrosa.class</value>
       </parameter>
@@ -755,6 +770,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>CogerVictima.class</value>
       </parameter>
@@ -804,6 +822,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>ConducirCamion.class</value>
       </parameter>
@@ -853,6 +874,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>DannarPared.class</value>
       </parameter>
@@ -902,6 +926,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>DarOrden.class</value>
       </parameter>
@@ -951,6 +978,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>DejarMateriaPeligrosa.class</value>
       </parameter>
@@ -1000,6 +1030,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>DejarVictima.class</value>
       </parameter>
@@ -1103,6 +1136,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>DesplazarAmbulancia.class</value>
       </parameter>
@@ -1137,6 +1173,9 @@
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.REQUEST</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
@@ -1186,6 +1225,9 @@
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.REQUEST</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
@@ -1238,6 +1280,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>MontarVehiculo.class</value>
       </parameter>
@@ -1287,6 +1332,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>UnirsePartida.class</value>
       </parameter>
@@ -1336,6 +1384,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>UsarCannonAgua.class</value>
       </parameter>
@@ -1384,6 +1435,9 @@
       <parameter name="language" class="String" direction="fixed">
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>AceptarTirada.class</value>
       </parameter>
