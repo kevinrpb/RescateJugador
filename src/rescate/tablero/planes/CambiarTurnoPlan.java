@@ -61,6 +61,7 @@ public class CambiarTurnoPlan extends Plan {
     TurnoAsignado predicado = new TurnoAsignado();
     predicado.setJugador(jugador);
     predicado.setHabitacion(t.getHabitacion(jugador.getHabitacion()));
+    predicado.setJugadores(t.getJugadoresEnHabitacion(jugador.getHabitacion()));
     respuesta.setContent(predicado);
     respuesta.getParameterSet(SFipa.RECEIVERS).addValue(jugador.getIdAgente());
     sendMessage(respuesta);
