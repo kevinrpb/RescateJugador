@@ -42,7 +42,7 @@ public class DannarParedPlan extends Plan {
     else {
       // No tiene PA suficientes en funcion de ...
       if (jugador.getPuntosAccion() < ((jugador.getRol() == 7) ? 1 : 2))  {
-        System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene suficientes PA para abrir una puerta");
+        System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene suficientes PA para dañar la pared");
         // Se rechaza la petición de acción del jugador
         IMessageEvent respuesta = peticion.createReply("Refuse_Dannar_Pared", accion);
         sendMessage(respuesta);

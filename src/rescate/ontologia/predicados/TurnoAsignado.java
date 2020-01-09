@@ -9,6 +9,7 @@ public class TurnoAsignado extends Predicado {
 
   private Jugador jugador;
   private ArrayList<Casilla> habitacion;
+  private ArrayList<Jugador> jugadores;
 
   public TurnoAsignado() {
   }
@@ -27,6 +28,14 @@ public class TurnoAsignado extends Predicado {
 
   public void setHabitacion(ArrayList<Casilla> habitacion) {
     this.habitacion = habitacion;
+  }
+
+  public ArrayList<Jugador> getJugadores() {
+    return jugadores;
+  }
+
+  public void setJugadores(ArrayList<Jugador> jugadores) {
+    this.jugadores = jugadores;
   }
 
 }

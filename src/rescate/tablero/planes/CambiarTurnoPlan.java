@@ -59,7 +59,9 @@ public class CambiarTurnoPlan extends Plan {
     // Se informa también al jugador al que le toca ahora jugar
     IMessageEvent respuesta = createMessageEvent("Inform_Turno_Asignado");
     TurnoAsignado predicado = new TurnoAsignado();
+    predicado.setJugador(jugador);
     predicado.setHabitacion(t.getHabitacion(jugador.getHabitacion()));
+    predicado.setJugadores(t.getJugadoresEnHabitacion(jugador.getHabitacion()));
     respuesta.setContent(predicado);
     respuesta.getParameterSet(SFipa.RECEIVERS).addValue(jugador.getIdAgente());
     sendMessage(respuesta);

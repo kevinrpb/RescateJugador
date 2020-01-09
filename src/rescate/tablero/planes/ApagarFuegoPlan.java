@@ -13,17 +13,17 @@ public class ApagarFuegoPlan extends Plan {
   @Override
   public void body() {
 
-    System.out.println("[PLAN] El tablero recibe peticion de apagar fuego o humo");
-
+    
     // Petición
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
-
+    
     // Tablero
     Tablero t = (Tablero) getBeliefbase().getBelief("tablero").getFact();
-
+    
     // Parámetros de la peticion
     AgentIdentifier idJugador = (AgentIdentifier) peticion.getParameter("sender").getValue();
     ApagarFuego accion = (ApagarFuego) peticion.getContent();
+    System.out.println("[PLAN] El tablero recibe peticion de apagar fuego o humo en la casilla [" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
 
     // Se encuentra en la lista de jugadores del tablero el jugador con id igual al de la petición
     Jugador jugador = t.getJugador(idJugador);
@@ -32,7 +32,7 @@ public class ApagarFuegoPlan extends Plan {
     Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
 
     // Si la casilla no tiene fuego...
-    if (accion.getCasilla().tieneFuego() != 2 && accion.getCasilla().tieneFuego() != 1) {
+    if (accion.getCasilla().getTieneFuego() != 2 && accion.getCasilla().getTieneFuego() != 1) {
       System.out.println("[FALLO] La casilla no tiene un fuego activo");
       // Se rechaza la petición de acción del jugador
       IMessageEvent respuesta = peticion.createReply("Failure_Apagar_Fuego", accion);
@@ -58,7 +58,7 @@ public class ApagarFuegoPlan extends Plan {
       else {
         System.out.println("[INFO] Se ha apagado un fuego o humo en la casilla[" + accion.getCasilla().getPosicion()[0] + ", " + accion.getCasilla().getPosicion()[1] + "]");
         // Se apaga el fuego (pasa a humo)
-        accion.getCasilla().setTieneFuego(accion.getCasilla().tieneFuego() - 1);
+        accion.getCasilla().setTieneFuego(accion.getCasilla().getTieneFuego() - 1);
         // Se actualiza el jugador (consumo de PA)
         if (jugador.getPuntosAccionExtincion() > 0) {
           jugador.setPuntosAccionExtincion(jugador.getPuntosAccionExtincion() - 1);
@@ -67,7 +67,7 @@ public class ApagarFuegoPlan extends Plan {
           jugador.setPuntosAccion(jugador.getPuntosAccion() - ((jugador.getRol() == 1) ? 2 : 1));
         }
         // Se actualiza la casilla sobre la que se ha realizado la apertura de la puerta
-        t.setCasilla(accion.getCasilla().getPosicion()[1], accion.getCasilla().getPosicion()[0], accion.getCasilla());
+        t.setCasilla(accion.getCasilla().getPosicion()[0], accion.getCasilla().getPosicion()[1], accion.getCasilla());
         // Se actualiza la vista
         ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
         viewUpdater.updateTablero(t);

@@ -42,7 +42,7 @@ public class Casilla extends Concepto {
     this.conexiones = conexiones;
   }
 
-  public int tieneFuego() {
+  public int getTieneFuego() {
     return tieneFuego;
   }
 

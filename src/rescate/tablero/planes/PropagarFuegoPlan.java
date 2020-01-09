@@ -44,7 +44,7 @@ public class PropagarFuegoPlan extends Plan {
     // Para cada jugador
     for (int i = 0; i < t.getJugadores().size(); i++) {
       // Si esta en una casilla con fuego
-      if (mapa[t.getJugadores().get(i).getPosicion()[1]][t.getJugadores().get(i).getPosicion()[0]].tieneFuego() == 2) {
+      if (mapa[t.getJugadores().get(i).getPosicion()[1]][t.getJugadores().get(i).getPosicion()[0]].getTieneFuego() == 2) {
         // Si esta llevando una victima
         if (t.getJugadores().get(i).llevandoVictima() != 0) {
           // Ya no llevas la victima
@@ -54,6 +54,7 @@ public class PropagarFuegoPlan extends Plan {
           getBeliefbase().getBelief("victimas").setFact((int) getBeliefbase().getBelief("victimas").getFact() + 1);
         }
         // Se mueve al bombero a la casilla en la que está la ambulancia
+        System.out.println("[INFO] bombero"+i+" ha sido trasladado a la ambulancia");
         if (mapa[3][0].esAmbulancia()) {
           t.getJugadores().get(i).setPosicion(new int[] {0, 3});
         } else if (mapa[0][5].esAmbulancia()) {
@@ -70,7 +71,7 @@ public class PropagarFuegoPlan extends Plan {
     for (int i = 0; i < mapa.length; i++) {
       for (int j = 0; j < mapa[i].length; j++) {
         // Si hay fuego
-        if (mapa[i][j].tieneFuego() == 2) {
+        if (mapa[i][j].getTieneFuego() == 2) {
           // Dependiendo del tipo de punto de interes
           switch(mapa[i][j].getPuntoInteres()) {
             case 0:
@@ -122,13 +123,13 @@ public class PropagarFuegoPlan extends Plan {
     // Guardar tablero
     getBeliefbase().getBelief("tablero").setFact(t);
     getBeliefbase().getBelief("propagarFuego").setFact(false);
-    getBeliefbase().getBelief("finTurno").setFact(true);
+    getBeliefbase().getBelief("siguienteTurno").setFact(true);
 
   }
 
   private void expandirFuego(int X, int Y) {
     // Si la casilla tiene humo
-    if (mapa[Y][X].tieneFuego() == 1) {
+    if (Y >= 0 && Y < mapa.length && X >= 0 && X < mapa[Y].length && mapa[Y][X].getTieneFuego() == 1) {
       // Tiene fuego adyacente
       if (fuegoAdyacente(X, Y)) {
         // Se cambia a fuego
@@ -144,7 +145,7 @@ public class PropagarFuegoPlan extends Plan {
 
   private void explosionMatPeligrosa(int X, int Y) {
     // Si la casilla tiene fuego
-    if (mapa[Y][X].tieneFuego() == 2) {
+    if (mapa[Y][X].getTieneFuego() == 2) {
       // Y materia peligrosa
       if (mapa[Y][X].tieneMateriaPeligrosa()) {
         // Explosion en la casilla
@@ -163,10 +164,10 @@ public class PropagarFuegoPlan extends Plan {
 
   // Devuelve si hay fuego arriba, derecha, abajo o izquierda de una casilla[X, Y]
   private boolean fuegoAdyacente(int X, int Y) {
-    return (Y - 1 > -1 && mapa[Y - 1][X].tieneFuego() == 2 && !obstaculo(X, Y, 0))
-        || (X + 1 < mapa[0].length && mapa[Y][X + 1].tieneFuego() == 2 && !obstaculo(X, Y, 1))
-        || (Y + 1 < mapa.length && mapa[Y + 1][X].tieneFuego() == 2 && !obstaculo(X, Y, 2))
-        || (X - 1 > -1 && mapa[Y][X - 1].tieneFuego() == 2 && !obstaculo(X, Y, 3));
+    return (Y - 1 > -1 && mapa[Y - 1][X].getTieneFuego() == 2 && !obstaculo(X, Y, 0))
+        || (X + 1 < mapa[0].length && mapa[Y][X + 1].getTieneFuego() == 2 && !obstaculo(X, Y, 1))
+        || (Y + 1 < mapa.length && mapa[Y + 1][X].getTieneFuego() == 2 && !obstaculo(X, Y, 2))
+        || (X - 1 > -1 && mapa[Y][X - 1].getTieneFuego() == 2 && !obstaculo(X, Y, 3));
   }
 
   // Devuelve si hay un obstaculo (pared sin romper o puerta cerrada) en la direccion indicada de una casilla
@@ -190,7 +191,7 @@ public class PropagarFuegoPlan extends Plan {
     }
 
     // Dependiendo del estado de la casilla
-    switch (c.tieneFuego()) {
+    switch (c.getTieneFuego()) {
       // Nada -> Humo
       case 0:
         c.setTieneFuego(1);
@@ -264,7 +265,7 @@ public class PropagarFuegoPlan extends Plan {
       // Si la nueva casilla esta dentro de los limites
       if (Y_ > -1 && X_ > -1 && Y_ < mapa.length && X_ < mapa[0].length) {
         // Si no hay fuego, se cambia a fuego y se para
-        if (mapa[Y_][X_].tieneFuego() != 2) {
+        if (mapa[Y_][X_].getTieneFuego() != 2) {
           mapa[Y_][X_].setTieneFuego(2);
           return;
         }

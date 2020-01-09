@@ -55,7 +55,7 @@ public class ColocarPuntosInteresPlan extends Plan {
           for (int j = 1; j < mapa[i].length - 1; j++) {
             // Se encuentra la primera casilla en la que sea viable poner el PDI
             Casilla c_ = mapa[i][j];
-            if (c_.getPuntoInteres() == 0 && c_.tieneFuego() != 2 && !hayBombero(j, i, jugadores)) {
+            if (c_.getPuntoInteres() == 0 && c_.getTieneFuego() != 2 && !hayBombero(j, i, jugadores)) {
               // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma o víctima)
               System.out.println("[INFO] Se ha colocado un PDI en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
               c.setPuntoInteres(1);
@@ -66,7 +66,7 @@ public class ColocarPuntosInteresPlan extends Plan {
       }
 
       // Se puede colocar...
-      if (c.getPuntoInteres() == 0 && c.tieneFuego() != 2 && !hayBombero(X, Y, jugadores)) {
+      if (c.getPuntoInteres() == 0 && c.getTieneFuego() != 2 && !hayBombero(X, Y, jugadores)) {
 
         // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma o víctima)
         System.out.println("[INFO] Se ha colocado un PDI en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
@@ -124,7 +124,7 @@ public class ColocarPuntosInteresPlan extends Plan {
 		getBeliefbase().getBelief("PDITablero").setFact(PDITablero + 1);
     getBeliefbase().getBelief("tablero").setFact(t);
     getBeliefbase().getBelief("finTurno").setFact(false);
-    getBeliefbase().getBelief("siguienteTurno").setFact(true);
+    //getBeliefbase().getBelief("siguienteTurno").setFact(true);
     
   }
 

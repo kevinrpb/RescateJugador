@@ -68,7 +68,7 @@ public class DesplazarPlan extends Plan {
       int PA = puntosAccionNecesarios(destino, jugador);
       if (jugador.getPuntosAccion() + jugador.getPuntosAccionMovimiento() >= PA) {
         // La casilla destino tiene FUEGO y se está llevando una víctima
-        if (destino.tieneFuego() == 2 && (jugador.llevandoVictima() != 0 || jugador.llevandoMateriaPeligrosa())) {
+        if (destino.getTieneFuego() == 2 && (jugador.llevandoVictima() != 0 || jugador.llevandoMateriaPeligrosa())) {
           System.out.println("[RECHAZADO] Desde la casilla del jugador con id " + idJugador + " en direccion " + accion.getDireccion() + " hay fuego y el jugador lleva una victima/mat. peligrosa");
           // Se rechaza la peticion de accion del jugador
           IMessageEvent respuesta = peticion.createReply("Refuse_Desplazar", accion);
@@ -81,6 +81,7 @@ public class DesplazarPlan extends Plan {
           jugador.setSubidoCamion(false);
           // Se actualiza la posicion
           jugador.setPosicion(destino.getPosicion());
+          jugador.setHabitacion(destino.getHabitacion());
           // Se consumen los PA
           if (jugador.getPuntosAccionMovimiento() >= PA) {
             jugador.setPuntosAccionMovimiento(jugador.getPuntosAccionMovimiento() - PA);
@@ -127,6 +128,7 @@ public class DesplazarPlan extends Plan {
           // Se informa al jugador de que la accion ha sido llevada a cabo y se le envia la habitacion en la que esta
           Desplazado predicado = new Desplazado();
           predicado.setHabitacion(t.getHabitacion(jugador.getHabitacion()));
+          predicado.setJugadores(t.getJugadoresEnHabitacion(jugador.getHabitacion()));
           IMessageEvent respuesta = peticion.createReply("Inform_Desplazado", predicado);
           sendMessage(respuesta);
         }
@@ -147,7 +149,7 @@ public class DesplazarPlan extends Plan {
   }
 
   public static int puntosAccionNecesarios(Casilla destino, Jugador j) {
-    if (destino.tieneFuego() == 2 || j.llevandoVictima() == 1 || j.llevandoMateriaPeligrosa()) {
+    if (destino.getTieneFuego() == 2 || j.llevandoVictima() == 1 || j.llevandoMateriaPeligrosa()) {
       return 2;
     }
     return 1;

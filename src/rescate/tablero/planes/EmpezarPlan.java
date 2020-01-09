@@ -57,7 +57,7 @@ public class EmpezarPlan extends Plan {
       int Y = (int) (Math.random() * 6 + 1);
       // Casilla en la posicion X e Y
       Casilla casilla = t.getMapa()[Y][X];
-      if (casilla.tieneFuego() == 0) {
+      if (casilla.getTieneFuego() == 0) {
         t.getMapa()[Y][X].setTieneFuego(2);
         t.getMapa()[Y][X].setTieneFocoCalor(true);
         explosion(X, Y);
@@ -78,7 +78,7 @@ public class EmpezarPlan extends Plan {
       int Y = (int) (Math.random() * 6 + 1);
       // Casilla en la posicion X e Y
       Casilla casilla = t.getMapa()[Y][X];
-      if (casilla.tieneFuego() == 0)
+      if (casilla.getTieneFuego() == 0)
         t.getMapa()[Y][X].setTieneMateriaPeligrosa(true);
       else
         i--;
@@ -185,6 +185,7 @@ public class EmpezarPlan extends Plan {
     TurnoAsignado predicado = new TurnoAsignado();
     predicado.setJugador(t.getJugadores().get(0));
     predicado.setHabitacion(t.getHabitacion(0));
+    predicado.setJugadores(t.getJugadoresEnHabitacion(t.getJugadores().get(0).getHabitacion()));
     respuesta.setContent(predicado);
     respuesta.getParameterSet(SFipa.RECEIVERS).addValue(t.getJugadores().get(0).getIdAgente());
     sendMessage(respuesta);
@@ -248,7 +249,7 @@ public class EmpezarPlan extends Plan {
       // Si la nueva casilla esta dentro de los limites
       if (Y_ > -1 && X_ > -1 && Y_ < t.getMapa().length && X_ < t.getMapa()[0].length) {
         // Si no hay fuego, se cambia a fuego y se para
-        if (t.getMapa()[Y_][X_].tieneFuego() != 2) {
+        if (t.getMapa()[Y_][X_].getTieneFuego() != 2) {
           t.getMapa()[Y_][X_].setTieneFuego(2);
           return;
         }
@@ -290,7 +291,7 @@ public class EmpezarPlan extends Plan {
           for (int j = 1; j < t.getMapa()[i].length - 1; j++) {
             // Se encuentra la primera casilla en la que sea viable poner el PDI
             Casilla c_ = t.getMapa()[i][j];
-            if (c_.getPuntoInteres() == 0 && c_.tieneFuego() != 2) {
+            if (c_.getPuntoInteres() == 0 && c_.getTieneFuego() != 2) {
               // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma
               // o víctima)
               System.out.println("[INFO] Se ha colocado un PDI en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
@@ -302,7 +303,7 @@ public class EmpezarPlan extends Plan {
       }
 
       // Se puede colocar...
-      if (c.getPuntoInteres() == 0 && c.tieneFuego() != 2) {
+      if (c.getPuntoInteres() == 0 && c.getTieneFuego() != 2) {
 
         // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma
         // o víctima)

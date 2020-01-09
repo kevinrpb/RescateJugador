@@ -32,6 +32,16 @@ public class Tablero extends Concepto {
     return jugadores;
   }
 
+  public ArrayList<Jugador> getJugadoresEnHabitacion(int i){
+    ArrayList<Jugador> jugadores = new ArrayList<>();
+    for (Jugador jugador : this.jugadores) {
+      if (jugador.getHabitacion() == i){
+        jugadores.add(jugador);
+      }
+    }
+    return jugadores;
+  }
+
   public Jugador getJugador(AgentIdentifier idJugador) {
     for (int i = 0; i < getJugadores().size(); i++) {
       if (getJugadores().get(i).getIdAgente().equals(idJugador)) {
