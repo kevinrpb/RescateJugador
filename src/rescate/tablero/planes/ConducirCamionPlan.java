@@ -29,13 +29,13 @@ public class ConducirCamionPlan extends Plan {
     Jugador jugador = t.getJugador(idJugador);
 
     // El jugador está subido al camión
-    if (jugador.subidoCamion()) {
+    if (jugador.getSubidoCamion()) {
       // El jugador tiene PA suficientes
       if (jugador.getPuntosAccion() > 1) {
         // Hay otro jugador montado
         Jugador montado = null;
         for (int i = 0; i < t.getJugadores().size(); i++) {
-          if (t.getJugadores().get(i).getIdAgente() != idJugador && t.getJugadores().get(i).subidoCamion()) {
+          if (t.getJugadores().get(i).getIdAgente() != idJugador && t.getJugadores().get(i).getSubidoCamion()) {
             montado = t.getJugadores().get(i);
             break;
           }

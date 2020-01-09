@@ -32,7 +32,7 @@ public class EliminarMateriaPeligrosaPlan extends Plan {
     Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
 
 
-    if (!c.tieneMateriaPeligrosa()) {
+    if (!c.getTieneMateriaPeligrosa()) {
       System.out.println("[FALLO] La casilla sobre la que esta el jugador " + idJugador + " no tiene materia peligrosa");
       // Se rechaza la petición de acción del jugador
       IMessageEvent respuesta = peticion.createReply("Failure_Eliminar_Materia_Peligrosa", accion);

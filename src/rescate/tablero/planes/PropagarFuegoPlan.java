@@ -46,7 +46,7 @@ public class PropagarFuegoPlan extends Plan {
       // Si esta en una casilla con fuego
       if (mapa[t.getJugadores().get(i).getPosicion()[1]][t.getJugadores().get(i).getPosicion()[0]].getTieneFuego() == 2) {
         // Si esta llevando una victima
-        if (t.getJugadores().get(i).llevandoVictima() != 0) {
+        if (t.getJugadores().get(i).getLlevandoVictima() != 0) {
           // Ya no llevas la victima
           t.getJugadores().get(i).setLlevandoVictima(0);
           // Se actualizan los hechos
@@ -55,11 +55,11 @@ public class PropagarFuegoPlan extends Plan {
         }
         // Se mueve al bombero a la casilla en la que está la ambulancia
         System.out.println("[INFO] bombero"+i+" ha sido trasladado a la ambulancia");
-        if (mapa[3][0].esAmbulancia()) {
+        if (mapa[3][0].getAmbulancia()) {
           t.getJugadores().get(i).setPosicion(new int[] {0, 3});
-        } else if (mapa[0][5].esAmbulancia()) {
+        } else if (mapa[0][5].getAmbulancia()) {
           t.getJugadores().get(i).setPosicion(new int[] {5, 0});
-        } else if (mapa[3][9].esAmbulancia()) {
+        } else if (mapa[3][9].getAmbulancia()) {
           t.getJugadores().get(i).setPosicion(new int[] {9, 3});
         } else {
           t.getJugadores().get(i).setPosicion(new int[] {3, 7});
@@ -124,6 +124,7 @@ public class PropagarFuegoPlan extends Plan {
     getBeliefbase().getBelief("tablero").setFact(t);
     getBeliefbase().getBelief("propagarFuego").setFact(false);
     getBeliefbase().getBelief("siguienteTurno").setFact(true);
+    //getBeliefbase().getBelief("finTurno").setFact(true);
 
   }
 
@@ -147,7 +148,7 @@ public class PropagarFuegoPlan extends Plan {
     // Si la casilla tiene fuego
     if (mapa[Y][X].getTieneFuego() == 2) {
       // Y materia peligrosa
-      if (mapa[Y][X].tieneMateriaPeligrosa()) {
+      if (mapa[Y][X].getTieneMateriaPeligrosa()) {
         // Explosion en la casilla
         explosion(X, Y);
         // Materia peligrosa -> Foco calor
@@ -186,7 +187,7 @@ public class PropagarFuegoPlan extends Plan {
     Casilla c = mapa[Y][X];
 
     // Si hay un foco de calor, se propagará de nuevo
-    if (c.tieneFocoCalor()) {
+    if (c.getTieneFocoCalor()) {
       propagaciones++;
     }
 

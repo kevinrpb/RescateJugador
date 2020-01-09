@@ -34,17 +34,17 @@ public class DejarVictimaPlan extends Plan {
     // Si no hay un PDI en la casilla
     if (c.getPuntoInteres() == 0) {
       // Si el jugador lleva a una victima
-      if (jugador.llevandoVictima() != 0) {
+      if (jugador.getLlevandoVictima() != 0) {
         System.out.println("[INFO] El jugador con id " + idJugador + " ha dejado una victima en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
         // Si deja la victima en una ambulancia
-        if (c.esAmbulancia()) {
+        if (c.getAmbulancia()) {
           // Se reduce en uno los PDI en el tablero
           getBeliefbase().getBelief("PDITablero").setFact((int) getBeliefbase().getBelief("PDITablero").getFact() - 1);
           // Se aumenta en uno las victimas salvadas
           getBeliefbase().getBelief("salvados").setFact((int) getBeliefbase().getBelief("salvados").getFact() + 1);
         } else {
           // Se añade el PDI a la casilla
-          c.setPuntoInteres((jugador.llevandoVictima() == 1) ? 2 : 3);       
+          c.setPuntoInteres((jugador.getLlevandoVictima() == 1) ? 2 : 3);       
         }
         // El jugador deja a la victima
         jugador.setLlevandoVictima(0);

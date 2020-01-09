@@ -151,14 +151,14 @@ public class View extends Application {
         hb.getChildren().add(pos);
         tilesLabels.getChildren().add(hb);
         // Aparcamientos
-        if (c.esAparcamientoAmbulancia())
+        if (c.getEsAparcamientoAmbulancia())
           r.setFill(Color.DARKGREEN);
-        if (c.esAparcamientoCamion())
+        if (c.getEsAparcamientoCamion())
           r.setFill(Color.MEDIUMSEAGREEN);
         // Veh�culos
-        if (c.esCamionBomberos())
+        if (c.getCamionBomberos())
           r.setFill(Color.ORANGERED);
-        if (c.esAmbulancia())
+        if (c.getAmbulancia())
           r.setFill(Color.WHITESMOKE);
         tiles.getChildren().add(r);
         // Conexiones
@@ -199,7 +199,7 @@ public class View extends Application {
           }
         }
         // Fuego
-        int fuego = c.tieneFuego();
+        int fuego = c.getTieneFuego();
         switch (fuego) {
         case 0:
           break;
@@ -211,11 +211,11 @@ public class View extends Application {
           break;
         }
         // Materia peligrosa
-        if (c.tieneMateriaPeligrosa()) {
+        if (c.getTieneMateriaPeligrosa()) {
           drawDangMat(i, j);
         }
         // Materia peligrosa
-        if (c.tieneFocoCalor()) {
+        if (c.getTieneFocoCalor()) {
           drawHotPoint(i, j);
         }
       }
@@ -289,12 +289,12 @@ public class View extends Application {
       Label l = new Label("J" + (i + 1));
       l.setFont(new Font("Arial Bold", 32));
       l.setTextFill(Color.BLACK);
-      if (j.subidoAmbulancia()) {
+      if (j.getSubidoAmbulancia()) {
         Label A = new Label("A");
         A.setFont(new Font("Arial Bold", 14));
         A.setTextFill(Color.ORANGERED);
         bottomInfo.getChildren().add(A);
-      } else if (j.subidoCamion()) {
+      } else if (j.getSubidoCamion()) {
         Label C = new Label("C");
         C.setFont(new Font("Arial Bold", 14));
         C.setTextFill(Color.WHITESMOKE);
@@ -332,19 +332,19 @@ public class View extends Application {
       }
       ROL.setFont(new Font("Arial Bold", 14));
       ROL.setTextFill(Color.BLACK);
-      if (j.llevandoVictima() == 1) {
+      if (j.getLlevandoVictima() == 1) {
         Label V = new Label("VICT.");
         V.setFont(new Font("Arial Bold", 14));
         V.setTextFill(Color.BLACK);
         bottomInfo.getChildren().add(V);
       }
-      if (j.llevandoVictima() == 2) {
+      if (j.getLlevandoVictima() == 2) {
         Label V = new Label("V.CUR.");
         V.setFont(new Font("Arial Bold", 14));
         V.setTextFill(Color.BLACK);
         bottomInfo.getChildren().add(V);
       }
-      if (j.llevandoMateriaPeligrosa()) {
+      if (j.getLlevandoMateriaPeligrosa()) {
         Label V = new Label("MAT.");
         V.setFont(new Font("Arial Bold", 14));
         V.setTextFill(Color.BLACK);

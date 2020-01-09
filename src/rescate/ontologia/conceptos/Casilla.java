@@ -50,7 +50,7 @@ public class Casilla extends Concepto {
     this.tieneFuego = tieneFuego;
   }
 
-  public boolean tieneMateriaPeligrosa() {
+  public boolean getTieneMateriaPeligrosa() {
     return tieneMateriaPeligrosa;
   }
 
@@ -58,7 +58,7 @@ public class Casilla extends Concepto {
     this.tieneMateriaPeligrosa = tieneMateriaPeligrosa;
   }
 
-  public boolean tieneFocoCalor() {
+  public boolean getTieneFocoCalor() {
     return tieneFocoCalor;
   }
 
@@ -82,7 +82,7 @@ public class Casilla extends Concepto {
     this.flecha = flecha;
   }
 
-  public boolean esCamionBomberos() {
+  public boolean getCamionBomberos() {
     return camionBomberos;
   }
 
@@ -90,7 +90,7 @@ public class Casilla extends Concepto {
     this.camionBomberos = camionBomberos;
   }
 
-  public boolean esAmbulancia() {
+  public boolean getAmbulancia() {
     return ambulancia;
   }
 
@@ -98,7 +98,7 @@ public class Casilla extends Concepto {
     this.ambulancia = ambulancia;
   }
 
-  public boolean esAparcamientoCamion() {
+  public boolean getEsAparcamientoCamion() {
     return esAparcamientoCamion;
   }
 
@@ -106,7 +106,7 @@ public class Casilla extends Concepto {
     this.esAparcamientoCamion = esAparcamientoCamion;
   }
 
-  public boolean esAparcamientoAmbulancia() {
+  public boolean getEsAparcamientoAmbulancia() {
     return esAparcamientoAmbulancia;
   }
 

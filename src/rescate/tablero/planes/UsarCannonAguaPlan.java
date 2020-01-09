@@ -31,7 +31,7 @@ public class UsarCannonAguaPlan extends Plan {
     Jugador jugador = t.getJugador(idJugador);
 
     // Si el jugador no esta subido al camion
-    if(!jugador.subidoCamion()){
+    if(!jugador.getSubidoCamion()){
       System.out.println("[FALLO] El jugador " + idJugador + " no esta en el camion de bomberos");
       // Se rechaza la peticion de accion del jugador
       IMessageEvent respuesta = peticion.createReply("Failure_Usar_Cannon_Agua", accion);
@@ -89,17 +89,17 @@ public class UsarCannonAguaPlan extends Plan {
   public int[] tirarDados(){
     int[] posicion = new int[2];
     // Arriba-Derecha
-    if (t.getMapa()[0][7].esCamionBomberos()) {
+    if (t.getMapa()[0][7].getCamionBomberos()) {
       posicion[0] = (int)(Math.random() * 4 + 5); // entre 5 y 8
       posicion[1] = (int)(Math.random() * 3 + 1); // entre 1 y 3
     }
     // Abajo-Derecha
-    else if (t.getMapa()[5][9].esCamionBomberos()) {
+    else if (t.getMapa()[5][9].getCamionBomberos()) {
       posicion[0] = (int)(Math.random() * 4 + 5); // entre 5 y 8
       posicion[1] = (int)(Math.random() * 3 + 4); // entre 4 y 6
     }
     // Arriba-Izquierda
-    else if (t.getMapa()[1][0].esCamionBomberos()) {
+    else if (t.getMapa()[1][0].getCamionBomberos()) {
       posicion[0] = (int)(Math.random() * 4 + 1); // entre 1 y 4
       posicion[1] = (int)(Math.random() * 3 + 1); // entre 1 y 3
     }

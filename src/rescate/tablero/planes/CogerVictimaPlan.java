@@ -34,7 +34,7 @@ public class CogerVictimaPlan extends Plan {
     // Si hay una víctima en la casilla
     if (c.getPuntoInteres() == 2 || c.getPuntoInteres() == 3) {
       // Si el jugador ya esta llevando algo
-      if (jugador.llevandoVictima() != 0 || jugador.llevandoMateriaPeligrosa()) {
+      if (jugador.getLlevandoVictima() != 0 || jugador.getLlevandoMateriaPeligrosa()) {
         System.out.println("[RECHAZADO] El jugador con id " + idJugador + " ya esta llevando algo");
         // Se rechaza la petición de acción del jugador
         IMessageEvent respuesta = peticion.createReply("Refuse_Coger_Victima", accion);
