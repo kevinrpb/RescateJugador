@@ -129,7 +129,7 @@
     </achievegoalref>
 
     <!-- Objetivo finalizar partida -->
-    <performgoal name="acabarPartida" retrydelay="30000" exclude="when_succeeded" >
+    <performgoal name="acabarPartida" retry="false" >
       <creationcondition>
         <!-- Que  -->
         $beliefbase.jugando &amp;&amp;
@@ -158,7 +158,7 @@
 		</performgoal>
 
     <!-- Objetivo para cambiar el turno -->
-		<performgoal name="cambiarTurnoMeta" retry="true" retrydelay="3000" exclude="when_succeeded">
+		<performgoal name="cambiarTurnoMeta" retry="false">
 			<creationcondition>
 				<!-- Que se active cuando tenga que activarse-->
         $beliefbase.jugando &amp;&amp;
@@ -167,7 +167,7 @@
 		</performgoal>
 
     <!-- Objetivo para empezar la partida -->
-		<performgoal name="empezarMeta1" retry="true" retrydelay="30000" exclude="when_succeeded">
+		<performgoal name="empezarMeta1" retry="false">
 			<creationcondition>
 				<!-- Que se active cuando empezar sea true y que el número de jugadores sea como minimo 2 -->
         $beliefbase.jugando &amp;&amp;
@@ -176,7 +176,7 @@
 		</performgoal>
 
     <!-- Objetivo para empezar la partida -->
-		<performgoal name="empezarMeta2" retrydelay="10000" exclude="when_succeeded">
+		<performgoal name="empezarMeta2" retry="false">
 			<creationcondition>
 				<!-- Que se active cuando empezar sea true y que el número de jugadores sea 6 -->
         $beliefbase.jugando &amp;&amp;
@@ -1428,7 +1428,7 @@
       </parameter>
     </messageevent>
 
-    <messageevent name="Request_Aceptar_Tirada" direction="receive" type="fipa">
+    <messageevent name="Request_Aceptar_Tirada" direction="send" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.REQUEST</value>
       </parameter>
@@ -1443,7 +1443,7 @@
       </parameter>
     </messageevent>
     
-    <messageevent name="Inform_Aceptar_Tirada" direction="send" type="fipa">
+    <messageevent name="Inform_Aceptar_Tirada" direction="receive" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.INFORM</value>
       </parameter>

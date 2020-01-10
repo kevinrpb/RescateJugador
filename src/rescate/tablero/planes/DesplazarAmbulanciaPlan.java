@@ -33,11 +33,11 @@ public class DesplazarAmbulanciaPlan extends Plan {
 
     // Posicion ambulancia
     int posicionAmbulancia;
-    if (t.getMapa()[3][0].esAmbulancia()) {
+    if (t.getMapa()[3][0].getAmbulancia()) {
       posicionAmbulancia = 3;
-    } else if (t.getMapa()[0][5].esAmbulancia()) {
+    } else if (t.getMapa()[0][5].getAmbulancia()) {
       posicionAmbulancia = 0;
-    } else if (t.getMapa()[3][9].esAmbulancia()) {
+    } else if (t.getMapa()[3][9].getAmbulancia()) {
       posicionAmbulancia = 1;
     } else {
       posicionAmbulancia = 2;
@@ -48,7 +48,7 @@ public class DesplazarAmbulanciaPlan extends Plan {
       // Hay jugadores montados
       ArrayList<Jugador> jugadoresMontados = new ArrayList<Jugador>();
       for (int i = 0; i < t.getJugadores().size(); i++) {
-        if (t.getJugadores().get(i).subidoAmbulancia()) {
+        if (t.getJugadores().get(i).getSubidoAmbulancia()) {
           jugadoresMontados.add(t.getJugadores().get(i));
         }
       }

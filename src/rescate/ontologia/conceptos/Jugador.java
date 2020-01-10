@@ -84,7 +84,7 @@ public class Jugador extends Concepto {
     this.puntosAccionMovimiento = puntosAccionMovimiento;
   }
 
-  public boolean subidoCamion() {
+  public boolean getSubidoCamion() {
     return subidoCamion;
   }
 
@@ -92,7 +92,7 @@ public class Jugador extends Concepto {
     this.subidoCamion = subidoCamion;
   }
   
-  public boolean subidoAmbulancia() {
+  public boolean getSubidoAmbulancia() {
     return subidoAmbulancia;
   }
 
@@ -100,7 +100,7 @@ public class Jugador extends Concepto {
     this.subidoAmbulancia = subidoAmbulancia;
   }
 
-  public int llevandoVictima() {
+  public int getLlevandoVictima() {
     return llevandoVictima;
   }
 
@@ -108,7 +108,7 @@ public class Jugador extends Concepto {
     this.llevandoVictima = llevandoVictima;
   }
 
-  public boolean llevandoMateriaPeligrosa() {
+  public boolean getLlevandoMateriaPeligrosa() {
     return llevandoMateriaPeligrosa;
   }
 

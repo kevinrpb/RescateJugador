@@ -32,15 +32,15 @@ public class MontarEnVehiculoPlan extends Plan {
     Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
 
     // En qué vehículo quiere montar
-    boolean ambulancia = c.esAmbulancia();
-    boolean camion = c.esCamionBomberos();
+    boolean ambulancia = c.getAmbulancia();
+    boolean camion = c.getCamionBomberos();
 
     // Montar en el vehiculo
     if (ambulancia || camion) {
       // Si hay un jugador subido a la ambulancia en esa posicion
       for (int i = 0; i < t.getJugadores().size(); i++) {
         if (t.getJugadores().get(i).getPosicion()[0] == jugador.getPosicion()[0] && t.getJugadores().get(i).getPosicion()[1] == jugador.getPosicion()[1]) {
-          if (t.getJugadores().get(i).subidoAmbulancia() || t.getJugadores().get(i).subidoCamion()) {
+          if (t.getJugadores().get(i).getSubidoAmbulancia() || t.getJugadores().get(i).getSubidoCamion()) {
             System.out.println("[RECHAZADO] El jugador con id " + t.getJugadores().get(i).getIdAgente() + " ya está subido " + ((ambulancia) ? "a la ambulancia" : "al camion") + " en esa posición");
             // Se rechaza la petición de acción del jugador
             IMessageEvent respuesta = peticion.createReply("Refuse_Montar_Vehiculo", accion);

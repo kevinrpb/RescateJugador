@@ -19,7 +19,7 @@ public class Tablero extends Concepto {
     ArrayList<Casilla> habitacion = new ArrayList<>();
     for (Casilla[] fila: mapa) {
       for (Casilla c: fila) {
-        if (c.getHabitacion() == i) {
+        if (c != null && c.getHabitacion() == i) {
           habitacion.add(c);
         }
       }

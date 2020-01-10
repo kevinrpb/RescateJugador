@@ -68,7 +68,7 @@ public class DesplazarPlan extends Plan {
       int PA = puntosAccionNecesarios(destino, jugador);
       if (jugador.getPuntosAccion() + jugador.getPuntosAccionMovimiento() >= PA) {
         // La casilla destino tiene FUEGO y se está llevando una víctima
-        if (destino.getTieneFuego() == 2 && (jugador.llevandoVictima() != 0 || jugador.llevandoMateriaPeligrosa())) {
+        if (destino.getTieneFuego() == 2 && (jugador.getLlevandoVictima() != 0 || jugador.getLlevandoMateriaPeligrosa())) {
           System.out.println("[RECHAZADO] Desde la casilla del jugador con id " + idJugador + " en direccion " + accion.getDireccion() + " hay fuego y el jugador lleva una victima/mat. peligrosa");
           // Se rechaza la peticion de accion del jugador
           IMessageEvent respuesta = peticion.createReply("Refuse_Desplazar", accion);
@@ -149,7 +149,7 @@ public class DesplazarPlan extends Plan {
   }
 
   public static int puntosAccionNecesarios(Casilla destino, Jugador j) {
-    if (destino.getTieneFuego() == 2 || j.llevandoVictima() == 1 || j.llevandoMateriaPeligrosa()) {
+    if (destino.getTieneFuego() == 2 || j.getLlevandoVictima() == 1 || j.getLlevandoMateriaPeligrosa()) {
       return 2;
     }
     return 1;

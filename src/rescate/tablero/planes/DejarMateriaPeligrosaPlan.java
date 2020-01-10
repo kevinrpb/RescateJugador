@@ -32,9 +32,9 @@ public class DejarMateriaPeligrosaPlan extends Plan {
     Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
 
     // Si no hay materia peligrosa en la casilla
-    if (!c.tieneMateriaPeligrosa()) {
+    if (!c.getTieneMateriaPeligrosa()) {
       // Si el jugador lleva una materia peligrosa
-      if (jugador.llevandoMateriaPeligrosa()) {
+      if (jugador.getLlevandoMateriaPeligrosa()) {
         System.out.println("[INFO] El jugador con id " + idJugador + " ha dejado una materia peligrosa en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
         // Si se deja en el exterior
         if (c.getHabitacion() == 0) { 

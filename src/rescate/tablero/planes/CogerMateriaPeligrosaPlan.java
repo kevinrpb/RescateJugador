@@ -32,9 +32,9 @@ public class CogerMateriaPeligrosaPlan extends Plan {
     Casilla c = t.getMapa()[jugador.getPosicion()[1]][jugador.getPosicion()[0]];
 
     // Si hay una materia peligrosa en la casilla
-    if (c.tieneMateriaPeligrosa()) {
+    if (c.getTieneMateriaPeligrosa()) {
       // Si el jugador ya esta llevando algo
-      if (jugador.llevandoVictima() != 0 || jugador.llevandoMateriaPeligrosa()) {
+      if (jugador.getLlevandoVictima() != 0 || jugador.getLlevandoMateriaPeligrosa()) {
         System.out.println("[RECHAZADO] El jugador con id " + idJugador + " ya esta llevando algo");
         // Se rechaza la petición de acción del jugador
         IMessageEvent respuesta = peticion.createReply("Refuse_Coger_Materia_Peligrosa", accion);
