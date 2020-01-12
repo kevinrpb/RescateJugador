@@ -5,7 +5,6 @@ import jadex.runtime.IMessageEvent;
 import jadex.runtime.Plan;
 import jadex.runtime.IGoal;
 
-import rescate.util.*;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 
@@ -16,6 +15,8 @@ public class UnirsePartidaPlan extends Plan {
     // Registra al jugador
     AgentIdentifier agentId = new AgentIdentifier();
     Jugador jugador = new Jugador();
+
+    System.out.println("[PLAN] El jugador con id " + agentId + " quiere unirse a la partida");
 
     jugador.setIdAgente(agentId);
 
@@ -35,13 +36,11 @@ public class UnirsePartidaPlan extends Plan {
     ft.getParameter("constraints").setValue(sc);
     dispatchSubgoalAndWait(ft);
 
-    Log.debug("Jugador busca tablero...");
+    System.out.println("[INFO] Jugador busca tablero...");
 
     AgentDescription[] result = (AgentDescription[]) ft.getParameterSet("result").getValues();
 
     if (result.length > 0) {
-      Log.debug("Jugador pide unirse a la partida");
-
       AgentIdentifier tablero = result[0].getName();
 
       // Solicitud unirse
@@ -53,9 +52,9 @@ public class UnirsePartidaPlan extends Plan {
 
       sendMessage(msgsend);
 
-      Log.debug("Jugador envía mensaje para unirse a tablero");
+      System.out.println("[INFO] Jugador envía mensaje para unirse a tablero");
     } else {
-      Log.warning("Tablero no encontrado");
+      System.out.println("[FALLO] Tablero no encontrado");
     }
   }
 
