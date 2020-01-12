@@ -20,6 +20,8 @@ public class UnirsePartidaPlan extends Plan {
 
     jugador.setIdAgente(agentId);
 
+    getBeliefbase().getBelief("jugador").setFact(jugador);
+
     ServiceDescription sd = new ServiceDescription();
     sd.setName("tablero");
     sd.setType("agente");
@@ -42,6 +44,8 @@ public class UnirsePartidaPlan extends Plan {
 
     if (result.length > 0) {
       AgentIdentifier tablero = result[0].getName();
+
+      getBeliefbase().getBelief("tablero").setFact(tablero);
 
       // Solicitud unirse
       UnirsePartida accion = new UnirsePartida();
