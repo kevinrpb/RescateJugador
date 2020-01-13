@@ -2,7 +2,6 @@
 **/*.class
 
 bin/*
-src/rescate/jugador/*
 
 RescateTableroJadex*
 sources.txt
