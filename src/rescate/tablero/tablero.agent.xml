@@ -141,11 +141,10 @@
 
     <!-- Colocar PDI -->
     <performgoal name="colocarPDIMeta" retry="false">
-        <contextcondition>
+        <creationcondition>
           $beliefbase.jugando &amp;&amp;
-          (($beliefbase.finTurno) &amp;&amp;
-          (($beliefbase.PDITablero) &lt; 3))
-        </contextcondition>
+          ($beliefbase.PDITablero) &lt; 3
+        </creationcondition>
     </performgoal>
 
     <!-- Objetivo para propagar el fuego -->

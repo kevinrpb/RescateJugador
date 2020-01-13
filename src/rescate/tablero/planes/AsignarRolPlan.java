@@ -80,28 +80,6 @@ public class AsignarRolPlan extends Plan {
         // Se actualiza en la base de creencias el hecho tablero
         getBeliefbase().getBelief("tablero").setFact(t);
 
-
-        // Se actualizan los PA del jugador
-        jugador.setPuntosAccion(4);
-        jugador.setPuntosAccionMando(0);
-        jugador.setPuntosAccionExtincion(0);
-        jugador.setPuntosAccionMovimiento(0);
-
-        switch (accion.getRol()) {
-          case 2: // Jefe
-            jugador.setPuntosAccionMando(2);
-            break;
-          case 4: // Espuma
-            jugador.setPuntosAccion(3);
-            jugador.setPuntosAccionExtincion(3);
-            break;
-          case 6: // Generalista
-            jugador.setPuntosAccion(5);
-            break;
-          case 7: // Rescates
-            jugador.setPuntosAccionMovimiento(3);
-            break;
-        }
         // Se confirma al jugador la asignación del rol elegido
         RolElegido predicado = new RolElegido();
         predicado.setJugador(jugador);
