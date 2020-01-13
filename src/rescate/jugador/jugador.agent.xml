@@ -53,6 +53,14 @@
   <!-- PLANES -->
   <plans>
 
+    <!-- Empezar Turno -->
+    <plan name="EmpezarTurno">
+      <body class="EmpezarTurnoPlan" />
+      <trigger>
+        <messageevent ref="Inform_Turno_Asignado" />
+      </trigger>
+    </plan>
+
     <!-- Unirse a la partida -->
     <plan name="UnirsePartida">
       <body class="UnirsePartidaPlan" />
@@ -65,6 +73,98 @@
 
   <!-- EVENTOS -->
   <events>
+
+    <!-- Cambiar de turno (FinTurnoPlan y CambiarTurnoPlan) -->
+    <messageevent name="Request_Cambiar_Turno" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
+        <value>SFipa.createUniqueId($scope.getAgentName())</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CambiarTurno.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Turno_Cambiado" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>TurnoCambiado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Turno_Asignado" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>TurnoAsignado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Cambiar_Turno" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CambiarTurno.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Elegir rol -->
+    <messageevent name="Request_Elegir_Rol" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ElegirRol.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Rol_Elegido" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>RolElegido.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Elegir_Rol" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>RolesDisponibles.class</value>
+      </parameter>
+    </messageevent>
 
     <!-- Unirse partida -->
     <messageevent name="Request_Unirse_Partida" direction="send" type="fipa">

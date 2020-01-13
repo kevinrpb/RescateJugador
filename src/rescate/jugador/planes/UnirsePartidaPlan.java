@@ -7,6 +7,7 @@ import jadex.runtime.IGoal;
 
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
+import rescate.jugador.util.Mensajes;
 
 public class UnirsePartidaPlan extends Plan {
 
@@ -50,7 +51,7 @@ public class UnirsePartidaPlan extends Plan {
       // Solicitud unirse
       UnirsePartida accion = new UnirsePartida();
 
-      IMessageEvent msgsend = createMessageEvent("Request_Unirse_Partida");
+      IMessageEvent msgsend = createMessageEvent(Mensajes.Partida.RequestUnirse);
       msgsend.setContent(accion);
       msgsend.getParameterSet(SFipa.RECEIVERS).addValue(tablero);
 
