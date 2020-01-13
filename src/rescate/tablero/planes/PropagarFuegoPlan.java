@@ -64,6 +64,7 @@ public class PropagarFuegoPlan extends Plan {
         } else {
           t.getJugadores().get(i).setPosicion(new int[] {3, 7});
         }
+        t.getJugadores().get(i).setHabitacion(0);
       }
     }
 
