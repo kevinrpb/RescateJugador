@@ -9,6 +9,7 @@ import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.jugador.util.Mensajes;
 
+@SuppressWarnings("serial")
 public class UnirsePartidaPlan extends Plan {
 
   public void body() {

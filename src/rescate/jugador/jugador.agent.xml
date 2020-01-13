@@ -22,14 +22,32 @@
   <!-- CREENCIAS -->
   <beliefs>
 
+    <!-- Info (principio turno) -->
+    <belief name="tieneInfo" class="boolean">
+      <fact>false</fact>
+    </belief>
+
+    <belief name="info" class="Info">
+      <fact>new Info()</fact>
+    </belief>
+
+    <!-- Jugadores -->
+    <belief name="jugador" class="Jugador">
+      <fact>new Jugador()</fact>
+    </belief>
+
+    <beliefset name="jugadoresHabitacion" class="AgentIdentifier">
+      <facts>new AgentIdentifier[] { }</facts>
+    </beliefset>
+
     <!-- Tablero -->
     <belief name="tablero" class="AgentIdentifier">
       <fact>new AgentIdentifier()</fact>
     </belief>
 
-    <!-- Jugador -->
-    <belief name="jugador" class="Jugador">
-      <fact>new Jugador()</fact>
+    <!-- Turno -->
+    <belief name="esTurno" class="boolean">
+      <fact>false</fact>
     </belief>
 
   </beliefs>
@@ -42,11 +60,21 @@
       <concrete ref="dfcap.df_register" />
     </achievegoalref>
 
-    <achievegoal name="unirsePartida"></achievegoal>
-
+    <!-- Búsqueda de tablero -->
     <achievegoalref name="df_search">
       <concrete ref="dfcap.df_search" />
     </achievegoalref>
+
+    <!-- Unirse a la partida para jugar -->
+    <achievegoal name="unirsePartida" />
+
+    <!-- Obtener info (inicio turno) -->
+    <performgoal name="obtenerInfo" retry="false">
+      <creationcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.tieneInfo == false
+      </creationcondition>
+    </performgoal>
 
   </goals>
 
@@ -59,6 +87,22 @@
       <trigger>
         <messageevent ref="Inform_Turno_Asignado" />
       </trigger>
+    </plan>
+
+    <!-- Información -->
+    <plan name="DarInformacion">
+      <body class="DarInformacionPlan" />
+      <trigger>
+        <messageevent ref="Inform_Info" />
+      </trigger>
+    </plan>
+
+    <plan name="ObtenerInfo">
+      <body class="ObtenerInfoPlan" />
+      <trigger>
+        <goal ref="obtenerInfo" />
+      </trigger>
+      <contextcondition>$beliefbase.esTurno</contextcondition>
     </plan>
 
     <!-- Unirse a la partida -->
@@ -74,7 +118,7 @@
   <!-- EVENTOS -->
   <events>
 
-    <!-- Cambiar de turno (FinTurnoPlan y CambiarTurnoPlan) -->
+    <!-- Cambiar Turno -->
     <messageevent name="Request_Cambiar_Turno" direction="send" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.REQUEST</value>
@@ -126,7 +170,35 @@
       </parameter>
     </messageevent>
 
-    <!-- Elegir rol -->
+    <!-- Dar Información -->
+    <messageevent name="Request_Info" direction="send_receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Info" direction="send_receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Info.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Elegir Rol -->
     <messageevent name="Request_Elegir_Rol" direction="send" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.REQUEST</value>
@@ -236,7 +308,7 @@
           </parameter>
         </initialgoal>
 
-        <initialgoal ref="unirsePartida"></initialgoal>
+        <initialgoal ref="unirsePartida" />
       </goals>
 
     </configuration>

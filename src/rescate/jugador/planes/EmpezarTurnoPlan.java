@@ -37,10 +37,15 @@ public class EmpezarTurnoPlan extends Plan {
 
     getBeliefbase().getBelief("jugador").setFact(jugador);
 
-    // Preguntamos al resto de jugadores en esta habitación
-    ArrayList<Jugador> jugadores = turno.getJugadores();
+    // Guardamos los jugadores de la habitación
+    ArrayList<Jugador> jugadoresList = turno.getJugadores();
+    Jugador[] jugadores = jugadoresList.toArray(new Jugador[jugadoresList.size()]);
 
-    // ObtenerInfoEstrategia.ejecutar(this, jugadores);
+    getBeliefbase().getBeliefSet("jugadoresHabitacion").removeFacts();
+    getBeliefbase().getBeliefSet("jugadoresHabitacion").addFacts(jugadores);
+
+    // El turno ha empezado
+    getBeliefbase().getBelief("esTurno").setFact(true);
 
   }
 
