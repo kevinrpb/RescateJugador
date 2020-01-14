@@ -70,7 +70,7 @@
 
     <!-- Focos de calor disponibles -->
     <belief name="focosCalor" class="int">
-      <fact>24</fact>
+      <fact>36</fact>
     </belief>
 
     <!-- Personas salvadas -->
@@ -129,9 +129,8 @@
     </achievegoalref>
 
     <!-- Objetivo finalizar partida -->
-    <performgoal name="acabarPartida" retry="false" >
+    <performgoal name="acabarPartida" retry="false">
       <creationcondition>
-        <!-- Que  -->
         $beliefbase.jugando &amp;&amp;
         (($beliefbase.victimas &gt; 3) &#124;&#124;
         ($beliefbase.salvados &gt; 6) &#124;&#124;
@@ -141,14 +140,10 @@
 
     <!-- Colocar PDI -->
     <performgoal name="colocarPDIMeta" retry="false">
-        <creationcondition>
-          $beliefbase.jugando &amp;&amp;
-          ($beliefbase.PDITablero) &lt; 3
-        </creationcondition>
     </performgoal>
 
     <!-- Objetivo para propagar el fuego -->
-		<performgoal name="propagarFuegoMeta" retry="false">
+		<performgoal name="propagarFuegoMeta" retry="false" priority="5">
 			<creationcondition>
 				<!-- Que se active cuando tenga que activarse-->
         $beliefbase.jugando &amp;&amp;
@@ -190,11 +185,12 @@
   <plans>
   
     <!-- Acabar partida -->
-    <plan name="acabarPartida_plan">
+    <plan name="acabarPartida_plan" priority="10">
       <body class="AcabarPartidaPlan" />
       <trigger>
         <goal ref="acabarPartida"></goal>
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Abrir una puerta -->
@@ -203,6 +199,7 @@
       <trigger>
         <messageevent ref="Request_Abrir_Puerta" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Reduce en uno la potencia del fuego -->
@@ -211,6 +208,7 @@
       <trigger>
         <messageevent ref="Request_Apagar_Fuego" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Asigna un rol a un jugador -->
@@ -219,6 +217,7 @@
       <trigger>
         <messageevent ref="Request_Elegir_Rol" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Atiende a un jugador herido -->
@@ -227,6 +226,7 @@
       <trigger>
         <messageevent ref="Request_Atender" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Cerrar una puerta -->
@@ -235,6 +235,7 @@
       <trigger>
         <goal ref="cambiarTurnoMeta" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Cerrar una puerta -->
@@ -243,6 +244,7 @@
       <trigger>
         <messageevent ref="Request_Cerrar_Puerta" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
   
     <!-- Colocar PDI -->
@@ -251,6 +253,7 @@
         <trigger>
           <goal ref="colocarPDIMeta"/>
         </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Coger mat peligrosa -->
@@ -259,6 +262,7 @@
       <trigger>
         <messageevent ref="Request_Coger_Materia_Peligrosa" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Coger victima -->
@@ -267,6 +271,7 @@
       <trigger>
         <messageevent ref="Request_Coger_Victima" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Desplaza un vehiculo -->
@@ -275,6 +280,7 @@
       <trigger>
         <messageevent ref="Request_Conducir_Camion" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
     
     <!-- Suma un punto de danno a una pared -->
@@ -283,6 +289,7 @@
       <trigger>
         <messageevent ref="Request_Dannar_Pared" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Suma un punto de danno a una pared -->
@@ -291,6 +298,7 @@
       <trigger>
         <messageevent ref="Request_Dar_Orden" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
   
     <!-- Dejar mat peligrosa -->
@@ -299,6 +307,7 @@
       <trigger>
         <messageevent ref="Request_Dejar_Materia_Peligrosa" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Dejar victima -->
@@ -307,6 +316,7 @@
       <trigger>
         <messageevent ref="Request_Dejar_Victima" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Mueve un jugador a otra casilla -->
@@ -315,6 +325,7 @@
       <trigger>
         <messageevent ref="Request_Desplazar" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
    
     <!-- Llama a la ambulancia para que se desplace -->
@@ -323,6 +334,7 @@
       <trigger>
         <messageevent ref="Request_Desplazar_Ambulancia" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
     
     <!-- Eliminar una materia peligrosa -->
@@ -331,6 +343,7 @@
       <trigger>
         <messageevent ref="Request_Eliminar_Materia_Peligrosa" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Empieza la partida creando el tablero -->
@@ -340,6 +353,7 @@
         <goal ref="empezarMeta1" />
         <goal ref="empezarMeta2" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Identifica un punto de interes -->
@@ -348,6 +362,7 @@
       <trigger>
         <messageevent ref="Request_Cambiar_Turno" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Identifica un punto de interes -->
@@ -356,6 +371,7 @@
       <trigger>
         <messageevent ref="Request_Identificar_PDI" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- El jugador se monta en un vehiculo -->
@@ -364,6 +380,7 @@
       <trigger>
         <messageevent ref="Request_Montar_Vehiculo" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
     
     <!-- Propaga el fuego -->
@@ -373,6 +390,7 @@
         <!-- Se activa cada vez que termina el plan de cambiar el turno -->
         <goal ref="propagarFuegoMeta"/>
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
     <!-- Registrar a un jugador -->
@@ -381,6 +399,7 @@
       <trigger>
         <messageevent ref="Request_Unirse_Partida" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
     
     <!-- Usa el cannon de agua de la ambulancia -->
@@ -389,6 +408,7 @@
       <trigger>
         <messageevent ref="Request_Usar_Cannon_Agua" />
       </trigger>
+      <contextcondition>$beliefbase.jugando</contextcondition>
     </plan>
 
   </plans>
