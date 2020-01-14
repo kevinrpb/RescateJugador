@@ -13,7 +13,7 @@ public class EliminarMateriaPeligrosaPlan extends Plan {
   @Override
   public void body() {
 
-    System.out.println("[PLAN] El tablero recibe petición de atender victima");
+    System.out.println("[PLAN] El tablero recibe petición de eliminar materia peligrosa");
 
     // Petición
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
@@ -46,7 +46,7 @@ public class EliminarMateriaPeligrosaPlan extends Plan {
     }
     else {
       // Si tiene PA suficientes y hay suficientes fichas de primeros auxilios...
-      if (jugador.getPuntosAccion() > 2) {
+      if (jugador.getPuntosAccion() > 1) {
         System.out.println("[INFO] El jugador con id " + idJugador + " eliminar una materia peligrosa en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
         // Se actualiza el PDI
         c.setTieneMateriaPeligrosa(false);

@@ -44,7 +44,7 @@ public class DesplazarAmbulanciaPlan extends Plan {
     }
 
     // El jugador tiene PA suficientes
-    if (jugador.getPuntosAccion() > 2) {
+    if (jugador.getPuntosAccion() > 1) {
       // Hay jugadores montados
       ArrayList<Jugador> jugadoresMontados = new ArrayList<Jugador>();
       for (int i = 0; i < t.getJugadores().size(); i++) {
@@ -58,7 +58,7 @@ public class DesplazarAmbulanciaPlan extends Plan {
       switch (accion.getDestino()) {
         case 0:
           // No puede conducir desde ABAJO
-          if (posicionAmbulancia != 1) {
+          if (posicionAmbulancia != 2) {
             // Vienen de la IZQUIERDA
             if (posicionAmbulancia == 3) {
               // El camion abandona el aparcamiento actual
