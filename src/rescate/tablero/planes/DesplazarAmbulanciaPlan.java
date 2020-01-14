@@ -224,7 +224,10 @@ public class DesplazarAmbulanciaPlan extends Plan {
         // Se aumenta en uno las victimas salvadas
         getBeliefbase().getBelief("salvados").setFact((int) getBeliefbase().getBelief("salvados").getFact() + victimas_salvadas);
         // Se informa al jugador de que la accion ha sido llevada a cabo
-        IMessageEvent respuesta = peticion.createReply("Inform_Ambulancia_Desplazada", new AmbulanciaDesplazada());
+        AmbulanciaDesplazada predicado = new AmbulanciaDesplazada();
+        predicado.setHabitacion(t.getHabitacion(jugador.getHabitacion()));
+        predicado.setJugadores(t.getJugadoresEnHabitacion(jugador.getHabitacion()));
+        IMessageEvent respuesta = peticion.createReply("Inform_Ambulancia_Desplazada", predicado);
         sendMessage(respuesta);
       // No se ha desplazado...
       } else {
