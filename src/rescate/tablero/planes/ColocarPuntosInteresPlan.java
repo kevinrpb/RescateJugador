@@ -59,6 +59,15 @@ public class ColocarPuntosInteresPlan extends Plan {
               // Se coloca el PDI (oculto y cuando se descubra se decidirá si es falsa alarma o víctima)
               System.out.println("[INFO] Se ha colocado un PDI en la casilla[" + c.getPosicion()[0] + ", " + c.getPosicion()[1] + "]");
               c.setPuntoInteres(1);
+
+              // Se actualiza la vista
+              ViewUpdater viewUpdater = (ViewUpdater) getBeliefbase().getBelief("view").getFact();
+              viewUpdater.updateTablero(t);
+              getBeliefbase().getBelief("view").setFact(viewUpdater);
+              // Una vez colocado el nuevo PDI, se actualizan las creencias
+              getBeliefbase().getBelief("PDITablero").setFact(PDITablero + 1);
+              getBeliefbase().getBelief("tablero").setFact(t);
+              getBeliefbase().getBelief("finTurno").setFact(false);
               return;
             }
           }
