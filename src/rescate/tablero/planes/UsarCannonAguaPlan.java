@@ -21,7 +21,7 @@ public class UsarCannonAguaPlan extends Plan {
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
 
     // Tablero
-    t = (Tablero) getBeliefbase().getBelief("t").getFact();
+    t = (Tablero) getBeliefbase().getBelief("tablero").getFact();
 
     // Parámetros de la peticion
     AgentIdentifier idJugador = (AgentIdentifier) peticion.getParameter("sender").getValue();

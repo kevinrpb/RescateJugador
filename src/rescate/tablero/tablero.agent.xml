@@ -1287,7 +1287,7 @@
       </parameter>
     </messageevent>
 
-    <messageevent name="Inform_Montado_vehiculo" direction="send" type="fipa">
+    <messageevent name="Inform_Montado_Vehiculo" direction="send" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.INFORM</value>
       </parameter>
