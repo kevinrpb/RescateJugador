@@ -1,9 +1,12 @@
 package rescate.ontologia.predicados;
 
+import rescate.ontologia.conceptos.Jugador;
+
 public class OrdenCompletada extends Predicado {
 
   private int puntosAccion;
-
+  private Jugador jugador;
+  
   public OrdenCompletada() {
   } 
 
@@ -13,6 +16,14 @@ public class OrdenCompletada extends Predicado {
 
   public int getPuntosAccion() {
     return this.puntosAccion;
+  }
+
+  public Jugador getJugador() {
+    return jugador;
+  }
+
+  public void setJugador(Jugador jugador) {
+    this.jugador = jugador;
   }
 
 }
