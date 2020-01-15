@@ -34,7 +34,7 @@ public class UsarCannonAguaPlan extends Plan {
     if(!jugador.getSubidoCamion()){
       System.out.println("[FALLO] El jugador " + idJugador + " no esta en el camion de bomberos");
       // Se rechaza la peticion de accion del jugador
-      IMessageEvent respuesta = peticion.createReply("Failure_Usar_Cannon_Agua", accion);
+      IMessageEvent respuesta = peticion.createReply("Failure_Usar_Cannon_De_Agua", accion);
       sendMessage(respuesta);
 
     }
