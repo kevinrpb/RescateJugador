@@ -129,21 +129,40 @@ public class EmpezarPlan extends Plan {
 
     // Posicion inicial de jugadores
     for (int i = 0; i < t.getJugadores().size(); i++) {
-      switch ((int) (Math.random() * 4)) {
-        case 0:
-          t.getJugadores().get(i).setPosicion(new int[] { 6, 0 });
-          break;
-        case 1:
-          t.getJugadores().get(i).setPosicion(new int[] { 9, 4 });
-          break;
-        case 2:
-          t.getJugadores().get(i).setPosicion(new int[] { 3, 7 });
-          break;
-        case 3:
-          t.getJugadores().get(i).setPosicion(new int[] { 0, 3 });
-          break;
-        default:
-          break;
+      if(i > 3) {
+        switch ((int) (Math.random() * 4)) {
+          case 0:
+            t.getJugadores().get(i).setPosicion(new int[] { 6, 0 });
+            break;
+          case 1:
+            t.getJugadores().get(i).setPosicion(new int[] { 9, 4 });
+            break;
+          case 2:
+            t.getJugadores().get(i).setPosicion(new int[] { 3, 7 });
+            break;
+          case 3:
+            t.getJugadores().get(i).setPosicion(new int[] { 0, 3 });
+            break;
+          default:
+            break;
+        }
+      } else {
+          switch (i) {
+            case 0:
+              t.getJugadores().get(i).setPosicion(new int[] { 6, 0 });
+              break;
+            case 1:
+              t.getJugadores().get(i).setPosicion(new int[] { 9, 4 });
+              break;
+            case 2:
+              t.getJugadores().get(i).setPosicion(new int[] { 3, 7 });
+              break;
+            case 3:
+              t.getJugadores().get(i).setPosicion(new int[] { 0, 3 });
+              break;
+            default:
+              break;
+        }
       }
       t.getJugadores().get(i).setHabitacion(0);
       t.getJugadores().get(i).setLlevandoVictima(0);
