@@ -123,7 +123,7 @@ public class ConducirCamionPlan extends Plan {
             break;
           case 3:
             // No puede conducir desde DERECHA
-            if (jugador.getPosicion()[0] != t.getMapa().length - 1) {
+            if (jugador.getPosicion()[0] != t.getMapa()[0].length - 1) {
               // Vienen de ARRIBA
               if (jugador.getPosicion()[1] == 0) {
                 // El camión abandona el aparcamiento actual
