@@ -5,10 +5,7 @@ public class AceptarTirada {
   private boolean tiradaAceptada; 
   private int[] tirada;
 
-  public AceptarTirada(int [] tirada){
-    this.tirada = tirada;
-    tiradaAceptada = false;
-
+  public AceptarTirada(){
   }
 
   public boolean tiradaAceptada() {
