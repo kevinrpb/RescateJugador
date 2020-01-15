@@ -34,14 +34,14 @@ public class UsarCannonAguaPlan extends Plan {
     if(!jugador.getSubidoCamion()){
       System.out.println("[FALLO] El jugador " + idJugador + " no esta en el camion de bomberos");
       // Se rechaza la peticion de accion del jugador
-      IMessageEvent respuesta = peticion.createReply("Failure_Usar_Cannon_Agua", accion);
+      IMessageEvent respuesta = peticion.createReply("Failure_Usar_Cannon_De_Agua", accion);
       sendMessage(respuesta);
 
     }
     // Si el jugador esta subido al camion
     else {
       // Suficientes PA
-      if (jugador.getPuntosAccion() > ((jugador.getRol() == 8) ? 2 : 4)) {
+      if (jugador.getPuntosAccion() > ((jugador.getRol() == 8) ? 1 : 3)) {
         // Se consume el PA
         jugador.setPuntosAccion(jugador.getPuntosAccion() - ((jugador.getRol() == 8) ? 2 : 4));
         // Se tiran los dados
@@ -51,7 +51,9 @@ public class UsarCannonAguaPlan extends Plan {
           // Pregunta
           IMessageEvent pregunta = createMessageEvent("Request_Aceptar_Tirada");
           pregunta.getParameterSet(SFipa.RECEIVERS).addValue(idJugador);
-          AceptarTirada aceptar = new AceptarTirada(posicion);
+          AceptarTirada aceptar = new AceptarTirada();
+          aceptar.setTirada(posicion);
+          aceptar.setTiradaAceptada(false);
           pregunta.setContent(aceptar);
           // Respuesta
           IMessageEvent respuesta = sendMessageAndWait(pregunta, 10000);
@@ -80,7 +82,7 @@ public class UsarCannonAguaPlan extends Plan {
       else {
         System.out.println("[RECHAZADO] El jugador con id " + idJugador + " no tiene suficientes PA para usar cañon de agua");
         // Se rechaza la peticion de accion del jugador
-        IMessageEvent respuesta = peticion.createReply("Refuse_Usar_Cannon_Agua", accion);
+        IMessageEvent respuesta = peticion.createReply("Refuse_Usar_Cannon_De_Agua", accion);
         sendMessage(respuesta);
       }
     }

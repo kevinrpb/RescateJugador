@@ -105,6 +105,7 @@ public class DarOrdenPlan extends Plan {
             jugadorEsclavo.setSubidoCamion(false);
             // Se actualiza la posicion
             jugadorEsclavo.setPosicion(colindante.getPosicion());
+            jugadorEsclavo.setHabitacion(colindante.getHabitacion());
             // Se identifica PDI si lo hay
             int PDITablero = (int) getBeliefbase().getBelief("PDITablero").getFact();
             int PDIVictima = (int) getBeliefbase().getBelief("PDIVictima").getFact();
