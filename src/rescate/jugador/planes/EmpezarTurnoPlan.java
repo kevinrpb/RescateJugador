@@ -12,6 +12,7 @@ import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
 
 import rescate.jugador.estrategias.*;
+import rescate.jugador.util.*;
 
 @SuppressWarnings("serial")
 public class EmpezarTurnoPlan extends Plan {
@@ -36,7 +37,7 @@ public class EmpezarTurnoPlan extends Plan {
       jugador = rol.getJugador();
 
       // Para el primer turno, no pedimos info
-    getBeliefbase().getBelief("tieneInfo").setFact(true);
+      getBeliefbase().getBelief("tieneInfo").setFact(true);
     }
 
     getBeliefbase().getBelief("jugador").setFact(jugador);
@@ -47,6 +48,14 @@ public class EmpezarTurnoPlan extends Plan {
 
     getBeliefbase().getBeliefSet("jugadoresHabitacion").removeFacts();
     getBeliefbase().getBeliefSet("jugadoresHabitacion").addFacts(jugadores);
+
+    // Actualizamos la info con las habitaciones de este turno
+    Info info = (Info) getBeliefbase().getBelief("info").getFact();
+
+    ArrayList<Casilla> casillas = turno.getHabitacion();
+    Info nuevaInfo = ActualizarHabitacionEstrategia.ejecutar(this, info, casillas, true);
+
+    getBeliefbase().getBelief("info").setFact(nuevaInfo);
 
     // Guardamos los PA para este turno
     getBeliefbase().getBelief("PA").setFact(jugador.getPuntosAccion());

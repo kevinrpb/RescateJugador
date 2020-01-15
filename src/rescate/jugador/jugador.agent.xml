@@ -33,6 +33,10 @@
       <fact>new int[] { -1, -1 }</fact>
     </belief>
 
+    <belief name="conexionEstrategia" class="int">
+      <fact>-1</fact>
+    </belief>
+
     <!-- Info (principio turno) -->
     <belief name="tieneInfo" class="boolean">
       <fact>false</fact>
@@ -47,8 +51,7 @@
       <fact>new Jugador()</fact>
     </belief>
 
-    <beliefset name="jugadoresHabitacion" class="Jugador">
-    </beliefset>
+    <beliefset name="jugadoresHabitacion" class="Jugador"></beliefset>
 
     <!-- Puntos de Accion -->
     <belief name="PA" class="int">
@@ -103,6 +106,14 @@
       </creationcondition>
     </performgoal>
 
+    <!-- Abrir -->
+    <performgoal name="abrirPuerta" retry="false">
+      <creationcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.AbrirPuerta
+      </creationcondition>
+    </performgoal>
+
     <!-- Apagar cosas -->
     <performgoal name="apagarFuego" retry="false">
       <creationcondition>
@@ -120,6 +131,14 @@
       </creationcondition>
     </performgoal>
 
+    <!-- Apagar cosas -->
+    <performgoal name="desplazarse" retry="false">
+      <creationcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.Desplazarse
+      </creationcondition>
+    </performgoal>
+
     <!-- Obtener info (inicio turno) -->
     <performgoal name="obtenerInfo" retry="false">
       <creationcondition>
@@ -133,6 +152,18 @@
   <!-- PLANES -->
   <plans>
 
+    <!-- Abrir -->
+    <plan name="AbrirPuerta">
+      <body class="AbrirPuertaPlan" />
+      <trigger>
+        <goal ref="abrirPuerta" />
+      </trigger>
+      <contextcondition>
+        $beliefbase.esTurno &amp;&amp;
+        $beliefbase.estrategia == Estrategias.AbrirPuerta
+      </contextcondition>
+    </plan>
+
     <!-- Apagar -->
     <plan name="ApagarFuego">
       <body class="ApagarFuegoPlan" />
@@ -141,7 +172,19 @@
       </trigger>
       <contextcondition>
         $beliefbase.esTurno &amp;&amp;
-				$beliefbase.estrategia == Estrategias.ApagarFuego
+        $beliefbase.estrategia == Estrategias.ApagarFuego
+      </contextcondition>
+    </plan>
+
+    <!-- Desplazarse -->
+    <plan name="Desplazarse">
+      <body class="DesplazarsePlan" />
+      <trigger>
+        <goal ref="desplazarse" />
+      </trigger>
+      <contextcondition>
+        $beliefbase.esTurno &amp;&amp;
+        $beliefbase.estrategia == Estrategias.Desplazarse
       </contextcondition>
     </plan>
 
@@ -153,7 +196,8 @@
       </trigger>
       <contextcondition>
         $beliefbase.esTurno &amp;&amp;
-				$beliefbase.estrategia == Estrategias.Ninguna
+        $beliefbase.estrategia == Estrategias.Ninguna &#124;&#124;
+        $beliefbase.estrategia == Estrategias.Decidiendo
       </contextcondition>
     </plan>
 
@@ -183,7 +227,7 @@
       </trigger>
       <contextcondition>
         $beliefbase.esTurno &amp;&amp;
-				$beliefbase.estrategia == Estrategias.AcabarTurno
+        $beliefbase.estrategia == Estrategias.AcabarTurno
       </contextcondition>
     </plan>
 
@@ -205,8 +249,10 @@
   </plans>
 
   <!-- EVENTOS -->
-  <events>    <!-- Apagar fuego -->
-    <messageevent name="Request_Apagar_Fuego" direction="send" type="fipa">
+  <events>
+
+    <!-- Abrir puerta -->
+    <messageevent name="Request_Abrir_Puerta" direction="send" type="fipa">
       <parameter name="performative" class="String" direction="fixed">
         <value>SFipa.REQUEST</value>
       </parameter>
@@ -216,6 +262,58 @@
       <parameter name="conversation-id" class="String">
 				<value>SFipa.createUniqueId($scope.getAgentName())</value>
 			</parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AbrirPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Puerta_Abierta" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>PuertaAbierta.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Abrir_Puerta" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AbrirPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Abrir_Puerta" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>AbrirPuerta.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Apagar fuego -->
+    <messageevent name="Request_Apagar_Fuego" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
+        <value>SFipa.createUniqueId($scope.getAgentName())</value>
+      </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>ApagarFuego.class</value>
       </parameter>
@@ -318,8 +416,8 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="conversation-id" class="String">
-				<value>SFipa.createUniqueId($scope.getAgentName())</value>
-			</parameter>
+        <value>SFipa.createUniqueId($scope.getAgentName())</value>
+      </parameter>
     </messageevent>
 
     <messageevent name="Inform_Info" direction="send_receive" type="fipa">
@@ -330,10 +428,63 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="conversation-id" class="String">
+        <value>SFipa.createUniqueId($scope.getAgentName())</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Info.class</value>
+      </parameter>
+    </messageevent>
+
+
+    <!-- Desplazar jugador -->
+    <messageevent name="Request_Desplazar" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
 				<value>SFipa.createUniqueId($scope.getAgentName())</value>
 			</parameter>
       <parameter name="content-class" class="Class" direction="fixed">
-        <value>Info.class</value>
+        <value>Desplazar.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Desplazado" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Desplazado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Desplazar" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Desplazar.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Desplazar" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>Desplazar.class</value>
       </parameter>
     </messageevent>
 
@@ -346,8 +497,8 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="conversation-id" class="String">
-				<value>SFipa.createUniqueId($scope.getAgentName())</value>
-			</parameter>
+        <value>SFipa.createUniqueId($scope.getAgentName())</value>
+      </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>ElegirRol.class</value>
       </parameter>
@@ -386,8 +537,8 @@
         <value>SFipa.NUGGETS_XML</value>
       </parameter>
       <parameter name="conversation-id" class="String">
-				<value>SFipa.createUniqueId($scope.getAgentName())</value>
-			</parameter>
+        <value>SFipa.createUniqueId($scope.getAgentName())</value>
+      </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>UnirsePartida.class</value>
       </parameter>

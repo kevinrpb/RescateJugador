@@ -19,6 +19,10 @@ public class ApagarFuegoPlan extends Plan {
 
   public void body() {
 
+    AgentIdentifier idTablero = (AgentIdentifier) getBeliefbase().getBelief("tablero").getFact();
+
+    Jugador jugador = (Jugador) getBeliefbase().getBelief("jugador").getFact();
+
     // Cargamos info de la base
     Info info = (Info) getBeliefbase().getBelief("info").getFact();
     int PA = (int) getBeliefbase().getBelief("PA").getFact();
@@ -48,6 +52,7 @@ public class ApagarFuegoPlan extends Plan {
       accion.setCasilla(casilla);
 
       IMessageEvent peticion = createMessageEvent(Mensajes.Fuego.RequestApagar);
+      peticion.getParameterSet(SFipa.RECEIVERS).addValue(idTablero);
       peticion.setContent(accion);
 
       // Mandamos y recibimos respuesta
@@ -60,17 +65,24 @@ public class ApagarFuegoPlan extends Plan {
 
         // acutalizamos fuego
         --fuego;
+      } else {
+        break;
       }
     }
 
     // Actualizamos la casilla y PA
-    casilla.setTieneFuego(0);
+    casilla.setTieneFuego(fuego);
     mapaActual[Y][X] = casilla;
     info.setHistorial(info.getTurno(), mapaActual);
 
     getBeliefbase().getBelief("info").setFact(info);
     getBeliefbase().getBelief("PA").setFact(PA);
     getBeliefbase().getBelief("PAExtincion").setFact(PAExt);
+
+    jugador.setPuntosAccion(PA);
+    jugador.setPuntosAccionExtincion(PAExt);
+
+    getBeliefbase().getBelief("jugador").setFact(jugador);
   }
 
   @Override
