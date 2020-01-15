@@ -31,4 +31,13 @@ public class Mensajes {
 
   }
 
+  public class Fuego {
+
+    public static final String RequestApagar = "Request_Apagar_Fuego";
+    public static final String InformApagado = "Inform_Fuego_Apagado";
+    public static final String RefuseApagar = "Refuse_Apagar_Fuego";
+    public static final String FailureApagar = "Failure_Apagar_Fuego";
+
+  }
+
 }

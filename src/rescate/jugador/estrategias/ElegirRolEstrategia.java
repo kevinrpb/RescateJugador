@@ -10,19 +10,20 @@ import jadex.runtime.IGoal;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
-import rescate.jugador.util.Mensajes;
+
+import rescate.jugador.util.*;
 
 public class ElegirRolEstrategia {
 
   private static int[] preferenciasRoles = new int[] {
-    4,  // Espuma
-    5,  // Materias
-    6,  // Generalista
-    7,  // Rescates
-    1,  // Sanitaria
-    3,  // Imágenes
-    8,  // Conductor
-    2   // Jefe
+    Roles.Espuma,
+    Roles.Materias,
+    Roles.Generalista,
+    Roles.Rescates,
+    Roles.Sanitaria,
+    Roles.Imagenes,
+    Roles.Conductor,
+    Roles.Jefe
   };
 
   public static RolElegido ejecutar(Plan plan, AgentIdentifier idTablero) {

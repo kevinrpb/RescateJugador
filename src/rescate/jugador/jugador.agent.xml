@@ -29,6 +29,10 @@
       <fact>Estrategias.Ninguna</fact>
     </belief>
 
+    <belief name="casillaEstrategia" class="int[]">
+      <fact>new int[] { -1, -1 }</fact>
+    </belief>
+
     <!-- Info (principio turno) -->
     <belief name="tieneInfo" class="boolean">
       <fact>false</fact>
@@ -99,6 +103,14 @@
       </creationcondition>
     </performgoal>
 
+    <!-- Apagar cosas -->
+    <performgoal name="apagarFuego" retry="false">
+      <creationcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.ApagarFuego
+      </creationcondition>
+    </performgoal>
+
     <!-- Decidir estrategia -->
     <performgoal name="decidirEstrategia" retry="false">
       <creationcondition>
@@ -121,13 +133,28 @@
   <!-- PLANES -->
   <plans>
 
+    <!-- Apagar -->
+    <plan name="ApagarFuego">
+      <body class="ApagarFuegoPlan" />
+      <trigger>
+        <goal ref="apagarFuego" />
+      </trigger>
+      <contextcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.ApagarFuego
+      </contextcondition>
+    </plan>
+
     <!-- Estrategia -->
     <plan name="DecidirEstrategia">
       <body class="DecidirEstrategiaPlan" />
       <trigger>
         <goal ref="decidirEstrategia" />
       </trigger>
-      <contextcondition>$beliefbase.esTurno</contextcondition>
+      <contextcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.Ninguna
+      </contextcondition>
     </plan>
 
     <!-- Información -->
@@ -143,7 +170,9 @@
       <trigger>
         <goal ref="obtenerInfo" />
       </trigger>
-      <contextcondition>$beliefbase.esTurno</contextcondition>
+      <contextcondition>
+        $beliefbase.esTurno
+      </contextcondition>
     </plan>
 
     <!-- Turno -->
@@ -152,7 +181,10 @@
       <trigger>
         <goal ref="acabarTurno" />
       </trigger>
-      <contextcondition>$beliefbase.esTurno</contextcondition>
+      <contextcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.AcabarTurno
+      </contextcondition>
     </plan>
 
     <plan name="EmpezarTurno">
@@ -173,7 +205,57 @@
   </plans>
 
   <!-- EVENTOS -->
-  <events>
+  <events>    <!-- Apagar fuego -->
+    <messageevent name="Request_Apagar_Fuego" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ApagarFuego.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Fuego_Apagado" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>FuegoApagado.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Apagar_Fuego" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ApagarFuego.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Apagar_Fuego" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>ApagarFuego.class</value>
+      </parameter>
+    </messageevent>
 
     <!-- Cambiar Turno -->
     <messageevent name="Request_Cambiar_Turno" direction="send" type="fipa">
