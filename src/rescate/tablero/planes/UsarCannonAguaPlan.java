@@ -56,11 +56,11 @@ public class UsarCannonAguaPlan extends Plan {
           aceptar.setTiradaAceptada(false);
           pregunta.setContent(aceptar);
           // Respuesta
-          IMessageEvent respuesta = sendMessageAndWait(pregunta, 10000);
+          IMessageEvent respuesta = sendMessageAndWait(pregunta);
           aceptar = (AceptarTirada) respuesta.getContent();
-          System.out.println("[RESPUESTA] La tirada ha sido " +  ((aceptar.tiradaAceptada()) ? "aceptada" : "rechazada") + " por el jugador con id " + idJugador);
+          System.out.println("[RESPUESTA] La tirada ha sido " +  ((aceptar.getTiradaAceptada()) ? "aceptada" : "rechazada") + " por el jugador con id " + idJugador);
           // Si la respuesta es negativa se vuelven a tirar los dados 
-          if (!aceptar.tiradaAceptada()){
+          if (!aceptar.getTiradaAceptada()){
             posicion = tirarDados();
           }
         }

@@ -8,7 +8,7 @@ public class AceptarTirada {
   public AceptarTirada(){
   }
 
-  public boolean tiradaAceptada() {
+  public boolean getTiradaAceptada() {
     return tiradaAceptada;
   }
 
