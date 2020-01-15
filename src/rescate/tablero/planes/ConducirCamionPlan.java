@@ -62,9 +62,9 @@ public class ConducirCamionPlan extends Plan {
               t.getMapa()[0][7].setCamionBomberos(true);
               t.getMapa()[0][8].setCamionBomberos(true);
               // Los jugadores se desplazan
-              jugador.setPosicion(new int[]{0, 7});
+              jugador.setPosicion(new int[]{7, 0});
               if (montado != null) {
-                montado.setPosicion(new int[]{0, 8});
+                montado.setPosicion(new int[]{8, 0});
               }
               desplazado = true;
             }
@@ -88,9 +88,9 @@ public class ConducirCamionPlan extends Plan {
               t.getMapa()[5][9].setCamionBomberos(true);
               t.getMapa()[6][9].setCamionBomberos(true);
               // Los jugadores se desplazan
-              jugador.setPosicion(new int[]{5, 9});
+              jugador.setPosicion(new int[]{9, 5});
               if (montado != null) {
-                montado.setPosicion(new int[]{6, 9});
+                montado.setPosicion(new int[]{9, 6});
               }
               desplazado = true;
             }
@@ -114,9 +114,9 @@ public class ConducirCamionPlan extends Plan {
               t.getMapa()[7][1].setCamionBomberos(true);
               t.getMapa()[7][2].setCamionBomberos(true);
               // Los jugadores se desplazan
-              jugador.setPosicion(new int[]{7, 1});
+              jugador.setPosicion(new int[]{1, 7});
               if (montado != null) {
-                montado.setPosicion(new int[]{7, 2});
+                montado.setPosicion(new int[]{2, 7});
               }
               desplazado = true;
             }
@@ -140,9 +140,9 @@ public class ConducirCamionPlan extends Plan {
               t.getMapa()[1][0].setCamionBomberos(true);
               t.getMapa()[2][0].setCamionBomberos(true);
               // Los jugadores se desplazan
-              jugador.setPosicion(new int[]{1, 0});
+              jugador.setPosicion(new int[]{0, 1});
               if (montado != null) {
-                montado.setPosicion(new int[]{2, 0});
+                montado.setPosicion(new int[]{0, 2});
               }
               desplazado = true;
             }
