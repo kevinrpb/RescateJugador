@@ -33,6 +33,9 @@ public class EmpezarTurnoPlan extends Plan {
       RolElegido rol = ElegirRolEstrategia.ejecutar(this, idTablero);
 
       jugador = rol.getJugador();
+
+      // Para el primer turno, no pedimos info
+    getBeliefbase().getBelief("tieneInfo").setFact(true);
     }
 
     getBeliefbase().getBelief("jugador").setFact(jugador);

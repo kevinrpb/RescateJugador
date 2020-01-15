@@ -23,6 +23,8 @@ public class ObtenerInfoPlan extends Plan {
     Jugador jugador = (Jugador) getBeliefbase().getBelief("jugador").getFact();
     Jugador[] jugadores = (Jugador[]) getBeliefbase().getBeliefSet("jugadoresHabitacion").getFacts();
 
+    System.out.println("[PLAN] El jugador con id " + jugador.getIdAgente() + " obtiene info de otros jugadores");
+
     // Ejecutamos la estrategia
     Info nuevaInfo = ObtenerInfoEstrategia.ejecutar(this, jugador, jugadores);
 

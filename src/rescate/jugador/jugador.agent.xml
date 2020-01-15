@@ -12,7 +12,9 @@
     <import>rescate.ontologia.acciones.*</import>
     <import>rescate.ontologia.conceptos.*</import>
     <import>rescate.ontologia.predicados.*</import>
+
     <import>rescate.jugador.planes.*</import>
+    <import>rescate.jugador.util.*</import>
   </imports>
 
   <capabilities>
@@ -36,9 +38,10 @@
       <fact>new Jugador()</fact>
     </belief>
 
-    <beliefset name="jugadoresHabitacion" class="AgentIdentifier">
-      <facts>new AgentIdentifier[] { }</facts>
+    <beliefset name="jugadoresHabitacion" class="Jugador">
     </beliefset>
+
+    <!-- Puntos de Accion -->
 
     <!-- Tablero -->
     <belief name="tablero" class="AgentIdentifier">
@@ -91,7 +94,7 @@
 
     <!-- Información -->
     <plan name="DarInformacion">
-      <body class="DarInformacionPlan" />
+      <body class="DarInfoPlan" />
       <trigger>
         <messageevent ref="Inform_Info" />
       </trigger>

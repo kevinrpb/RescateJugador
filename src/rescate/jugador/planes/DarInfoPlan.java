@@ -22,6 +22,11 @@ public class DarInfoPlan extends Plan {
     // Recibimos la petición
     IMessageEvent peticion = (IMessageEvent) getInitialEvent();
 
+    AgentIdentifier idEnvio = (AgentIdentifier) peticion.getParameter("sender").getValue();
+    AgentIdentifier idAgente = ((Jugador) getBeliefbase().getBelief("jugador").getFact()).getIdAgente();
+
+    System.out.println("[INFO] El jugador con id " + idAgente + " da info al " + idEnvio);
+
     // Cogemos nuestra info
     Info info = (Info) getBeliefbase().getBelief("info").getFact();
 

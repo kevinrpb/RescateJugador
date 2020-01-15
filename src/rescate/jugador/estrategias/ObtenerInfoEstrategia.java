@@ -25,6 +25,8 @@ public class ObtenerInfoEstrategia {
       // Si no es el mismo jugador
       if (j.getIdAgente() != jugador.getIdAgente()) {
 
+        System.out.println("[INFO] Pidiendo info al jugador con id " + j.getIdAgente());
+
         // Creamos la petición
         IMessageEvent msgInfoSend = plan.createMessageEvent(Mensajes.Info.Request);
         msgInfoSend.getParameterSet(SFipa.RECEIVERS).addValue(j.getIdAgente());
