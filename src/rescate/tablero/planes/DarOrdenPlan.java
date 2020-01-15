@@ -159,6 +159,7 @@ public class DarOrdenPlan extends Plan {
             // Se informa al jugador de que la accion ha sido llevada a cabo
             OrdenCompletada predicado = new OrdenCompletada();
             predicado.setPuntosAccion(PA);
+            predicado.setJugador(jugadorEsclavo);
             predicado.setHabitacion(t.getHabitacion(jugadorJefe.getHabitacion()));
             predicado.setJugadores(t.getJugadoresEnHabitacion(jugadorJefe.getHabitacion()));
             IMessageEvent respuesta = peticion.createReply("Inform_Orden_Completada", predicado);

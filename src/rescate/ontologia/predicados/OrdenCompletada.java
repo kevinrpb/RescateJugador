@@ -8,6 +8,7 @@ import rescate.ontologia.conceptos.Jugador;
 public class OrdenCompletada extends Predicado {
 
   private int puntosAccion;
+  private Jugador jugador;
   private ArrayList<Casilla> habitacion;
   private ArrayList<Jugador> jugadores;
   
@@ -36,6 +37,14 @@ public class OrdenCompletada extends Predicado {
 
   public void setJugadores(ArrayList<Jugador> jugadores) {
     this.jugadores = jugadores;
+  }
+
+  public Jugador getJugador() {
+    return jugador;
+  }
+
+  public void setJugador(Jugador jugador) {
+    this.jugador = jugador;
   }
   
 
