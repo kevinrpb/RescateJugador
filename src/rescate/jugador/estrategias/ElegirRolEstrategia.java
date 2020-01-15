@@ -21,8 +21,8 @@ public class ElegirRolEstrategia {
     7,  // Rescates
     1,  // Sanitaria
     3,  // Imágenes
-    2,  // Jefe
-    8   // Conductor
+    8,  // Conductor
+    2   // Jefe
   };
 
   public static RolElegido ejecutar(Plan plan, AgentIdentifier idTablero) {
@@ -42,7 +42,7 @@ public class ElegirRolEstrategia {
 
     // Si el rol no está disponible, mandamos otro
     // (hacemos while por si otro jugador elige antes que nosotros)
-    while (rolMsgReceive.getName().equals(Mensajes.Rol.RefuseElegir)) {
+    while (rolMsgReceive.getName().contains(Mensajes.Rol.RefuseElegir)) {
       // Cogemos los roles disponibles
       ArrayList<Integer> rolesDisponibles = ((RolesDisponibles) rolMsgReceive.getContent()).getRolesDisponibles();
 
@@ -62,7 +62,7 @@ public class ElegirRolEstrategia {
     }
 
     // Si llegamos aquí, el mensaje debería ser positivo. Comprobamos
-    assert rolMsgReceive.getName().equals(Mensajes.Rol.InformElegido);
+    assert rolMsgReceive.getName().contains(Mensajes.Rol.InformElegido);
 
     return (RolElegido) rolMsgReceive.getContent();
   }

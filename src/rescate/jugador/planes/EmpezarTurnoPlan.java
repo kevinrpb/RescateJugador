@@ -10,6 +10,7 @@ import jadex.runtime.IGoal;
 import rescate.ontologia.acciones.*;
 import rescate.ontologia.conceptos.*;
 import rescate.ontologia.predicados.*;
+
 import rescate.jugador.estrategias.*;
 
 @SuppressWarnings("serial")
@@ -46,6 +47,12 @@ public class EmpezarTurnoPlan extends Plan {
 
     getBeliefbase().getBeliefSet("jugadoresHabitacion").removeFacts();
     getBeliefbase().getBeliefSet("jugadoresHabitacion").addFacts(jugadores);
+
+    // Guardamos los PA para este turno
+    getBeliefbase().getBelief("PA").setFact(jugador.getPuntosAccion());
+    getBeliefbase().getBelief("PAMando").setFact(jugador.getPuntosAccionMando());
+    getBeliefbase().getBelief("PAExtincion").setFact(jugador.getPuntosAccionExtincion());
+    getBeliefbase().getBelief("PAMovimiento").setFact(jugador.getPuntosAccionMovimiento());
 
     // El turno ha empezado
     getBeliefbase().getBelief("esTurno").setFact(true);

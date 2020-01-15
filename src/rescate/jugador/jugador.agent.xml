@@ -24,6 +24,11 @@
   <!-- CREENCIAS -->
   <beliefs>
 
+    <!-- Estrategia -->
+    <belief name="estrategia" class="int">
+      <fact>Estrategias.Ninguna</fact>
+    </belief>
+
     <!-- Info (principio turno) -->
     <belief name="tieneInfo" class="boolean">
       <fact>false</fact>
@@ -42,6 +47,21 @@
     </beliefset>
 
     <!-- Puntos de Accion -->
+    <belief name="PA" class="int">
+      <fact>0</fact>
+    </belief>
+
+    <belief name="PAMando" class="int">
+      <fact>0</fact>
+    </belief>
+
+    <belief name="PAExtincion" class="int">
+      <fact>0</fact>
+    </belief>
+
+    <belief name="PAMovimiento" class="int">
+      <fact>0</fact>
+    </belief>
 
     <!-- Tablero -->
     <belief name="tablero" class="AgentIdentifier">
@@ -71,6 +91,23 @@
     <!-- Unirse a la partida para jugar -->
     <achievegoal name="unirsePartida" />
 
+    <!-- Acabar turno -->
+    <performgoal name="acabarTurno" retry="false">
+      <creationcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.AcabarTurno
+      </creationcondition>
+    </performgoal>
+
+    <!-- Decidir estrategia -->
+    <performgoal name="decidirEstrategia" retry="false">
+      <creationcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.tieneInfo &amp;&amp;
+				$beliefbase.estrategia == Estrategias.Ninguna
+      </creationcondition>
+    </performgoal>
+
     <!-- Obtener info (inicio turno) -->
     <performgoal name="obtenerInfo" retry="false">
       <creationcondition>
@@ -84,12 +121,13 @@
   <!-- PLANES -->
   <plans>
 
-    <!-- Empezar Turno -->
-    <plan name="EmpezarTurno">
-      <body class="EmpezarTurnoPlan" />
+    <!-- Estrategia -->
+    <plan name="DecidirEstrategia">
+      <body class="DecidirEstrategiaPlan" />
       <trigger>
-        <messageevent ref="Inform_Turno_Asignado" />
+        <goal ref="decidirEstrategia" />
       </trigger>
+      <contextcondition>$beliefbase.esTurno</contextcondition>
     </plan>
 
     <!-- Información -->
@@ -106,6 +144,22 @@
         <goal ref="obtenerInfo" />
       </trigger>
       <contextcondition>$beliefbase.esTurno</contextcondition>
+    </plan>
+
+    <!-- Turno -->
+    <plan name="AcabarTurno">
+      <body class="AcabarTurnoPlan" />
+      <trigger>
+        <goal ref="acabarTurno" />
+      </trigger>
+      <contextcondition>$beliefbase.esTurno</contextcondition>
+    </plan>
+
+    <plan name="EmpezarTurno">
+      <body class="EmpezarTurnoPlan" />
+      <trigger>
+        <messageevent ref="Inform_Turno_Asignado" />
+      </trigger>
     </plan>
 
     <!-- Unirse a la partida -->

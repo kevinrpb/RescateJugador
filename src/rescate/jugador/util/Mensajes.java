@@ -23,4 +23,12 @@ public class Mensajes {
 
   }
 
+  public class Turno {
+
+    public static final String RequestCambiar = "Request_Cambiar_Turno";
+    public static final String InformCambiado = "Inform_Turno_Cambiado";
+    public static final String RefuseCambiar  = "Refuse_Cambiar_Turno";
+
+  }
+
 }
