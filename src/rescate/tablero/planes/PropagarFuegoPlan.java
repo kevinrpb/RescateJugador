@@ -1,7 +1,7 @@
 package rescate.tablero.planes;
 
 import rescate.ontologia.conceptos.Casilla;
-
+import jadex.runtime.IGoal;
 import jadex.runtime.Plan;
 import rescate.gui.ViewUpdater;
 import rescate.ontologia.conceptos.*;
@@ -124,6 +124,12 @@ public class PropagarFuegoPlan extends Plan {
     // Guardar tablero
     getBeliefbase().getBelief("tablero").setFact(t);
     getBeliefbase().getBelief("propagarFuego").setFact(false);
+
+    while (((int) getBeliefbase().getBelief("PDITablero").getFact()) < 3) {
+      IGoal goal = createGoal("colocarPDIMeta");
+      dispatchSubgoalAndWait(goal);
+    }
+
     getBeliefbase().getBelief("siguienteTurno").setFact(true);
     //getBeliefbase().getBelief("finTurno").setFact(true);
 
