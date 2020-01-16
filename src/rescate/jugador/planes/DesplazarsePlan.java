@@ -81,11 +81,26 @@ public class DesplazarsePlan extends Plan {
       jugador.setPosicion(new int[] { X, Y });
       jugador.setHabitacion(casillas.get(0).getHabitacion());
 
+      //
+      Casilla casilla = info.getHistorial(info.getTurno())[Y][X];
+
+      int dif = 1;
+
+      if (casilla.getTieneFuego() == 2 ||
+          jugador.getLlevandoVictima() == 1 ||
+          jugador.getLlevandoMateriaPeligrosa()) {
+        dif = 2;
+      }
+
       // Actualizamos PA
-      if (PAMov > 0) {
-        --PAMov;
-      } else {
-        --PA;
+      while (dif > 0) {
+        if (PAMov > 0) {
+          --PAMov;
+        } else {
+          --PA;
+        }
+
+        --dif;
       }
 
       getBeliefbase().getBelief("PA").setFact(PA);
@@ -93,6 +108,14 @@ public class DesplazarsePlan extends Plan {
 
       jugador.setPuntosAccion(PA);
       jugador.setPuntosAccionMovimiento(PAMov);
+
+      getBeliefbase().getBelief("jugador").setFact(jugador);
+    } else {
+      getBeliefbase().getBelief("PA").setFact(0);
+      getBeliefbase().getBelief("PAMovimiento").setFact(0);
+
+      jugador.setPuntosAccion(0);
+      jugador.setPuntosAccionMovimiento(0);
 
       getBeliefbase().getBelief("jugador").setFact(jugador);
     }

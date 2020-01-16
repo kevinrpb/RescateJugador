@@ -38,20 +38,147 @@ public class DecidirEstrategiaEstrategia {
     Casilla[][] mapaActual = info.getHistorial(info.getTurno());
     Casilla casillaActual = mapaActual[Y][X];
 
-    // Si estamos en la habitación 0 (fuera) buscamos una puerta cercana en la habitación
-
+    // Si estamos en la habitación 0 (fuera)
     if (jugador.getHabitacion() == 0) {
-      int[] conex = casillaActual.getConexiones();
+      // Si llevamos una victima la dejamos
+      if (jugador.getLlevandoVictima() > 0) {
+        return new int[] { Estrategias.DejarVictima };
+      } else if (jugador.getPuntosAccion() + jugador.getPuntosAccionMovimiento() > 0) {
 
-      for (int i = 0; i < 4; i++) {
-        int d = conex[i];
+        // Sino buscamos una puerta cercana en la habitación
+        int[] conex = casillaActual.getConexiones();
 
-        if (d == 1) { // puerta abierta
-          int[] pos = posicionEnDireccion(casillaActual, i);
+        for (int i = 0; i < 4; i++) {
+          int d = conex[i];
 
-          return new int[] { Estrategias.Desplazarse, pos[0], pos[1] };
+          if (d == 1) { // puerta abierta
+            int[] pos = posicionEnDireccion(casillaActual, i);
+
+            return new int[] { Estrategias.Desplazarse, pos[0], pos[1] };
+          }
+        }
+
+        // sino nos movemos a la colindante que tenga puerta
+        ArrayList<Casilla> colin = casillasColindantes(mapaActual, X, Y);
+
+        for (Casilla c : colin) {
+          conex = c.getConexiones();
+
+          for (int i = 0; i < 4; i++) {
+            int d = conex[i];
+
+            if (d == 1) {
+              int[] pos = c.getPosicion();
+
+              return new int[] { Estrategias.Desplazarse, pos[0], pos[1] };
+            }
+          }
         }
       }
+    }
+
+    // Si estamos trasladando una victima, intentamos ir a fuera
+    if (jugador.getLlevandoVictima() > 0) {
+      int hab = jugador.getHabitacion();
+      int[] dest = new int[] { X, Y };
+
+      switch (hab) {
+        case 1:
+          if (X > 1) {
+            dest[0] = X - 1;
+          } else if (Y < 3) {
+            dest[1] = Y + 1;
+          } else if (Y > 3) {
+            dest[1] = Y - 1;
+          } else {
+            dest[0] = X - 1;
+          }
+
+          break;
+
+        case 2:
+          if (Y == 1) {
+            dest[1] = Y + 1;
+          } else {
+            dest[0] = X + 1;
+          }
+          break;
+
+        case 3:
+          if (X > 6) {
+            dest[0] = X - 1;
+          } else {
+            dest[1] = Y - 1;
+          }
+
+          break;
+
+        case 4:
+          if (X == 4) {
+            dest[0] = X - 1;
+          } else if (X == 5) {
+            dest[0] = X + 1;
+          } else if (X == 3) {
+            if (Y == 4) {
+              dest[1] = Y - 1;
+            } else {
+              dest[0] = X - 1;
+            }
+          } else {
+            if (Y == 4) {
+              dest[0] = X + 1;
+            } else {
+              dest[1] = Y + 1;
+            }
+          }
+          break;
+
+        case 5:
+          if (Y == 3) { // tenemos que bajar
+            dest[1] = Y + 1;
+          } else {
+            dest[0] = X + 1; // vamos a derecha
+          }
+          break;
+
+        case 6:
+          if (Y == 5) { // tenemos que bajar
+            dest[1] = Y + 1;
+          } else if (X > 3) { // vamos a izq
+            dest[0] = X - 1;
+          } else if (X < 3) {
+            dest[0] = X + 1;
+          } else {
+            dest[1] = Y + 1;
+          }
+          break;
+
+        case 7:
+          if (Y == 5) { // tenemos que bajar
+            dest[1] = Y + 1;
+          } else { // vamos a izq
+            dest[0] = X - 1;
+          }
+          break;
+
+        case 8:
+          if (Y == 5) { // tenemos que bajar
+            dest[1] = Y + 1;
+          } else { // vamos a izq
+            dest[0] = X - 1;
+          }
+          break;
+      }
+
+      if (dest[0] != X || dest[1] != Y) {
+        return new int[] { Estrategias.Desplazarse, dest[0], dest[1] };
+      }
+
+    }
+
+    // Si estamos en una casilla con victima, la trasladamos
+    if (casillaActual.getPuntoInteres() > 1) {
+      return new int[] { Estrategias.CogerVictima };
     }
 
     // Si:
@@ -130,29 +257,33 @@ public class DecidirEstrategiaEstrategia {
           return casilla.getTieneFuego() == 2;
         }).collect(Collectors.toList());
 
-      if (fuego.size() > 0) {
-        int[] p = fuego.get(0).getPosicion();
+        for (Casilla c : fuego) {
+          if (casillasColindantes(mapaActual, X, Y).contains(c) &&
+              puedeIrDeCasillaACasilla(casillaActual, c)) {
+                int[] p = c.getPosicion();
 
-        return new int[] { Estrategias.ApagarFuego, p[0], p[1] };
-      }
+                return new int[] { Estrategias.ApagarFuego, p[0], p[1] };
+          }
+        }
     }
 
     // Si tenemos una puerta cerrada en nuestra casilla la abrimos
-    int[] conexiones = casillaActual.getConexiones();
+    if (jugador.getPuntosAccion() > 0) {
+      int[] conexiones = casillaActual.getConexiones();
 
-    for (int i = 0; i < 4; i++) {
-      int d = conexiones[i];
+      for (int i = 0; i < 4; i++) {
+        int d = conexiones[i];
 
-      if (d == 2) { // puerta cerrada
-        return new int[] { Estrategias.AbrirPuerta, i };
+        if (d == 2) { // puerta cerrada
+          return new int[] { Estrategias.AbrirPuerta, i };
+        }
       }
     }
 
     // Si no hemos apagado fuego, y
     //   - somos bombero con espuma o generalista
     // tratamos de andar en la dirección de un fuego tengamos en los dos últimos turnos o hacia el centro del edificio
-    if ((rol == Roles.Espuma || rol == Roles.Generalista) &&
-        jugador.getPuntosAccion() + jugador.getPuntosAccionMovimiento() > 0) {
+    if (jugador.getPuntosAccion() + jugador.getPuntosAccionMovimiento() > 0) {
       ArrayList<Casilla> fuegos = new ArrayList<Casilla>();
       ArrayList<Casilla> humos = new ArrayList<Casilla>();
 
@@ -302,75 +433,49 @@ public class DecidirEstrategiaEstrategia {
 
     }
 
+    // Si hemos llegado aquí sin hacer nada, miramos si tenemos una víctima cerca
+    ArrayList<Casilla> posiblesPDIVictima = casillasColindantes(mapaActual, X, Y);
+    posiblesPDIVictima.add(casillaActual);
 
-    // Si no hemos encontrado una ficha que apagar (o somos conductor), tenemos oras estrategias específicas
-    switch (rol) {
-      case Roles.Sanitaria:
-        return decidirEstrategiaSanitaria(plan, info);
-      case Roles.Jefe:
-        return decidirEstrategiaJefe(plan, info);
-      case Roles.Imagenes:
-        return decidirEstrategiaImágenes(plan, info);
-      case Roles.Espuma:
-        return decidirEstrategiaEspuma(plan, info);
-      case Roles.Materias:
-        return decidirEstrategiaMaterias(plan, info);
-      case Roles.Generalista:
-        return decidirEstrategiaGeneralista(plan, info);
-      case Roles.Rescates:
-        return decidirEstrategiaRescates(plan, info);
-      case Roles.Conductor:
-        return decidirEstrategiaConductor(plan, info);
-      default: // ¿No sabemos el rol...? cosa mala
-        return ACABAR;
+    List<Casilla> PDIVictima = posiblesPDIVictima.stream()
+      .filter(casilla -> {
+        return casilla.getHabitacion() > 0 && casilla.getPuntoInteres() > 1;
+      }).collect(Collectors.toList());
+
+    // Si no tenemos ninguno, intentamos buscar en el turno anterior
+    if (PDIVictima.size() < 1 && info.getTurno() > 1) {
+      Casilla[][] anterior = info.getHistorial(info.getTurno() - 1);
+      for (Casilla[] fila : anterior) {
+        for (Casilla c : fila) {
+          if (c.getPuntoInteres() > 1) {
+            // Miramos como ir hasta allí
+            int d = direccionDeCasillaACasilla(casillaActual, c);
+            int[] pos = posicionEnDireccion(casillaActual, d);
+            if (casillaExisteEnMapa(mapaActual, pos[0], pos[1])) {
+              Casilla des = mapaActual[pos[1]][pos[0]];
+
+              if (des.getHabitacion() > 0)
+                PDIVictima.add(des);
+            }
+          }
+        }
+      }
     }
-  }
 
-  private static int[] decidirEstrategiaSanitaria(Plan plan, Info info) {
-    //TODO: implement
+    // Nos quedamos con aquellas a las que podamos ir
+    PDIVictima = PDIVictima.stream()
+      .filter(casilla -> {
+        return puedeIrDeCasillaACasilla(casillaActual, casilla);
+      }).collect(Collectors.toList());
 
-    return ACABAR;
-  }
+    // si tenemos alguno nos movemos
+    if (PDIVictima.size() > 0) {
+      int[] pos = PDIVictima.get(0).getPosicion();
 
-  private static int[] decidirEstrategiaJefe(Plan plan, Info info) {
-    //TODO: implement
+      return new int[] { Estrategias.Desplazarse, pos[0], pos[1] };
+    }
 
-    return ACABAR;
-  }
-
-  private static int[] decidirEstrategiaImágenes(Plan plan, Info info) {
-    //TODO: implement
-
-    return ACABAR;
-  }
-
-  private static int[] decidirEstrategiaEspuma(Plan plan, Info info) {
-    //TODO: implement
-
-    return ACABAR;
-  }
-
-  private static int[] decidirEstrategiaMaterias(Plan plan, Info info) {
-    //TODO: implement
-
-    return ACABAR;
-  }
-
-  private static int[] decidirEstrategiaGeneralista(Plan plan, Info info) {
-    //TODO: implement
-
-    return ACABAR;
-  }
-
-  private static int[] decidirEstrategiaRescates(Plan plan, Info info) {
-    //TODO: implement
-
-    return ACABAR;
-  }
-
-  private static int[] decidirEstrategiaConductor(Plan plan, Info info) {
-    //TODO: implement
-
+    // Si no tenemos nada más que hacer, acabamos
     return ACABAR;
   }
 

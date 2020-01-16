@@ -17,10 +17,10 @@ public class ElegirRolEstrategia {
 
   private static int[] preferenciasRoles = new int[] {
     Roles.Espuma,
-    Roles.Materias,
     Roles.Generalista,
     Roles.Rescates,
     Roles.Sanitaria,
+    Roles.Materias,
     Roles.Imagenes,
     Roles.Conductor,
     Roles.Jefe

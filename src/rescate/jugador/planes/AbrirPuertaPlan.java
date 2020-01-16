@@ -76,6 +76,12 @@ public class AbrirPuertaPlan extends Plan {
       jugador.setPuntosAccion(PA);
 
       getBeliefbase().getBelief("jugador").setFact(jugador);
+    } else {
+      getBeliefbase().getBelief("PA").setFact(0);
+
+      jugador.setPuntosAccion(0);
+
+      getBeliefbase().getBelief("jugador").setFact(jugador);
     }
   }
 

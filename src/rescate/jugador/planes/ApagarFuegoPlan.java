@@ -66,6 +66,8 @@ public class ApagarFuegoPlan extends Plan {
         // acutalizamos fuego
         --fuego;
       } else {
+        PA = 0;
+        PAExt = 0;
         break;
       }
     }

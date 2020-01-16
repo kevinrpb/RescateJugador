@@ -122,6 +122,22 @@
       </creationcondition>
     </performgoal>
 
+    <!-- Coger -->
+    <performgoal name="cogerVictima" retry="false">
+      <creationcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.CogerVictima
+      </creationcondition>
+    </performgoal>
+
+    <!-- Dejar -->
+    <performgoal name="dejarVictima" retry="false">
+      <creationcondition>
+        $beliefbase.esTurno &amp;&amp;
+				$beliefbase.estrategia == Estrategias.DejarVictima
+      </creationcondition>
+    </performgoal>
+
     <!-- Decidir estrategia -->
     <performgoal name="decidirEstrategia" retry="false">
       <creationcondition>
@@ -173,6 +189,30 @@
       <contextcondition>
         $beliefbase.esTurno &amp;&amp;
         $beliefbase.estrategia == Estrategias.ApagarFuego
+      </contextcondition>
+    </plan>
+
+    <!-- Coger -->
+    <plan name="CogerVictima">
+      <body class="CogerVictimaPlan" />
+      <trigger>
+        <goal ref="cogerVictima" />
+      </trigger>
+      <contextcondition>
+        $beliefbase.esTurno &amp;&amp;
+        $beliefbase.estrategia == Estrategias.CogerVictima
+      </contextcondition>
+    </plan>
+
+    <!-- Dejar -->
+    <plan name="DejarVictima">
+      <body class="DejarVictimaPlan" />
+      <trigger>
+        <goal ref="dejarVictima" />
+      </trigger>
+      <contextcondition>
+        $beliefbase.esTurno &amp;&amp;
+        $beliefbase.estrategia == Estrategias.DejarVictima
       </contextcondition>
     </plan>
 
@@ -404,6 +444,110 @@
       </parameter>
       <parameter name="content-class" class="Class" direction="fixed">
         <value>CambiarTurno.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Coger victima -->
+    <messageevent name="Request_Coger_Victima" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Victima_Cogida" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>VictimaCogida.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Coger_Victima" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Coger_Victima" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>CogerVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <!-- Dejar victima -->
+    <messageevent name="Request_Dejar_Victima" direction="send" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REQUEST</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="conversation-id" class="String">
+				<value>SFipa.createUniqueId($scope.getAgentName())</value>
+			</parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Inform_Victima_Dejada" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.INFORM</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>VictimaDejada.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Refuse_Dejar_Victima" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.REFUSE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarVictima.class</value>
+      </parameter>
+    </messageevent>
+
+    <messageevent name="Failure_Dejar_Victima" direction="receive" type="fipa">
+      <parameter name="performative" class="String" direction="fixed">
+        <value>SFipa.FAILURE</value>
+      </parameter>
+      <parameter name="language" class="String" direction="fixed">
+        <value>SFipa.NUGGETS_XML</value>
+      </parameter>
+      <parameter name="content-class" class="Class" direction="fixed">
+        <value>DejarVictima.class</value>
       </parameter>
     </messageevent>
 
